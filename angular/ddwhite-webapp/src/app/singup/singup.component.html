@@ -1,1 +1,36 @@
-<p>singup works!</p>
+<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
+  <mat-card class="box">
+    <mat-card-header>
+      <mat-card-title>Register</mat-card-title>
+    </mat-card-header>
+
+    <form class="example-form">
+
+      <mat-card-content>
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Full Name" #fullName>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Username" #username>
+        </mat-form-field>
+
+        <mat-form-field class="example-full-width">
+          <input matInput placeholder="Password" type="password" #password>
+        </mat-form-field>
+
+        <!--mat-form-field class="example-full-width">
+          <mat-label>Choose a role...</mat-label>
+          <mat-select [(value)]="selected">
+            <mat-option [value]="roles" *ngFor="let roles of Roles">{{roles}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field-->
+
+      </mat-card-content>
+
+      <button mat-raised-button color="primary" class="btn-block" (click)="createUser(fullName.value, username.value, password.value)">Register</button>
+
+    </form>
+  </mat-card>
+</div>

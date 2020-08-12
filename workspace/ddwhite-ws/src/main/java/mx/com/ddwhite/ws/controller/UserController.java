@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,6 +20,7 @@ import mx.com.ddwhite.ws.model.User;
 import mx.com.ddwhite.ws.repository.UserRepository;
 
 @RestController
+@CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/user")
 public class UserController {
 
@@ -53,6 +55,15 @@ public class UserController {
 		User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 		userRepository.delete(user);
 		return ResponseEntity.ok().build();
+	}
+	
+	@PostMapping("/login")
+	public ResponseEntity<?> login(@RequestBody User user){
+		user = userRepository.findByUserAndPassword(user.getUsername(), user.getPassword());
+		if( user != null ) {
+			return ResponseEntity.ok().build();
+		}
+		return ResponseEntity.notFound().build();
 	}
 
 }

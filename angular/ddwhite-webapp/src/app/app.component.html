@@ -1,15 +1,9 @@
-<link href='https://fonts.googleapis.com/css?family=Open+Sans:700,600' rel='stylesheet' type='text/css'>
-
-<form method="post" action="index.html">
-  <div class="box">
-    <h1>Login Screen</h1>
-    <input type="email" name="email" value="email" onFocus="field_focus(this, 'email');" onblur="field_blur(this, 'email');" class="email" />
-    <input type="password" name="email" value="email" onFocus="field_focus(this, 'email');" onblur="field_blur(this, 'email');" class="email" />
-    <button mat-menu-item routerLink="/home">Login</button>
-    <button mat-menu-item routerLink="/signup">Sing up</button>
-  </div> <!-- End Box -->
-</form>
-
-<p>Forgot your password? <u style="color:#f1c40f;">Click Here!</u></p>
+<!-- Toolbar -->
+<mat-toolbar color="primary" class="app-header">
+  <span class="nav-tool-items">
+    <a mat-button routerLink="/login" routerLinkActive="active">Log in</a>
+    <a mat-button mat-raised-button routerLink="/signup" routerLinkActive="active">Register</a>
+  </span>
+</mat-toolbar>
 
 <router-outlet></router-outlet> 
