@@ -6,12 +6,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -22,39 +16,41 @@ import mx.com.ddwhite.ws.repository.ProviderRepository;
 @RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/provider")
-public class ProviderController {
+public class ProviderController implements GenericController<Provider> {
+	
+	private final String MODULE = Provider.class.getSimpleName();
 
 	@Autowired
-	private ProviderRepository providerRepository;
+	private ProviderRepository repository;
 	
-	@GetMapping("/find")
+	@Override
 	public Page<Provider> findAll(Pageable pageable) {
-		return providerRepository.findAll(pageable);
+		return repository.findAll(pageable);
 	}
 
-	@GetMapping("/find/{id}")
-	public Provider findById(@PathVariable(value = "id") Long id) {
-		return providerRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Provider", "id", id));
+	@Override
+	public Provider findById(Long id) {
+		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
 	}
 
-	@PostMapping("/save")
-	public Provider create(@RequestBody Provider provider) {
-		return providerRepository.save(provider);
+	@Override
+	public Provider create(Provider entity) {
+		return repository.save(entity);
 	}
 
-	@PutMapping("/update")
-	public Provider update(@RequestBody Provider provider) {
-		return providerRepository.findById(provider.getId()).map(p -> {
-			BeanUtils.copyProperties(provider, p, "id");
-			return providerRepository.save(p);
-		}).orElseThrow(() -> new ResourceNotFoundException("Provider", "id", provider.getId()));
+	@Override
+	public Provider update(Provider entity) {
+		return repository.findById(entity.getId()).map(t -> {
+			BeanUtils.copyProperties(entity, t, "id");
+			return repository.save(t);
+		}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId()));
 	}
 
-	@DeleteMapping("/delete/{id}")
-	public ResponseEntity<?> delete(@PathVariable("id") Long id) {
-		Provider user = providerRepository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException("Provider", "id", id));
-		providerRepository.delete(user);
+	@Override
+	public ResponseEntity<?> delete(Long id) {
+		Provider e = repository.findById(id)
+				.orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
+		repository.delete(e);
 		return ResponseEntity.ok().build();
 	}
 

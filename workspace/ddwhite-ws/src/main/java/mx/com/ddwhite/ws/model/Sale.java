@@ -10,21 +10,21 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "usuarios")
-public class User implements Serializable {
+@Table(name = "venta_total")
+public class Sale implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3554528062258053521L;
+	private static final long serialVersionUID = -7374967894811600880L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String username;
-	private String password;
-	@Column(name = "nombre_completo")
-	private String fullName;
+	@Column(name = "id_usuario")
+	private Long userId;
+	@Column(name = "id_cliente")
+	private Long clientId;
 	@Column(name = "fecha_registro", insertable = false, updatable = false)
 	private String dateCreated;
 
@@ -36,28 +36,20 @@ public class User implements Serializable {
 		this.id = id;
 	}
 
-	public String getUsername() {
-		return username;
+	public Long getUserId() {
+		return userId;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
-	public String getPassword() {
-		return password;
+	public Long getClientId() {
+		return clientId;
 	}
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public String getFullName() {
-		return fullName;
-	}
-
-	public void setFullName(String fullName) {
-		this.fullName = fullName;
+	public void setClientId(Long clientId) {
+		this.clientId = clientId;
 	}
 
 	public String getDateCreated() {

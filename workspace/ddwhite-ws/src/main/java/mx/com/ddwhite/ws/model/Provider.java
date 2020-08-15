@@ -33,6 +33,8 @@ public class Provider implements Serializable {
 	private String contactName;
 	@Column(name = "id_usuario")
 	private Long userId;
+	@Column(name = "fecha_registro", insertable = false, updatable = false)
+	private String dateCreated;
 
 	public Long getId() {
 		return id;
@@ -88,6 +90,14 @@ public class Provider implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public String getDateCreated() {
+		return dateCreated;
+	}
+
+	public void setDateCreated(String dateCreated) {
+		this.dateCreated = dateCreated;
 	}
 
 }
