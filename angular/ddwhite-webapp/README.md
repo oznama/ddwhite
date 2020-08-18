@@ -32,3 +32,5 @@ https://dzone.com/articles/create-a-beautiful-login-form-with-angular-material
 https://www.c-sharpcorner.com/article/simple-way-to-execute-a-function-in-a-component-from-another-component/
 ## This tutorial is the most helpfull
 https://www.positronx.io/create-login-ui-template-with-angular-8-material-design/
+## Integrating Bootstrap
+https://medium.com/@fbellod/como-integrar-el-framework-bootstrap-en-un-proyecto-angular-a5d53fa79e03

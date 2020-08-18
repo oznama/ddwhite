@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
 import { environment } from './../../environments/environment';
+import { alertOptions } from './../../app/app.component';
+import { AlertService } from '../_alert';
 
 @Component({
   selector: 'app-singup',
@@ -11,7 +12,7 @@ import { environment } from './../../environments/environment';
 })
 export class SingupComponent implements OnInit {
 
-  constructor(private http:HttpClient, private router:Router) { }
+  constructor(private http:HttpClient, public alertService:AlertService) { }
 
   ngOnInit(): void {
   	
@@ -25,13 +26,11 @@ export class SingupComponent implements OnInit {
   		"fullName": fullName
   	};
   	this.http.post<any>(uri,body,{observe:'response'}).subscribe(response =>{
-  		console.log(response.status);
   		if(response.status == 200){
-  			alert('Usuario registrado');
-  			this.router.navigateByUrl('/login');
+        this.alertService.success('Usuario registrado', alertOptions);
   		}
   	}, error =>{
-  		console.log(error);
+  		this.alertService.error(error.message, alertOptions);
   	})
   }
 
