@@ -19,10 +19,10 @@ public interface GenericController<E> {
 	public E findById(@PathVariable(value = "id") Long id);
 
 	@PostMapping("/save")
-	public E create(@RequestBody E entity);
+	public ResponseEntity<?> create(@RequestBody E entity);
 
 	@PutMapping("/update")
-	public E update(@RequestBody E entity);
+	public ResponseEntity<?> update(@RequestBody E entity);
 
 	@DeleteMapping("/delete/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") Long id);

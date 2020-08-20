@@ -20,7 +20,7 @@ import mx.com.ddwhite.ws.service.SaleService;
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/sale")
 public class SaleController implements GenericController<SaleDto> {
-	
+
 	@Autowired
 	private SaleService service;
 
@@ -35,12 +35,16 @@ public class SaleController implements GenericController<SaleDto> {
 	}
 
 	@Override
-	public SaleDto create(SaleDto entity) {
-		return service.save(entity);
+	public ResponseEntity<?> create(SaleDto entity) {
+		try {
+			return ResponseEntity.ok(service.save(entity));
+		} catch (Throwable e) {
+			return ResponseEntity.badRequest().body(e.getMessage());
+		}
 	}
 
 	@Override
-	public SaleDto update(SaleDto entity) {
+	public ResponseEntity<?> update(SaleDto entity) {
 		return null;
 	}
 
@@ -48,9 +52,9 @@ public class SaleController implements GenericController<SaleDto> {
 	public ResponseEntity<?> delete(Long id) {
 		return null;
 	}
-	
+
 	@GetMapping("/find/bydates")
-	public List<SaleDto> findByRange(@RequestParam("start") String start, @RequestParam("end") String end){
+	public List<SaleDto> findByRange(@RequestParam("start") String start, @RequestParam("end") String end) {
 		return service.findByRange(start, end);
 	}
 

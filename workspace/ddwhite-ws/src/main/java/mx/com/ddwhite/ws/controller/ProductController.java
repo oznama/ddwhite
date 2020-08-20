@@ -2,6 +2,7 @@ package mx.com.ddwhite.ws.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,12 @@ import mx.com.ddwhite.ws.repository.ProductRepository;
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/product")
 public class ProductController implements GenericController<Product> {
-	
+
 	private final String MODULE = Product.class.getSimpleName();
 
 	@Autowired
 	private ProductRepository repository;
-	
+
 	@Override
 	public Page<Product> findAll(Pageable pageable) {
 		return repository.findAll(pageable);
@@ -34,16 +35,24 @@ public class ProductController implements GenericController<Product> {
 	}
 
 	@Override
-	public Product create(Product entity) {
-		return repository.save(entity);
+	public ResponseEntity<?> create(Product entity) {
+		try {
+			return ResponseEntity.ok(repository.save(entity));
+		} catch (DataAccessException e) {
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}
 	}
 
 	@Override
-	public Product update(Product entity) {
-		return repository.findById(entity.getId()).map(t -> {
-			BeanUtils.copyProperties(entity, t, "id");
-			return repository.save(t);
-		}).orElseThrow(() -> new ResourceNotFoundException("User", "id", entity.getId()));
+	public ResponseEntity<?> update(Product entity) {
+		try {
+			return ResponseEntity.ok(repository.findById(entity.getId()).map(t -> {
+				BeanUtils.copyProperties(entity, t, "id");
+				return repository.save(t);
+			}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId())));
+		} catch (DataAccessException e) {
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}
 	}
 
 	@Override

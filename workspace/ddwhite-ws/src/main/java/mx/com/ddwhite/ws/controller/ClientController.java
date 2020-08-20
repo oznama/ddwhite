@@ -2,6 +2,7 @@ package mx.com.ddwhite.ws.controller;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +18,9 @@ import mx.com.ddwhite.ws.repository.ClientRepository;
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/client")
 public class ClientController implements GenericController<Client> {
-	
+
 	private final String MODULE = Client.class.getSimpleName();
-	
+
 	@Autowired
 	private ClientRepository repository;
 
@@ -34,22 +35,29 @@ public class ClientController implements GenericController<Client> {
 	}
 
 	@Override
-	public Client create(Client entity) {
-		return repository.save(entity);
+	public ResponseEntity<?> create(Client entity) {
+		try {
+			return ResponseEntity.ok(repository.save(entity));
+		} catch (DataAccessException e) {
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}
 	}
 
 	@Override
-	public Client update(Client entity) {
-		return repository.findById(entity.getId()).map(t -> {
-			BeanUtils.copyProperties(entity, t, "id");
-			return repository.save(t);
-		}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId()));
+	public ResponseEntity<?> update(Client entity) {
+		try {
+			return ResponseEntity.ok(repository.findById(entity.getId()).map(t -> {
+				BeanUtils.copyProperties(entity, t, "id");
+				return repository.save(t);
+			}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId())));
+		} catch (DataAccessException e) {
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}
 	}
 
 	@Override
 	public ResponseEntity<?> delete(Long id) {
-		Client e = repository.findById(id)
-				.orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
+		Client e = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
 		repository.delete(e);
 		return ResponseEntity.ok().build();
 	}

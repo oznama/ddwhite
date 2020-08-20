@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.dto.SaleDetailDto;
@@ -24,23 +25,31 @@ public class SaleService extends GenericService<Sale> {
 	@Autowired
 	private SaleDetailRepository saleDetailRepository;
 	
-	public SaleDto save(SaleDto saleDto) {
+	public SaleDto save(SaleDto saleDto) throws Throwable {
 		Sale sale = new Sale();
 		BeanUtils.copyProperties(saleDto, sale);
-		sale = saleRepository.saveAndFlush(sale);
-		persistDetail(saleDto.getDetail(), sale.getId());
-		return saleDto;
+		try {
+			sale = saleRepository.saveAndFlush(sale);
+			persistDetail(saleDto.getDetail(), sale.getId());
+			return saleDto;
+		} catch (DataAccessException e) {
+			throw e.getRootCause();
+		}
 	}
 
-	private void persistDetail(List<SaleDetailDto> detailsDto, Long saleId) {
+	private void persistDetail(List<SaleDetailDto> detailsDto, Long saleId) throws Throwable {
 		final List<SaleDetail> detail = new ArrayList<>();
 		detailsDto.forEach( d -> {
 			SaleDetail saleDetail = new SaleDetail();
 			BeanUtils.copyProperties(d, saleDetail);
 			detail.add(saleDetail);
 		});
-		saleDetailRepository.saveAll(detail);
-		saleDetailRepository.flush();
+		try {
+			saleDetailRepository.saveAll(detail);
+			saleDetailRepository.flush();
+		} catch (DataAccessException e) {
+			throw e.getRootCause();
+		}
 	}
 
 	public SaleDto findById(Long id) throws ResourceNotFoundException {
