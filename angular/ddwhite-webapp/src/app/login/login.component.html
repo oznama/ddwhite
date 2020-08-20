@@ -4,17 +4,20 @@
 			<mat-card-title>Log in</mat-card-title>
 		</mat-card-header>
 
-		<form class="example-form">
-			<alert></alert>
+		<form [formGroup]="loginForm" class="example-form">
 			<mat-card-content>
 				<mat-form-field class="example-full-width">
-					<input matInput placeholder="Username" #username />
+					<div class="form-group">
+						<input matInput formControlName="username" placeholder="Username" autocomplete="off" />
+					</div>
 				</mat-form-field>
 				<mat-form-field class="example-full-width">
-					<input matInput placeholder="Password" type="password" #password />
+					<div class="form-group">
+						<input matInput formControlName="password" placeholder="Password" type="password" autocomplete="off" />
+					</div>
 				</mat-form-field>
 			</mat-card-content>
-			<button mat-raised-button color="primary" class="btn-block" (click)="login(username.value, password.value)">Login</button>
+			<button mat-raised-button color="primary" class="btn-block" [disabled]="loginForm.invalid" (click)="login()">Login</button>
 		</form>
 	</mat-card>
 </div>

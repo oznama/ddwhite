@@ -18,7 +18,9 @@ MatNativeDateModule,
 MatChipsModule,
 MatTooltipModule,
 MatTableModule,
-MatPaginatorModule
+MatPaginatorModule,
+MatMenuModule,
+MatAutocompleteModule
 } from '@angular/material';
 
 @NgModule({
@@ -40,7 +42,9 @@ imports: [
    MatChipsModule,
    MatTooltipModule,
    MatTableModule,
-   MatPaginatorModule
+   MatPaginatorModule,
+   MatMenuModule,
+   MatAutocompleteModule
 ],
 exports: [
    MatButtonModule,
@@ -58,7 +62,9 @@ exports: [
    MatChipsModule,
    MatTooltipModule,
    MatTableModule,
-   MatPaginatorModule
+   MatPaginatorModule,
+   MatMenuModule,
+   MatAutocompleteModule
 ],
 providers: [
    MatDatepickerModule,

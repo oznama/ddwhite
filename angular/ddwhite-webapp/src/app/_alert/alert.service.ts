@@ -4,6 +4,11 @@ import { filter } from 'rxjs/operators';
 
 import { Alert, AlertType } from './alert.model';
 
+export const alertOptions = {
+  autoClose: true,
+  keepAfterRouteChange: true
+};
+
 @Injectable({ providedIn: 'root' })
 export class AlertService {
     private subject = new Subject<Alert>();

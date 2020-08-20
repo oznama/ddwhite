@@ -34,3 +34,5 @@ https://www.c-sharpcorner.com/article/simple-way-to-execute-a-function-in-a-comp
 https://www.positronx.io/create-login-ui-template-with-angular-8-material-design/
 ## Integrating Bootstrap
 https://medium.com/@fbellod/como-integrar-el-framework-bootstrap-en-un-proyecto-angular-a5d53fa79e03
+## The best CRUD example
+https://www.devglan.com/angular/angular-8-crud-example

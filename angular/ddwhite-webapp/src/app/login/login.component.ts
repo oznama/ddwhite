@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-
-import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router'; // Router to components
-import { environment } from './../../environments/environment';
-import { GlobalVar, alertOptions } from './../../app/app.component';
-import { AlertService } from '../_alert';
+import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import { Router } from '@angular/router';
+import { AlertService, alertOptions } from '../_alert';
+import { ApiUserService } from "../service/api.service";
 
 @Component({
   selector: 'app-login',
@@ -13,42 +11,47 @@ import { AlertService } from '../_alert';
 })
 export class LoginComponent implements OnInit {
 
-  global = GlobalVar;
+  loginForm: FormGroup;
+  invalidLogin: boolean = false;
 
-  constructor(private http:HttpClient, private router:Router, public alertService:AlertService){}
+  constructor(private formBuilder: FormBuilder, private router:Router, private apiService:ApiUserService, public alertService:AlertService){}
 
   ngOnInit(): void {
+    this.loginForm = this.formBuilder.group({
+      id: [],
+      username: ['', Validators.required],
+      password: ['', Validators.required]
+    });
   }
 
-  public login(username,password){
+  login(){
 
-    var msgError = '';
-
-    if(!username) 
-      msgError += '- Username is requerid<br>';
-    if(!password)
-      msgError += '- Password is requerid<br>';
-    
-    if(msgError)
-      this.alertService.warn(msgError, alertOptions);
-    else {
-      var uri = environment.apiUrl+environment.apiUrlLogin;
-      var body = {
-        "username": username,
-        "password": password
-      };
-      this.http.post<any>(uri,body,{observe:'response'}).subscribe(response =>{
-        if(response.status == 200){
-          this.global.isAunthenticated = true;
-          this.router.navigateByUrl('/home');
-        }
-      }, error =>{
-        if(error.status == 404)
-          this.alertService.warn('Username or password invalid', alertOptions);
-        else
-          this.alertService.error(error.message, alertOptions);
-      })
+    if (this.loginForm.invalid) {
+      return;
     }
+
+    const body = {
+      username: this.loginForm.controls.username.value,
+      password: this.loginForm.controls.password.value
+    }
+    this.apiService.login(body).subscribe(response => {
+      var token = response.headers.get('token');
+      if(response.status === 200 && token){
+        window.localStorage.setItem('token', token);
+        window.localStorage.setItem('id', response.body.id);
+        this.alertService.success('Bienvenido ' + response.body.fullName, alertOptions);
+        this.router.navigate(['home']);
+      } else {
+        this.invalidLogin = true;
+        this.alertService.warn(response.message, alertOptions);
+      }
+    }, error =>{
+      console.log(error);
+      if(error.status == 404)
+        this.alertService.warn('Username or password invalid', alertOptions);
+      else
+        this.alertService.error(error.message, alertOptions);
+    })
 
   }
 

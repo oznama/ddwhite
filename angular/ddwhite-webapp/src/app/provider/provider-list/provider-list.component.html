@@ -1,0 +1,27 @@
+<br>
+<div class="col-md-6 div-container">
+  <h2 style="margin: auto">Proveedores</h2>
+  <button class="btn btn-success" style="width:100px" (click)="add()">Nuevo</button>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th class="hidden">Id</th>
+      <th>Nombre</th>
+      <th>Direccion</th>
+      <th>Telefono</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let provider of providers">
+      <td class="hidden">{{provider.id}}</td>
+      <td>{{provider.bussinesName}}</td>
+      <td>{{provider.address}}</td>
+      <td>{{provider.phone}}</td>
+      <td>
+      	<button class="btn btn-danger" (click)="delete(provider)">Borrar</button>
+        <button class="btn btn-success" (click)="edit(provider)" style="margin-left: 20px;">Modificar</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

@@ -1,0 +1,25 @@
+<br>
+<div class="col-md-6 div-container">
+  <h2 style="margin: auto">Productos</h2>
+  <button class="btn btn-success" style="width:100px" (click)="add()">Registrar</button>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th class="hidden">Id</th>
+      <th>SKU</th>
+      <th>Nombre completo</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngFor="let product of products">
+      <td class="hidden">{{product.id}}</td>
+      <td>{{product.sku}}</td>
+      <td>{{product.nameLarge}}</td>
+      <td>
+      	<!--button class="btn btn-danger" (click)="delete(product)">Borrar</button-->
+        <button class="btn btn-success" (click)="edit(product)" style="margin-left: 20px;">Modificar</button>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>

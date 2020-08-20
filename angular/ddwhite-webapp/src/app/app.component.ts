@@ -1,14 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-export const GlobalVar = {
-	isAunthenticated: false
-};
-
-export const alertOptions = {
-    autoClose: true,
-    keepAfterRouteChange: false
-  };
+import { AlertService, alertOptions } from './_alert';
 
 @Component({
   selector: 'app-root',
@@ -17,16 +9,25 @@ export const alertOptions = {
 })
 export class AppComponent {
 
-  global = GlobalVar;
+  //logged:boolean = false;
 
-  constructor(private router:Router){}
+  constructor(private router:Router, public alertService:AlertService) { }
 
   ngOnInit(): void {
+  	/*let userLogged = window.localStorage.getItem("user");
+    if(!userLogged) {
+      this.alertService.warn("Iniciar sesion", alertOptions);
+      this.router.navigate(['']);
+      return;
+    } else {
+    	this.logged = true;
+    }*/
   }
 
-   public logout(){
-    this.global.isAunthenticated = false;
-    this.router.navigateByUrl('/');
+  logout(){
+  	window.localStorage.removeItem("token");
+  	window.localStorage.removeItem("id");
+    this.router.navigate(['']);
   }
   
 }

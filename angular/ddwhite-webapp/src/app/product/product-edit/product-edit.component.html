@@ -1,0 +1,33 @@
+<br>
+<div class="col-md-6 div-container">
+  <h2 class="text-center">Modificar Producto</h2>
+  <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+    <div class="hidden">
+      <input type="text" formControlName="id" placeholder="id" name="id" class="form-control" id="id">
+    </div>
+    <div class="form-group">
+      <label for="sku">SKU:</label>
+      <input type="text" formControlName="sku" placeholder="SKU" name="sku" class="form-control" id="sku">
+    </div>
+
+    <div class="form-group">
+      <label for="nameLarge">Nombre completo:</label>
+      <input type="text" formControlName="nameLarge" placeholder="Nombre completo del producto" name="nameLarge" class="form-control" id="nameLarge">
+    </div>
+
+    <div class="form-group">
+      <label for="nameShort">Nombre corto:</label>
+      <input formControlName="nameShort" placeholder="Nombre corto (para ticket de compra)" name="nameShort" class="form-control" id="nameShort">
+    </div>
+
+    <div class="form-group">
+      <label for="description">Descripcion:</label>
+      <input formControlName="description" placeholder="Descripcion del producto" name="description" class="form-control" id="description">
+    </div>
+
+    <div class="wrapper">
+      <button class="btn btn-success">Guardar</button>
+      <button class="btn btn-danger" (click)="cancelar()">Cancelar</button>
+    </div>
+  </form>
+</div>
