@@ -19,4 +19,4 @@ Angular Project
 		- cd my-app	
 		- ng serve --open
 	- create module
-		- ng generate component <component-name>
+		- ng generate component <component-name> --module app
