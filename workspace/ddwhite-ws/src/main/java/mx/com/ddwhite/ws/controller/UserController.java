@@ -16,10 +16,9 @@ import org.springframework.web.bind.annotation.RestController;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.User;
 import mx.com.ddwhite.ws.repository.UserRepository;
-import mx.com.ddwhite.ws.security.JWTAuthorizationFilter;
 
 @RestController
-@CrossOrigin(allowedHeaders = "*", origins = "*", exposedHeaders = "token")
+@CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/user")
 public class UserController implements GenericController<User> {
 
@@ -68,14 +67,10 @@ public class UserController implements GenericController<User> {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody User user) {
-		user = repository.findByUserAndPassword(user.getUsername(), user.getPassword());
-		if (user != null) {
-			String token = JWTAuthorizationFilter.getJWTToken(user.getUsername());
-			if (token != null) {
-				return ResponseEntity.ok().header("token", token).body(user);
-			} else
-				return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-						.body("Se ha producido un error al generar el token");
+		User userFinded = repository.findByUsername(user.getUsername());
+		if (userFinded != null) {
+			if( user.getPassword().equals(userFinded.getPassword()) ) return ResponseEntity.ok(userFinded);
+			else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La contraseña es incorrecta");
 		}
 		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El usuario no se encuentra registrado");
 	}

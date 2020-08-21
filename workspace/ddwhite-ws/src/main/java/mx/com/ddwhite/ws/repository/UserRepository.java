@@ -12,7 +12,7 @@ import mx.com.ddwhite.ws.model.User;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 	
-	@Query("SELECT u FROM User u WHERE u.username = :username AND u.password = :password")
-	User findByUserAndPassword(@Param("username") String username, @Param("password") String password);
+	@Query("SELECT u FROM User u WHERE u.username = :username")
+	User findByUsername(@Param("username") String username);
 
 }
