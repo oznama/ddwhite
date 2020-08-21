@@ -24,12 +24,14 @@ export class ProviderEditComponent implements OnInit {
       return;
     }
   	this.editForm = this.formBuilder.group({
-      id: [''],
+      id: [],
       bussinesName: ['', Validators.required],
       address: ['', Validators.required],
-      phone: ['', Validators.required],
-      website: ['', Validators.required],
-      contactName: ['', Validators.required]
+      phone: ['', [Validators.required, Validators.pattern("[0-9]{10,}")]],
+      contactName: ['', Validators.required],
+      website: ['', [Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      userId: [],
+      dateCreated: []
     });
     this.apiService.getById(+editProviderId)
       .subscribe( data => {
@@ -40,7 +42,7 @@ export class ProviderEditComponent implements OnInit {
 
   onSubmit() {
   	var body = this.editForm.value;
-  	body.userId = 1;
+  	body.userId = window.localStorage.getItem("userId");
     this.apiService.update(body).pipe(first()).subscribe(
         data => {
           if(data.status === 200) {

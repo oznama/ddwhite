@@ -28,7 +28,9 @@ export class ProductEditComponent implements OnInit {
       nameLarge: ['', Validators.required],
       nameShort: ['', Validators.required],
       sku: ['', Validators.required],
-      description: ['', Validators.required]
+      description: ['', Validators.required],
+      userId: [],
+      dateCreated: []
     });
     this.apiService.getById(+editProductId)
       .subscribe( data => {
@@ -39,7 +41,7 @@ export class ProductEditComponent implements OnInit {
 
   onSubmit() {
   	var body = this.editForm.value;
-  	body.userId = 1;
+  	body.userId = window.localStorage.getItem("userId");
     this.apiService.update(body).pipe(first()).subscribe(
         data => {
           if(data.status === 200) {

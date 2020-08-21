@@ -17,17 +17,16 @@ export class ProductAddComponent implements OnInit {
 
   ngOnInit(): void {
   	this.addForm = this.formBuilder.group({
-      id: [],
       nameLarge: ['', Validators.required],
       nameShort: ['', Validators.required],
-      sku: ['', Validators.required],
-      description: ['', Validators.required]
+      sku: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{1,}")]],
+      description: []
     });
   }
 
   onSubmit() {
   	var body = this.addForm.value;
-  	body.userId = 1;
+  	body.userId = window.localStorage.getItem("userId");
     this.apiService.create(body)
       .subscribe( data => {
         this.alertService.success('Producto guardado', alertOptions);

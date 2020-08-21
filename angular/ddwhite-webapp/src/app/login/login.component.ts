@@ -12,47 +12,49 @@ import { ApiUserService } from "../service/api.service";
 export class LoginComponent implements OnInit {
 
   loginForm: FormGroup;
-  invalidLogin: boolean = false;
 
-  constructor(private formBuilder: FormBuilder, private router:Router, private apiService:ApiUserService, public alertService:AlertService){}
+  constructor(
+    private formBuilder: FormBuilder, 
+    private router:Router, 
+    private apiService:ApiUserService, 
+    public alertService:AlertService
+   ){}
 
   ngOnInit(): void {
     this.loginForm = this.formBuilder.group({
-      id: [],
-      username: ['', Validators.required],
-      password: ['', Validators.required]
+      username: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{1,}")]],
+      password: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{4,}")]]
     });
   }
 
-  login(){
+  isFieldInvalid(field: string){
+    var input = this.loginForm.get(field);
+    return !input.valid && input.touched;
+  }
 
+  login(){
     if (this.loginForm.invalid) {
       return;
     }
-
     const body = {
       username: this.loginForm.controls.username.value,
       password: this.loginForm.controls.password.value
     }
     this.apiService.login(body).subscribe(response => {
-      var token = response.headers.get('token');
-      if(response.status === 200 && token){
-        window.localStorage.setItem('token', token);
-        window.localStorage.setItem('id', response.body.id);
+      if(response.status === 200){
         this.alertService.success('Bienvenido ' + response.body.fullName, alertOptions);
+        window.localStorage.setItem('userId', response.body.id);
+        this.apiService.LoggedIn = true;
         this.router.navigate(['home']);
       } else {
-        this.invalidLogin = true;
         this.alertService.warn(response.message, alertOptions);
       }
     }, error =>{
-      console.log(error);
-      if(error.status == 404)
-        this.alertService.warn('Username or password invalid', alertOptions);
+      if(error.status == 403)
+        this.alertService.warn(error.error, alertOptions);
       else
-        this.alertService.error(error.message, alertOptions);
+        this.alertService.error(error.error, alertOptions);
     })
-
   }
 
 }

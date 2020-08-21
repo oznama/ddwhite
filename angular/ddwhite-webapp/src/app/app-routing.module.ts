@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
-import { Routes, RouterModule } from '@angular/router';
+import { Routes, RouterModule, CanActivate } from '@angular/router';
+import { AuthGuard } from './login/auth.guard';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ProviderListComponent } from './provider/provider-list/provider-list.component';
@@ -12,7 +13,7 @@ import { ProductEditComponent } from './product/product-edit/product-edit.compon
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
 	{ path: 'login', component: LoginComponent },
-	{ path: 'home', component: HomeComponent },
+	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
 	{ path: 'provider-list', component: ProviderListComponent },
 	{ path: 'provider-add', component: ProviderAddComponent },
 	{ path: 'provider-edit', component: ProviderEditComponent },

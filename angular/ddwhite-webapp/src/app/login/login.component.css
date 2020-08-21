@@ -1,0 +1,36 @@
+mat-card {
+  max-width: 500px;
+  text-align: center;
+}
+.login-wrapper{
+	height:100%;
+}
+
+.login-wrapper mat-card-header{
+	text-align:center;
+	width:100%;
+	display:block;
+	font-weight:700;
+}
+.login-wrapper mat-card-header mat-card-title{
+	font-size:30px;margin:0;
+}
+.login-wrapper .mat-card{
+	padding:40px 70px 50px;
+}
+
+.box-login{
+	position:relative;
+	top:0;
+	opacity:1;
+	float:left;
+	padding:60px 50px 40px 50px;
+	width:100%;
+	background:#fff;
+	border-radius:10px;
+	transform:scale(1);
+	-webkit-transform:scale(1);
+	-ms-transform:scale(1);
+	z-index:5;
+	max-width:330px;
+}

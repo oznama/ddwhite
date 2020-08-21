@@ -1,23 +1,24 @@
-<div class="login-wrapper" fxLayout="row" fxLayoutAlign="center center">
-	<mat-card class="box">
+<div class="login-wrapper" fxLayoutAlign="center center">
+	<mat-card class="box-login">
 		<mat-card-header>
-			<mat-card-title>Log in</mat-card-title>
-		</mat-card-header>
-
-		<form [formGroup]="loginForm" class="example-form">
-			<mat-card-content>
-				<mat-form-field class="example-full-width">
-					<div class="form-group">
-						<input matInput formControlName="username" placeholder="Username" autocomplete="off" />
-					</div>
+	      <mat-card-title>Inicio de sesion</mat-card-title>
+	    </mat-card-header>
+		<mat-card-content>
+			<form [formGroup]="loginForm" (ngSubmit)="login()">
+				<mat-form-field class="full-width-input">
+					<input matInput formControlName="username" placeholder="Username" maxlength="10" autocomplete="off" required />
+					<mat-error *ngIf="isFieldInvalid('username')">
+						Nombre de usuario invalido
+					</mat-error>
 				</mat-form-field>
-				<mat-form-field class="example-full-width">
-					<div class="form-group">
-						<input matInput formControlName="password" placeholder="Password" type="password" autocomplete="off" />
-					</div>
+				<mat-form-field class="full-width-input">
+					<input matInput formControlName="password" placeholder="Password" maxlength="16" type="password" autocomplete="off" required />
+					<mat-error *ngIf="isFieldInvalid('password')">
+						Password invalido
+					</mat-error>
 				</mat-form-field>
-			</mat-card-content>
-			<button mat-raised-button color="primary" class="btn-block" [disabled]="loginForm.invalid" (click)="login()">Login</button>
-		</form>
+				<button mat-raised-button class="midle-width-input" color="primary" [disabled]="loginForm.invalid">Login</button>
+			</form>
+		</mat-card-content>
 	</mat-card>
 </div>

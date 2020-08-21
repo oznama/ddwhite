@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {Router} from "@angular/router";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {Provider} from "../../model/provider.model";
 import { ApiProviderService } from "../../service/api.service";
 import { AlertService, alertOptions } from '../../_alert';
@@ -11,11 +12,21 @@ import { AlertService, alertOptions } from '../../_alert';
 })
 export class ProviderListComponent implements OnInit {
 
+  searchForm: FormGroup;
   providers: Provider[];
 
-  constructor(private router:Router, private apiService:ApiProviderService, public alertService:AlertService) { }
+  constructor(
+    private router:Router, 
+    private apiService:ApiProviderService, 
+    public alertService:AlertService,
+    private formBuilder: FormBuilder) {
+  }
 
   ngOnInit() {
+    this.searchForm = this.formBuilder.group({
+      bussinesName: [],
+      contactName: [],
+    });
   	this.apiService.get()
   	  .subscribe( data => {
   	  	this.providers = data.content;
@@ -42,6 +53,10 @@ export class ProviderListComponent implements OnInit {
 
   add(): void{
   	this.router.navigate(['provider-add']);	
+  }
+
+  filtro(): void{
+
   }
 
 }

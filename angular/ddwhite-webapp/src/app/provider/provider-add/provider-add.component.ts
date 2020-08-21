@@ -17,18 +17,17 @@ export class ProviderAddComponent implements OnInit {
 
   ngOnInit(): void {
   	this.addForm = this.formBuilder.group({
-      id: [],
       bussinesName: ['', Validators.required],
       address: ['', Validators.required],
-      phone: ['', Validators.required],
+      phone: ['', [Validators.required, Validators.pattern("[0-9]{10,}")]],
       contactName: ['', Validators.required],
-      website: ['', Validators.required]
+      website: ['', [Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]]
     });
-  }
+  }    
 
   onSubmit() {
   	var body = this.addForm.value;
-  	body.userId = 1;
+  	body.userId = window.localStorage.getItem("userId");
     this.apiService.create(body)
       .subscribe( data => {
         this.alertService.success('Proveedor guardado', alertOptions);

@@ -1,35 +1,52 @@
-<br>
-<div class="col-md-6 div-container">
-  <h2 class="text-center">Agregar Proveedor</h2>
-  <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
-    <div class="form-group">
-      <label for="bussinesName">Nombre:</label>
-      <input type="text" formControlName="bussinesName" placeholder="Nombre del comercio" name="bussinesName" class="form-control" id="bussinesName">
-    </div>
+<div class="div-container">
+  <mat-card class="box-form">
+    <mat-card-header>
+      <mat-card-title>Agregar proveedor</mat-card-title>
+    </mat-card-header>
 
-    <div class="form-group">
-      <label for="password">Direccion:</label>
-      <input type="text" formControlName="address" placeholder="Direccion de la empresa" name="address" class="form-control" id="address">
-    </div>
+    <mat-card-content>
+      <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+        <mat-form-field class="full-width-input">
+          <input matInput formControlName="bussinesName" placeholder="Nombre" maxlength="150" required>
+          <mat-error>
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
 
-    <div class="form-group">
-      <label for="phone">Telefono:</label>
-      <input formControlName="phone" placeholder="##########" name="phone" class="form-control" id="phone">
-    </div>
+        <mat-form-field class="full-width-input">
+          <input matInput formControlName="address" placeholder="Direccion" maxlength="80" required>
+          <mat-error>
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
 
-    <div class="form-group">
-      <label for="contactName">Nombre de contacto:</label>
-      <input formControlName="contactName" placeholder="Contacto | Ejecutivo de venta" name="contactName" class="form-control" id="contactName">
-    </div>
+        <mat-form-field class="full-width-input">
+          <input matInput formControlName="phone" placeholder="Telefono" autocomplete="off" maxlength="11" required>
+          <mat-error>
+            Campo obligatorio, Ejemplo: 5512345678
+          </mat-error>
+        </mat-form-field>
 
-    <div class="form-group">
-      <label for="website">Pagina web:</label>
-      <input formControlName="website" placeholder="www.page.com" name="website" class="form-control" id="website">
-    </div>
+        <mat-form-field class="full-width-input">
+          <input matInput formControlName="contactName" placeholder="Nombre de contacto" maxlength="100" required>
+          <mat-error>
+            Campo obligatorio
+          </mat-error>
+        </mat-form-field>
 
-    <div class="wrapper">
-      <button class="btn btn-success">Guardar</button>
-      <button class="btn btn-danger" (click)="cancelar()">Cancelar</button>
-    </div>
-  </form>
+        <mat-form-field class="full-width-input">
+          <input matInput formControlName="website" placeholder="Pagina web" maxlength="100">
+          <mat-error>
+            Campo obligatorio, Ejemplo: www.pagina.com
+          </mat-error>
+        </mat-form-field>
+
+        <div class="wrapper">
+          <button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button>
+          <span class="spacer"></span>
+          <button mat-raised-button color="primary" [disabled]="addForm.invalid">Guardar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
 </div>

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {Product} from "../../model/product.model";
 import { ApiProductService } from "../../service/api.service";
 import { AlertService, alertOptions } from '../../_alert';
@@ -11,12 +12,22 @@ import { AlertService, alertOptions } from '../../_alert';
 })
 export class ProductListComponent implements OnInit {
 
+  searchForm: FormGroup;
   products: Product[];
 
-  constructor(private router:Router, private apiService:ApiProductService, public alertService:AlertService) { }
+  constructor(
+    private router:Router,
+    private apiService:ApiProductService,
+    public alertService:AlertService,
+    private formBuilder: FormBuilder) {
+  }
 
   ngOnInit(): void {
-  	this.apiService.get()
+    this.searchForm = this.formBuilder.group({
+      sku: [],
+      name: [],
+    });
+    this.apiService.get()
   	  .subscribe( data => {
   	  	this.products = data.content;
   	  })

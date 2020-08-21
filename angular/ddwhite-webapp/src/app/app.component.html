@@ -1,18 +1,2 @@
-<!-- Toolbar -->
-<mat-toolbar color="primary">
-
-  <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with menu icon">
-    <mat-icon>more_vert</mat-icon>
-  </button>
-  <mat-menu #menu="matMenu">
-    <button mat-menu-item routerLink="/provider-list"><span>Proveedores</span></button>
-    <button mat-menu-item routerLink="/product-list"><span>Productos</span></button>
-    <button mat-menu-item ><span>Compras</span></button>
-  </mat-menu>
-  <mat-icon aria-hidden="false" aria-label="Example home icon" routerLink="/home">home</mat-icon>
-  <span class="example-spacer"></span>
-  <button mat-raised-button (click)="logout()">Log out</button>
-  <!--a mat-button mat-raised-button routerLink="/login" routerLinkActive="active" *ngIf="!global.isAunthenticated">Login</a-->
-</mat-toolbar>
-<alert></alert>
+<app-header></app-header>
 <router-outlet></router-outlet>
