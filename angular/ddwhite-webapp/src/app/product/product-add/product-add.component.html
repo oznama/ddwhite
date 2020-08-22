@@ -9,27 +9,26 @@
       <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="full-width-input">
           <input matInput formControlName="sku" placeholder="SKU" maxlength="15" autocomplete="off" required>
-          <mat-error>
-            Campo incorrecto, solo letras y numeros
-          </mat-error>
+          <mat-error>Campo incorrecto, solo letras y numeros</mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
           <input matInput formControlName="nameLarge" placeholder="Nombre completo"  maxlength="80" required>
-          <mat-error>
-            Campo obligatorio
-          </mat-error>
+          <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
           <input matInput formControlName="nameShort" placeholder="Nombre corto"  maxlength="10" required>
-          <mat-error>
-            Campo obligatorio
-          </mat-error>
+          <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
           <input matInput formControlName="description" placeholder="Descripcion del producto" autocomplete="off" maxlength="150">
+        </mat-form-field>
+
+        <mat-form-field class="full-width-input">
+          <input matInput formControlName="percentage" placeholder="% de ganancia" autocomplete="off" maxlength="10">
+          <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
         <div class="wrapper">

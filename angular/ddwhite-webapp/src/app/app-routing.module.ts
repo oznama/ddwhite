@@ -9,6 +9,7 @@ import { ProviderEditComponent } from './provider/provider-edit/provider-edit.co
 import { ProductListComponent } from './product/product-list/product-list.component';
 import { ProductAddComponent } from './product/product-add/product-add.component';
 import { ProductEditComponent } from './product/product-edit/product-edit.component';
+import { PurchaseComponent } from './purchase/purchase.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
@@ -20,6 +21,7 @@ const routes: Routes = [
 	{ path: 'product-list', component: ProductListComponent },
 	{ path: 'product-add', component: ProductAddComponent },
 	{ path: 'product-edit', component: ProductEditComponent },
+	{ path: 'purchases', component: PurchaseComponent }
 ];
 
 @NgModule({

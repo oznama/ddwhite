@@ -10,7 +10,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule } from '@angular/common/http';
-import { ApiProviderService, ApiUserService, ApiProductService } from './service/api.service';
+import { ApiCatalogService, ApiProviderService, ApiUserService, ApiProductService, ApiPurchaseService } from './service/api.service';
 import { AlertModule } from './_alert';
 import { AuthGuard } from './login/auth.guard';
 
@@ -23,6 +23,7 @@ import { ProviderEditComponent } from './provider/provider-edit/provider-edit.co
 import { ProductEditComponent } from './product/product-edit/product-edit.component';
 import { ProductAddComponent } from './product/product-add/product-add.component';
 import { ProductListComponent } from './product/product-list/product-list.component';
+import { PurchaseComponent, DialogProviderSearch } from './purchase/purchase.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { ProductListComponent } from './product/product-list/product-list.compon
     ProviderEditComponent,
     ProductEditComponent,
     ProductAddComponent,
-    ProductListComponent
+    ProductListComponent,
+    PurchaseComponent, DialogProviderSearch
   ],
   imports: [
     BrowserModule,
@@ -50,9 +52,11 @@ import { ProductListComponent } from './product/product-list/product-list.compon
   ],
   providers: [
     AuthGuard,
+    ApiCatalogService,
     ApiUserService,
     ApiProviderService,
-    ApiProductService
+    ApiProductService,
+    ApiPurchaseService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

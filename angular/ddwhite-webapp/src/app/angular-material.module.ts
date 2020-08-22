@@ -9,13 +9,13 @@ MatListModule,
 MatGridListModule,
 MatFormFieldModule,
 MatInputModule,
-MatSelectModule,
 MatRadioModule,
 MatDatepickerModule,
 MatNativeDateModule,
 MatTooltipModule,
 MatMenuModule,
-MatAutocompleteModule
+MatAutocompleteModule,
+MatDialogModule
 } from '@angular/material';
 
 @NgModule({
@@ -28,13 +28,13 @@ imports: [
    MatGridListModule,
    MatFormFieldModule,
    MatInputModule,
-   MatSelectModule,
    MatRadioModule,
    MatDatepickerModule,
    MatNativeDateModule,
    MatTooltipModule,
    MatMenuModule,
-   MatAutocompleteModule
+   MatAutocompleteModule,
+   MatDialogModule
 ],
 exports: [
    MatButtonModule,
@@ -44,12 +44,12 @@ exports: [
    MatGridListModule,
    MatInputModule,
    MatFormFieldModule,
-   MatSelectModule,
    MatRadioModule,
    MatDatepickerModule,
    MatTooltipModule,
    MatMenuModule,
-   MatAutocompleteModule
+   MatAutocompleteModule,
+   MatDialogModule
 ],
 providers: [
    MatDatepickerModule,

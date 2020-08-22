@@ -27,11 +27,6 @@ export class LoginComponent implements OnInit {
     });
   }
 
-  isFieldInvalid(field: string){
-    var input = this.loginForm.get(field);
-    return !input.valid && input.touched;
-  }
-
   login(){
     if (this.loginForm.invalid) {
       return;

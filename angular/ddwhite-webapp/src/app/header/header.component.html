@@ -5,12 +5,9 @@
   <mat-menu #menu="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item routerLink="/provider-list"><span>Proveedores</span></button>
     <button mat-menu-item routerLink="/product-list"><span>Productos</span></button>
-    <button mat-menu-item ><span>Compras</span></button>
+    <button mat-menu-item routerLink="/purchases"><span>Compras</span></button>
   </mat-menu>
   <mat-icon aria-hidden="false" aria-label="Example home icon" routerLink="/home">home</mat-icon>
   <span class="spacer"></span>
   <button mat-raised-button (click)="onLogout()" *ngIf="isLoggedIn$ | async">Log out</button>
 </mat-toolbar>
-<div class="div-alert">
-  <alert></alert>
-</div>

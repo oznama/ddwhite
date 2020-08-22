@@ -26,12 +26,15 @@ export class ProductEditComponent implements OnInit {
   	this.editForm = this.formBuilder.group({
   	  id: [],
       nameLarge: ['', Validators.required],
-      nameShort: ['', Validators.required],
+      nameShort: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{1,10}")]],
       sku: ['', Validators.required],
       description: ['', Validators.required],
+      percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
       userId: [],
       dateCreated: []
     });
+    this.editForm.controls.userId.disable();
+    this.editForm.controls.dateCreated.disable();
     this.apiService.getById(+editProductId)
       .subscribe( data => {
         this.editForm.setValue(data);

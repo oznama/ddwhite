@@ -1,4 +1,4 @@
-﻿<div *ngFor="let alert of alerts" class="{{cssClass(alert)}}" style="text-align:center">
+﻿<div *ngFor="let alert of alerts" class="{{cssClass(alert)}}" style="text-align:center;	margin: 50px auto; width: 70%">
     <a class="close" (click)="removeAlert(alert)">&times;</a>
     <span [innerHTML]="alert.message"></span>
 </div>

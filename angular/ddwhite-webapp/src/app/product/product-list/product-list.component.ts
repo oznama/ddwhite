@@ -4,6 +4,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {Product} from "../../model/product.model";
 import { ApiProductService } from "../../service/api.service";
 import { AlertService, alertOptions } from '../../_alert';
+import { Observable, of, combineLatest } from 'rxjs/index';
+import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
 
 @Component({
   selector: 'app-product-list',
@@ -13,7 +15,8 @@ import { AlertService, alertOptions } from '../../_alert';
 export class ProductListComponent implements OnInit {
 
   searchForm: FormGroup;
-  products: Product[];
+  products: Observable<Product[]>;
+  productsFiltered$: Observable<Product[]>;
 
   constructor(
     private router:Router,
@@ -27,16 +30,21 @@ export class ProductListComponent implements OnInit {
       sku: [],
       name: [],
     });
-    this.apiService.get()
-  	  .subscribe( data => {
-  	  	this.products = data.content;
-  	  })
+    this.loadProducts();
+  }
+
+  private loadProducts(): void {
+    this.apiService.get().subscribe( data => {
+      this.products = of(data.content);
+      this.productsFiltered$ = of(data.content);
+    })
   }
 
   delete(product:Product): void{
   	this.apiService.delete(product.id)
   	  .subscribe( response => {
-  	  	this.products = this.products.filter( p => p != product);
+  	  	this.products = this.products.pipe(map( items => items.filter( p => p != product)));
+        this.loadProducts();
         this.alertService.success('Producto eliminado', alertOptions);
   	  }, error => {
         console.log(error);
@@ -53,6 +61,38 @@ export class ProductListComponent implements OnInit {
 
   add(): void{
   	this.router.navigate(['product-add']);	
+  }
+
+  doFilter(): void{
+    var sku = this.searchForm.get('sku').value;
+    var name = this.searchForm.get('name').value;
+    if(sku || name){
+      if( sku && name ){
+        this.productsFiltered$ = this.products.pipe(map( 
+          items => items.filter( 
+            product => (product.sku.toLowerCase().includes(sku) 
+                      && product.nameLarge.toLowerCase().includes(name))
+          )
+        ));
+      } else if( sku ){
+        this.productsFiltered$ = this.products.pipe(map( 
+          items => items.filter( 
+            product => product.sku.toLowerCase().includes(sku)
+          )
+        ));
+      } else if( name ){
+        this.productsFiltered$ = this.products.pipe(map( 
+          items => items.filter( 
+            product => product.nameLarge.toLowerCase().includes(name)
+          )
+        ));
+      }
+    }
+  }
+
+  clearFilter(): void{
+    this.searchForm.reset();
+    this.productsFiltered$ = this.products;
   }
 
 }

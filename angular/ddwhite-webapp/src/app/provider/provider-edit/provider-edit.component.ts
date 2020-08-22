@@ -33,6 +33,8 @@ export class ProviderEditComponent implements OnInit {
       userId: [],
       dateCreated: []
     });
+    this.editForm.controls.userId.disable();
+    this.editForm.controls.dateCreated.disable();
     this.apiService.getById(+editProviderId)
       .subscribe( data => {
         this.editForm.setValue(data);
