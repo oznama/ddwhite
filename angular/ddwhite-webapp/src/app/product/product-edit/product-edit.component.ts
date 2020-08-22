@@ -4,6 +4,8 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
 import { ApiProductService } from "../../service/api.service";
 import { AlertService, alertOptions } from '../../_alert';
+import {CatalogItem} from './../../model/catalog.model';
+import { ApiCatalogService } from './../../service/api.service.catalog';
 
 @Component({
   selector: 'app-product-edit',
@@ -13,8 +15,14 @@ import { AlertService, alertOptions } from '../../_alert';
 export class ProductEditComponent implements OnInit {
 
   editForm: FormGroup;
+  catalogGroup: CatalogItem[];
 
-  constructor(private formBuilder: FormBuilder,private router: Router, private apiService: ApiProductService, public alertService:AlertService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router, 
+    private apiService: ApiProductService, 
+    private catalogService: ApiCatalogService,
+    public alertService:AlertService) { }
 
   ngOnInit(): void {
   	let editProductId = window.localStorage.getItem("editProductId");
@@ -30,16 +38,30 @@ export class ProductEditComponent implements OnInit {
       sku: ['', Validators.required],
       description: ['', Validators.required],
       percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
+      group: ['', Validators.required],
       userId: [],
       dateCreated: []
     });
     this.editForm.controls.userId.disable();
     this.editForm.controls.dateCreated.disable();
-    this.apiService.getById(+editProductId)
+    this.loadCatalogGroup();
+    this.loadProduct(+editProductId);
+  }
+
+  private loadProduct(id: number){
+    this.apiService.getById(id)
       .subscribe( data => {
         this.editForm.setValue(data);
       }
     );
+  }
+
+  private loadCatalogGroup(): void{
+    this.catalogService.getByName('GRUPOPROD').subscribe( response => {
+      this.catalogGroup = response.items;
+    }, error =>{
+      console.log(error);
+    });
   }
 
   onSubmit() {

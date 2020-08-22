@@ -1,20 +1,29 @@
 /* You can add global styles to this file, and also import other style files */
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import "~@angular/material/prebuilt-themes/deeppurple-amber.css";
-
+/*
 html,body{
-	height:100%;
+	height:600px;
 	margin:0;
 	padding:0;
 }
+*/
 body{
-	background-image:url(https://lh4.googleusercontent.com/-XplyTa1Za-I/VMSgIyAYkHI/AAAAAAAADxM/oL-rD6VP4ts/w1184-h666/Android-Lollipop-wallpapers-Google-Now-Wallpaper-2.png);
+	/*background-image:url(https://lh4.googleusercontent.com/-XplyTa1Za-I/VMSgIyAYkHI/AAAAAAAADxM/oL-rD6VP4ts/w1184-h666/Android-Lollipop-wallpapers-Google-Now-Wallpaper-2.png);
 	background-position:center;
 	background-size:cover;
 	background-repeat:no-repeat;
 	min-height:100vh;
 	font-family:'Roboto', 
-	sans-serif;
+	sans-serif;*/
+	background-color:#F5EEF8;
+}
+
+input{
+	text-transform: uppercase;
+}
+input[type=number] {
+  text-align:right;
 }
 
 mat-card-header{
@@ -46,7 +55,7 @@ mat-card-header mat-card-title{
 	top:0;
 	opacity:1;
 	float:left;
-	padding:60px 50px 40px 50px;
+	padding: 10px;
 	width:100%;
 	background:#fff;
 	border-radius:10px;
@@ -90,7 +99,7 @@ mat-card-header mat-card-title{
   position:relative;
 }
 #table-scroll {
-  height:400px;
+  height:300px;
   overflow:auto;  
   margin-top:20px;
 }

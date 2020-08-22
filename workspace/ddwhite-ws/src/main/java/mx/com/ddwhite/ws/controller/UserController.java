@@ -40,7 +40,7 @@ public class UserController implements GenericController<User> {
 	@Override
 	public ResponseEntity<?> create(User entity) {
 		try {
-			return ResponseEntity.ok(repository.save(entity));
+			return ResponseEntity.ok(repository.saveAndFlush(entity));
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		}
@@ -51,7 +51,7 @@ public class UserController implements GenericController<User> {
 		try {
 			return ResponseEntity.ok(repository.findById(entity.getId()).map(t -> {
 				BeanUtils.copyProperties(entity, t, "id");
-				return repository.save(t);
+				return repository.saveAndFlush(t);
 			}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId())));
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
@@ -62,6 +62,7 @@ public class UserController implements GenericController<User> {
 	public ResponseEntity<?> delete(Long id) {
 		User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
 		repository.delete(user);
+		repository.flush();
 		return ResponseEntity.ok().build();
 	}
 

@@ -23,6 +23,10 @@ export class ApiProductService {
     return this.http.post<any>(this.context + '/save', provider);
   }
 
+  createBulk(providers: Product[]): Observable<any> {
+    return this.http.post<any>(this.context + '/saveBulk', providers);
+  }
+
   update(provider: Product): Observable<any> {
     return this.http.put<any>(this.context + '/update', provider, observeResponse);
   }

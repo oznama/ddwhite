@@ -25,6 +25,7 @@ export class Product {
 	sku: string;
 	description: string;
 	percentage: number;
+	group: number;
 	dateCreated: string;
 	userId: number;
 

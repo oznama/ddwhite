@@ -37,7 +37,7 @@ public class ClientController implements GenericController<Client> {
 	@Override
 	public ResponseEntity<?> create(Client entity) {
 		try {
-			return ResponseEntity.ok(repository.save(entity));
+			return ResponseEntity.ok(repository.saveAndFlush(entity));
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		}
@@ -48,7 +48,7 @@ public class ClientController implements GenericController<Client> {
 		try {
 			return ResponseEntity.ok(repository.findById(entity.getId()).map(t -> {
 				BeanUtils.copyProperties(entity, t, "id");
-				return repository.save(t);
+				return repository.saveAndFlush(t);
 			}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId())));
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
@@ -59,6 +59,7 @@ public class ClientController implements GenericController<Client> {
 	public ResponseEntity<?> delete(Long id) {
 		Client e = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
 		repository.delete(e);
+		repository.flush();
 		return ResponseEntity.ok().build();
 	}
 

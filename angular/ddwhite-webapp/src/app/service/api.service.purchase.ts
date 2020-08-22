@@ -14,4 +14,8 @@ export class ApiPurchaseService {
     return this.http.post<any>(this.context + '/save', purchase);
   }
 
+  createBulk(purchases: Purchase[]): Observable<any> {
+    return this.http.post<any>(this.context + '/saveBulk', purchases);
+  }
+
 }

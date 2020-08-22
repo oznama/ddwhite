@@ -12,17 +12,17 @@
           <input matInput formControlName="id">
         </mat-form-field>
 
-        <mat-form-field class="full-width-input">
+        <mat-form-field class="thrid-width-input">
           <input matInput formControlName="sku" placeholder="SKU" maxlength="15" autocomplete="off" required>
           <mat-error>Campo incorrecto, solo letras y numeros</mat-error>
-        </mat-form-field>
+        </mat-form-field><br>
 
-        <mat-form-field class="full-width-input">
+        <mat-form-field class="midle-width-input">
           <input matInput formControlName="nameLarge" placeholder="Nombre completo"  maxlength="80" required>
           <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
-        <mat-form-field class="full-width-input">
+        <mat-form-field class="midle-width-input">
           <input matInput formControlName="nameShort" placeholder="Nombre corto"  maxlength="10" required>
           <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
@@ -31,8 +31,17 @@
           <input matInput formControlName="description" placeholder="Descripcion del producto" autocomplete="off" maxlength="150">
         </mat-form-field>
 
-        <mat-form-field class="full-width-input">
-          <input matInput formControlName="percentage" placeholder="% de ganancia" autocomplete="off" maxlength="10">
+        <mat-form-field class='midle-width-input'>
+          <select matNativeControl formControlName="group" placeholder="Grupo" required>
+            <option *ngFor="let item of catalogGroup" [value]="item.id">
+              {{item.name}}
+            </option>
+          </select>
+          <mat-error>Campo obligatorio</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="percentage" style="text-align:right; padding: 0 10px;" placeholder="% de ganancia" autocomplete="off" maxlength="10">
           <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 

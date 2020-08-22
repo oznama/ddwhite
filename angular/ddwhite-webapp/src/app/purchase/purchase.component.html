@@ -1,5 +1,9 @@
 <div class="div-container">
 
+  <div fxLayoutAlign="center center">
+  	<button mat-raised-button class="quart-width-input" color="warn" (click)="cancelar()">Cancelar</button>
+  </div>
+
   <mat-card class="box-form">
     <mat-card-header>
       <mat-card-title>Compras</mat-card-title>
@@ -22,7 +26,7 @@
 	    	<mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
 	    </mat-form-field>
 	    <mat-form-field class="third-width-input">
-	    	<input matInput formControlName="unitPrice" placeholder="Costo" maxlength="15" autocomplete="off" required>
+	    	<input matInput formControlName="unitPrice" style="text-align:right; padding: 0 10px" placeholder="Costo" maxlength="15" autocomplete="off" required>
 	    	<mat-error>Campo incorrecto, solo monto con maximo 2 decimales opcionales</mat-error>
 	    </mat-form-field>
 	    
@@ -36,15 +40,43 @@
 		</mat-form-field>
 
 		<div class="wrapper">
-          <button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button>
           <span class="spacer"></span>
-          <button mat-raised-button color="primary" [disabled]="purchaseForm.invalid" (click)="onSubmit()">Guardar</button>
+          <button mat-raised-button type="button" [disabled]="purchaseForm.invalid" (click)="agregar()">Agregar</button>
+          <!--button mat-raised-button color="primary" [disabled]="purchaseForm.invalid" (click)="onSubmit()">Guardar</button-->
+        </div>
+
+		<div fxLayoutAlign="center center">
+        	<button mat-raised-button color="primary" class="midle-width-input" [disabled]="!tableValid()" (click)="builkSave()">Terminar compra</button>
         </div>
 
       </form>
     </mat-card-content>
   </mat-card>
 
-
+  <div id="table-wrapper">
+    <div id="table-scroll">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Proveedor</th>
+          <th>Producto</th>
+          <th>Cantidad</th>
+          <th>Precio</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let purchase of purchases">
+          <td>{{purchase.providerId}}</td>
+          <td>{{purchase.product.id}}</td>
+          <td>{{purchase.quantity}}</td>
+          <td>{{purchase.unitPrice}}</td>
+          <td>
+            <button mat-raised-button color="warn" (click)="remove(purchase)">Borrar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
 
 </div>
