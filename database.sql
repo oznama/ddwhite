@@ -7,6 +7,15 @@ drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
 drop table if exists usuarios;
+drop table if exists catalogos;
+
+create table if not exists catalogos(
+	id bigint not null auto_increment,
+	nombre char(20) not null,
+	descripcion char(100),
+	catalogo_padre bigint,
+	primary key(id)
+);
 
 create table if not exists usuarios(
 	id bigint not null auto_increment,
@@ -36,6 +45,7 @@ create table if not exists productos(
 	nombre_corto char(10) not null,
 	sku char(15) not null,
 	descripcion char(255),
+	porcentaje_ganancia decimal(5,2) not null,
 	fecha_registro datetime default current_timestamp,
 	id_usuario bigint not null,
 	primary key(id)
@@ -48,8 +58,8 @@ create table if not exists compras(
 	id_proveedor bigint not null,
 	id_producto bigint not null,
 	cantidad int not null,
-	precio_unitario numeric not null,
-	unidad char(50),
+	precio_unitario decimal(5,2) not null,
+	unidad bigint,
 	fecha_registro datetime default current_timestamp,
 	primary key(id)
 );
@@ -89,6 +99,7 @@ create table if not exists venta_detalle(
 	id_venta bigint not null,
 	id_compra bigint not null,
 	cantidad int not null,
+	precio decimal(5,2),
 	primary key(id)
 );
 alter table venta_detalle add constraint foreign key (id_venta) references venta_total (id);
