@@ -1,6 +1,7 @@
 package mx.com.ddwhite.ws.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,8 @@ public class SaleDetail implements Serializable {
 	private Long id;
 	@Column(name = "cantidad")
 	private Integer quantity;
+	@Column(name = "precio")
+	private BigDecimal price;
 	@Column(name = "id_venta", updatable = false)
 	private Long saleId;
 	@Column(name = "id_compra", updatable = false)
@@ -42,6 +45,14 @@ public class SaleDetail implements Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
 	public Long getSaleId() {

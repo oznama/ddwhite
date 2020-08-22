@@ -1,6 +1,7 @@
 package mx.com.ddwhite.ws.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -28,6 +29,8 @@ public class Product implements Serializable {
 	private String sku;
 	@Column(name = "descripcion")
 	private String description;
+	@Column(name = "porcentaje_ganancia")
+	private BigDecimal percentage;
 	@Column(name = "fecha_registro", insertable = false, updatable = false)
 	private String dateCreated;
 	@Column(name = "id_usuario")
@@ -71,6 +74,14 @@ public class Product implements Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public BigDecimal getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(BigDecimal percentage) {
+		this.percentage = percentage;
 	}
 
 	public String getDateCreated() {

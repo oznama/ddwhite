@@ -33,7 +33,7 @@ public class Purchase implements Serializable {
 	@Column(name = "precio_unitario")
 	private BigDecimal unitPrice;
 	@Column(name = "unidad")
-	private String unity;
+	private Long unity;
 	@Column(name = "fecha_registro", insertable = false, updatable = false)
 	private String dateCreated;
 	@JoinColumn(name = "id_producto", referencedColumnName = "id", updatable = false)
@@ -80,11 +80,11 @@ public class Purchase implements Serializable {
 		this.unitPrice = unitPrice;
 	}
 
-	public String getUnity() {
+	public Long getUnity() {
 		return unity;
 	}
 
-	public void setUnity(String unity) {
+	public void setUnity(Long unity) {
 		this.unity = unity;
 	}
 
