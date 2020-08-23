@@ -12,6 +12,7 @@ public class InventoryDto implements java.io.Serializable {
 	private Long productId;
 	private Integer quantity;
 	private BigDecimal cost;
+	private BigDecimal averageCost;
 	private BigDecimal price;
 
 	public Long getProductId() {
@@ -44,6 +45,14 @@ public class InventoryDto implements java.io.Serializable {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public BigDecimal getAverageCost() {
+		return averageCost;
+	}
+
+	public void setAverageCost(BigDecimal averageCost) {
+		this.averageCost = averageCost;
 	}
 
 }

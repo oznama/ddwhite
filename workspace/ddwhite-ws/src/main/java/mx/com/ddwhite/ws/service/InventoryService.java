@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -64,10 +65,28 @@ public class InventoryService {
 	private InventoryDto getPurchase(Product product, List<Purchase> purchase) {
 		InventoryDto inv = new InventoryDto();
 		inv.setProductId(product.getUserId());
-		inv.setQuantity(purchase.size());
+		inv.setQuantity(sumQuantity(purchase));
+		inv.setAverageCost(averageCost(purchase));
 		purchase.sort(Comparator.comparing(Purchase::getDateCreated).reversed());
 		inv.setCost(purchase.get(0).getUnitPrice());
 		inv.setPrice(purchase.get(0).getUnitPrice().multiply(product.getPercentage()));	
 		return inv;
+	}
+	
+	private int sumQuantity(List<Purchase> purchases) {
+		int sum = 0;
+		for(Purchase purchase : purchases) {
+			sum += purchase.getQuantity();
+		}
+		return sum;
+	}
+	
+	private BigDecimal averageCost(List<Purchase> purchases) {
+		double sum = 0;
+		for(Purchase purchase : purchases) {
+			sum += purchase.getUnitPrice().doubleValue();
+		}
+		double average = sum / purchases.size();
+		return BigDecimal.valueOf(average);
 	}
 }
