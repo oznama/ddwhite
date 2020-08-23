@@ -76,6 +76,6 @@ public class ProductController implements GenericController<Product> {
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		}
-	}	
-
+	}
+	
 }
