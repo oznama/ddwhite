@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Optional, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, FormControl, Validators} from '@angular/forms';
 import {Router} from "@angular/router";
 import {MatDialog} from '@angular/material/dialog';
@@ -7,14 +7,15 @@ import {Purchase} from './../model/purchase.model';
 import { AlertService, alertOptions } from '../_alert';
 import { ApiCatalogService } from './../service/api.service.catalog';
 import { ApiPurchaseService } from './../service/api.service.purchase';
-/*
-import {Observable} from 'rxjs';
+
+import {Observable, of} from 'rxjs';
 import {map, startWith} from 'rxjs/operators';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Provider } from './../model/provider.model';
 import { Product } from './../model/product.model';
 import { ApiProviderService } from './../service/api.service.provider';
 import { ApiProductService } from './../service/api.service.product';
-*/
+
 
 @Component({
   selector: 'app-purchase',
@@ -24,53 +25,28 @@ import { ApiProductService } from './../service/api.service.product';
 export class PurchaseComponent implements OnInit {
 
   purchaseForm: FormGroup;
-  provider = new FormControl();
-  product = new FormControl();
   catalogUnity: CatalogItem[];
   purchases: Purchase[] = [];
-  /*
-  providers: Provider[];
-  products: Product[];
-  providerFiltred$: Observable<Provider[]>;
-  productFiltred$: Observable<Product[]>;
-  */
+
+  provider: Provider = new Provider();
+  product: Product = new Product();
 
   constructor(
   	private formBuilder: FormBuilder,
   	private router: Router, 
   	private catalogService: ApiCatalogService,
-  	/*private providerService: ApiProviderService, 
-  	private productService: ApiProductService*/
   	private purchaseService: ApiPurchaseService,
   	public alertService:AlertService,
   	public dialog: MatDialog) { 
   }
 
   ngOnInit(): void {
-
   	this.purchaseForm = this.formBuilder.group({
-  		providerName: [],
-  		productName: [],
   		quantity: ['', [Validators.required,Validators.pattern("[0-9]{1,5}")]],
   		unitPrice: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
   		unity: []
   	})
-  	//this.purchaseForm.controls.providerName.disable();
-  	//this.purchaseForm.controls.productName.disable();
-
   	this.loadCatalogUnity();
-  	/*
-  	this.loadProviders();
-  	this.loadProducts();
-    this.providerFiltred$ = this.provider.valueChanges.pipe(
-    	startWith(''),
-    	map( value => this.filterProviders(value))
-    );
-    this.productFiltred$ = this.product.valueChanges.pipe(
-    	startWith(''),
-    	map( value => this.filterProducts(value))
-    );
-    */
   }
 
   cancelar(){
@@ -79,10 +55,8 @@ export class PurchaseComponent implements OnInit {
 
   private setPurchase(): Purchase {
     return <Purchase> {
-      product:{
-        id: +this.purchaseForm.controls.productName.value, // TODO: Temporal
-      },
-      providerId: +this.purchaseForm.controls.providerName.value, // TOFO: Temporal
+      product: this.product,
+      providerId: this.provider.id,
       quantity: +this.purchaseForm.controls.quantity.value,
       unitPrice: +this.purchaseForm.controls.unitPrice.value,
       unity: +this.purchaseForm.controls.unity.value,
@@ -110,33 +84,15 @@ export class PurchaseComponent implements OnInit {
     });
   }
 
-  /*
-  private loadProviders(): void{
-  	this.providerService.get().subscribe( response => {
-    	this.providers = response.content;
-    });
+  formInvalid(){
+    return !(this.provider.id && this.product.id && 
+            this.purchaseForm.controls.quantity.value &&
+            this.purchaseForm.controls.unitPrice.value &&
+            this.purchaseForm.controls.unity.value);
   }
-
-  private loadProducts(): void{
-  	this.productService.get().subscribe( response => {
-  		this.products = response.content;
-  	});
-  }
-
-  private filterProviders(bussinesName: string): Provider[] {
-    return this.providers.filter(provider => provider.bussinesName.toLowerCase().includes(bussinesName.toLowerCase()));
-  }
-
-  private filterProducts(nameLarge: string): Product[] {
-  	return this.products.filter(product => product.nameLarge.toLowerCase().includes(nameLarge.toLowerCase()));
-  }
-  */
 
   agregar(){
     const purch = this.setPurchase();
-    //const prov = this.purchaseForm.controls.providerName.value;
-    //const prod = this.purchaseForm.controls.productName.value;
-    //let itemFounded = this.purchases.find(item => item.providerId === purch.providerId && item.product.id === purch.product.id);
     let finded = false;
     this.purchases.forEach( item => {
       if(item.providerId === purch.providerId && 
@@ -170,6 +126,9 @@ export class PurchaseComponent implements OnInit {
         .subscribe( data => {
           this.alertService.success('Compras registradas', alertOptions);
           this.purchases = [];
+          this.product = new Product();
+          this.provider = new Provider();
+          this.purchaseForm.reset();
         }, error => {
           const errMsg = 'Ha ocurrido un error en la transaccion: ';
           console.error(error);
@@ -184,14 +143,161 @@ export class PurchaseComponent implements OnInit {
   }
 
   openDialogProviderSearch() {
-    this.dialog.open(DialogProviderSearch);
+    const dialogRef = this.dialog.open(DialogProviderSearch);
+    dialogRef.afterClosed().subscribe( result =>{
+      if( result && result.data ){
+        this.provider.id = result.data.id;
+        this.provider.bussinesName = result.data.bussinesName;
+      }
+    });
+  }
+
+  openDialogProductSearch() {
+    const dialogRef = this.dialog.open(DialogoProductSearch);
+    dialogRef.afterClosed().subscribe( result =>{
+      if( result && result.data ){
+        this.product.id = result.data.id;
+        this.product.sku = result.data.sku;
+        this.product.nameLarge = result.data.nameLarge;
+      }
+    });
   }
 
 }
+
+
+/* ####################################################################################*/
+/* #############################   DIALOG PROVIDER CLASS ##############################*/
+/* ####################################################################################*/
 
 
 @Component({
   selector: 'dialog-provider-search',
   templateUrl: 'dialog-provider-search.html',
 })
-export class DialogProviderSearch {}
+export class DialogProviderSearch implements OnInit {
+  searchForm: FormGroup;
+  providers: Observable<Provider[]>;
+  providersFiltred$: Observable<Provider[]>;
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogProviderSearch>, @Optional() @Inject(MAT_DIALOG_DATA) public dProvider: Provider,
+    private router:Router, 
+    private apiService: ApiProviderService, 
+    private purchaseService: ApiPurchaseService,
+    public alertService:AlertService,
+    private formBuilder: FormBuilder) {
+  }
+
+  ngOnInit() {
+    this.searchForm = this.formBuilder.group({
+      bussinesName: []
+    });
+    this.loadProviders();
+  }
+
+  private loadProviders() {
+    this.apiService.get().subscribe( data => {
+        this.providers = of(data.content);
+        this.providersFiltred$ = of(data.content);
+      }
+    )
+  }
+
+  doFilter(): void{
+    var bussinesName = this.searchForm.get('bussinesName').value;
+    if( bussinesName ){
+      this.providersFiltred$ = this.providers.pipe(map( 
+        items => items.filter( 
+          provider => provider.bussinesName.toLowerCase().includes(bussinesName)
+        )
+      ));
+    }
+  }
+
+  clearFilter(): void{
+    this.searchForm.reset();
+    this.providersFiltred$ = this.providers;
+  }
+
+  select(provider: Provider): void{
+    this.dialogRef.close({ event: 'close', data: provider });
+  }
+
+}
+
+/* ####################################################################################*/
+/* #############################   DIALOG PRODUCT CLASS ###############################*/
+/* ####################################################################################*/
+
+
+@Component({
+  selector: 'dialog-product-search',
+  templateUrl: 'dialog-product-search.html',
+})
+export class DialogoProductSearch implements OnInit {
+  searchForm: FormGroup;
+  products: Observable<Product[]>;
+  productFiltred$: Observable<Product[]>;
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogoProductSearch>, @Optional() @Inject(MAT_DIALOG_DATA) public dProduct: Product,
+    private router:Router, 
+    private apiService: ApiProductService, 
+    private purchaseService: ApiPurchaseService,
+    public alertService:AlertService,
+    private formBuilder: FormBuilder) {
+  }
+
+  ngOnInit() {
+    this.searchForm = this.formBuilder.group({
+      sku: [],
+      name: [],
+    });
+    this.loadProducts();
+  }
+
+  private loadProducts(): void{
+    this.apiService.get().subscribe( data => {
+      this.products = of(data.content);
+      this.productFiltred$ = of(data.content);
+    });
+  }
+
+  doFilter(): void{
+    var sku = this.searchForm.get('sku').value;
+    var name = this.searchForm.get('name').value;
+    if(sku || name){
+      if( sku && name ){
+        this.productFiltred$ = this.products.pipe(map( 
+          items => items.filter( 
+            product => (product.sku.toLowerCase().includes(sku) 
+                      && product.nameLarge.toLowerCase().includes(name))
+          )
+        ));
+      } else if( sku ){
+        this.productFiltred$ = this.productFiltred$.pipe(map( 
+          items => items.filter( 
+            product => product.sku.toLowerCase().includes(sku)
+          )
+        ));
+      } else if( name ){
+        this.productFiltred$ = this.products.pipe(map( 
+          items => items.filter( 
+            product => product.nameLarge.toLowerCase().includes(name)
+          )
+        ));
+      }
+    }
+  }
+
+  clearFilter(): void{
+    this.searchForm.reset();
+    this.productFiltred$ = this.products;
+  }
+
+  select(product: Product): void{
+    this.dialogRef.close({ event: 'close', data: product });
+  }
+
+}

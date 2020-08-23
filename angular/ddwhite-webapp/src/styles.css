@@ -26,7 +26,7 @@ input[type=number] {
   text-align:right;
 }
 
-th,td{
+th,td,.text-blue,.text-red{
 	text-transform: uppercase;
 	text-align: center;
 }
@@ -82,6 +82,20 @@ mat-card-header mat-card-title{
 
 .hidden {
 	display: none;
+}
+
+.text-blue, .text-red{
+	font-size: 15px;
+	padding: 0 10px;
+}
+
+.text-blue {
+	color: blue;
+}
+
+.text-red {
+	color: red;
+	font-style: italic;
 }
 
 .full-width-input {

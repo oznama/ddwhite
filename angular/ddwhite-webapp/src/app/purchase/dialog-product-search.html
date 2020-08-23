@@ -1,12 +1,15 @@
 <div mat-dialog-content style="width: 600px">
 
-   <!-- Formulario de busqueda -->
-   <div>
+  <!-- Formulario de busqueda -->
+  <div>
     <mat-card>
       <mat-card-content>
         <form [formGroup]="searchForm">
-          <mat-form-field style="width: 90%;">
-            <input matInput formControlName="bussinesName" placeholder="Nombre" maxlength="150">
+          <mat-form-field style="width: 20%;">
+            <input matInput formControlName="sku" placeholder="SKU" maxlength="15">
+          </mat-form-field>
+          <mat-form-field style="width: 70%;">
+            <input matInput formControlName="name" placeholder="Nombre" maxlength="80">
           </mat-form-field>
           <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="doFilter()">search</mat-icon>
           <mat-icon aria-hidden="false" aria-label="Example clear icon" (click)="clearFilter()">clear</mat-icon>
@@ -22,20 +25,23 @@
         <thead>
         <tr>
           <th class="hidden">Id</th>
-          <th>Nombre</th>
+          <th>SKU</th>
+          <th>Nombre completo</th>
           <th></th>
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let provider of providersFiltred$ | async">
-          <td class="hidden">{{provider.id}}</td>
-          <td>{{provider.bussinesName}}</td>
+        <tr *ngFor="let product of productFiltred$ | async">
+          <td class="hidden">{{product.id}}</td>
+          <td>{{product.sku}}</td>
+          <td>{{product.nameLarge}}</td>
           <td>
-            <button mat-raised-button color="primary" (click)="select(provider)" style="margin-left: 20px;">Seleccionar</button>
+            <button mat-raised-button color="primary" (click)="select(product)" style="margin-left: 20px;">Seleccionar</button>
           </td>
         </tr>
         </tbody>
       </table>
     </div>
   </div>
+
 </div>

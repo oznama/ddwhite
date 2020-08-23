@@ -23,7 +23,7 @@ import { ProviderEditComponent } from './provider/provider-edit/provider-edit.co
 import { ProductEditComponent } from './product/product-edit/product-edit.component';
 import { ProductAddComponent } from './product/product-add/product-add.component';
 import { ProductListComponent } from './product/product-list/product-list.component';
-import { PurchaseComponent, DialogProviderSearch } from './purchase/purchase.component';
+import { PurchaseComponent, DialogProviderSearch, DialogoProductSearch } from './purchase/purchase.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +37,7 @@ import { PurchaseComponent, DialogProviderSearch } from './purchase/purchase.com
     ProductEditComponent,
     ProductAddComponent,
     ProductListComponent,
-    PurchaseComponent, DialogProviderSearch
+    PurchaseComponent, DialogProviderSearch, DialogoProductSearch
   ],
   imports: [
     BrowserModule,

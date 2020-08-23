@@ -30,7 +30,8 @@
           <th>SKU</th>
           <th>Nombre completo</th>
           <th>Cant. Almacen</th>
-          <th>Costo</th>
+          <th>Costo promedio</th>
+          <th>Costo Ult Compra</th>
           <th>Precio</th>
           <th>
             <div class="wrapper">
@@ -46,6 +47,7 @@
           <td>{{product.sku}}</td>
           <td>{{product.nameLarge}}</td>
           <td>{{product.inventory.quantity}}</td>
+          <td>{{product.inventory.averageCost}}</td>
           <td>{{product.inventory.cost}}</td>
           <td>{{product.inventory.price}}</td>
           <td>

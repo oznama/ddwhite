@@ -40,5 +40,6 @@ export class Inventory{
 	productId: number;
 	quantity: number;
 	cost: number;
+	averageCost: number;
 	price: number;
 }
