@@ -43,9 +43,10 @@ create table if not exists productos(
 	id bigint not null auto_increment,
 	nombre_largo char(80) not null,
 	nombre_corto char(10) not null,
-	sku char(15) not null,
+	sku char(15) unique not null,
 	descripcion char(255),
 	porcentaje_ganancia decimal(5,2) not null,
+	grupo bigint not null,
 	fecha_registro datetime default current_timestamp,
 	id_usuario bigint not null,
 	primary key(id)
