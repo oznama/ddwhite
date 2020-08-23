@@ -45,10 +45,12 @@ export class LoginComponent implements OnInit {
         this.alertService.warn(response.message, alertOptions);
       }
     }, error =>{
-      if(error.status == 403)
+      if(error.status == 0)
+        this.alertService.error('No se ha podido establecer comunicaci&oacute;n con el servidor', alertOptions);
+      else if(error.status == 403)
         this.alertService.warn(error.error, alertOptions);
       else
-        this.alertService.error(error.error, alertOptions);
+        this.alertService.error(error.message, alertOptions);
     })
   }
 

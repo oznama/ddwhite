@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs/index";
 import { baseUrl, observeResponse } from './../../environments/environment';
 import {ApiResponse} from "../model/api.response";
-import {Product, ProductPageable} from "../model/product.model";
+import {Product, ProductPageable, Inventory} from "../model/product.model";
 
 @Injectable()
 export class ApiProductService {
@@ -34,4 +34,13 @@ export class ApiProductService {
   delete(id: number) {
     return this.http.delete<any>(this.context + '/delete/' + id);
   }
+
+  getInventory() : Observable<Product[]> {
+    return this.http.get<Product[]>(baseUrl + '/inventory/find/product');
+  }
+
+  getInventoryByProduct(productId: number) : Observable<Inventory> {
+    return this.http.get<Inventory>(baseUrl + '/inventory/find/' + productId);
+  }
+
 }

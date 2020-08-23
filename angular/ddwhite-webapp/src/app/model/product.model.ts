@@ -29,7 +29,16 @@ export class Product {
 	dateCreated: string;
 	userId: number;
 
+	inventory: Inventory;
+
 	constructor(init?:Partial<Product>){
 		Object.assign(this, init);
 	}
+}
+
+export class Inventory{
+	productId: number;
+	quantity: number;
+	cost: number;
+	price: number;
 }

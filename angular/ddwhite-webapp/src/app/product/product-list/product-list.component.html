@@ -45,9 +45,9 @@
           <td class="hidden">{{product.id}}</td>
           <td>{{product.sku}}</td>
           <td>{{product.nameLarge}}</td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>{{product.inventory.quantity}}</td>
+          <td>{{product.inventory.cost}}</td>
+          <td>{{product.inventory.price}}</td>
           <td>
           	<button mat-raised-button color="warn" (click)="delete(product)">Borrar</button>
             <button mat-raised-button color="primary" (click)="edit(product)" style="margin-left: 20px;">Modificar</button>

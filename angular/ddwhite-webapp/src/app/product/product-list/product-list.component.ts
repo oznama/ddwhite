@@ -34,10 +34,10 @@ export class ProductListComponent implements OnInit {
   }
 
   private loadProducts(): void {
-    this.apiService.get().subscribe( data => {
-      this.products = of(data.content);
-      this.productsFiltered$ = of(data.content);
-    })
+    this.apiService.getInventory().subscribe( data => {
+      this.products = of(data);
+      this.productsFiltered$ = of(data);
+    });
   }
 
   delete(product:Product): void{
