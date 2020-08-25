@@ -2,7 +2,6 @@ package mx.com.ddwhite.ws.controller;
 
 import java.util.List;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -14,46 +13,41 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
-import mx.com.ddwhite.ws.model.Product;
-import mx.com.ddwhite.ws.repository.ProductRepository;
+import mx.com.ddwhite.ws.dto.ProductDto;
+import mx.com.ddwhite.ws.service.ProductService;
 
 @RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/product")
-public class ProductController implements GenericController<Product> {
-
-	private final String MODULE = Product.class.getSimpleName();
-
+public class ProductController implements GenericController<ProductDto> {
+	
 	@Autowired
-	private ProductRepository repository;
+	private ProductService service;
 
 	@Override
-	public Page<Product> findAll(Pageable pageable) {
-		return repository.findAll(pageable);
+	public Page<ProductDto> findAll(Pageable pageable) {
+		return service.findAll(pageable);
 	}
 
 	@Override
-	public Product findById(Long id) {
-		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
+	public ProductDto findById(Long id) {
+		return service.findById(id);
 	}
 
 	@Override
-	public ResponseEntity<?> create(Product entity) {
+	public ResponseEntity<?> create(ProductDto entity) {
 		try {
-			return ResponseEntity.ok(repository.saveAndFlush(entity));
+			return ResponseEntity.ok(service.create(entity));
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		}
 	}
 
 	@Override
-	public ResponseEntity<?> update(Product entity) {
+	public ResponseEntity<?> update(ProductDto productDto) {
 		try {
-			return ResponseEntity.ok(repository.findById(entity.getId()).map(t -> {
-				BeanUtils.copyProperties(entity, t, "id");
-				return repository.saveAndFlush(t);
-			}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId())));
+			service.update(productDto);
+			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		}
@@ -61,17 +55,14 @@ public class ProductController implements GenericController<Product> {
 
 	@Override
 	public ResponseEntity<?> delete(Long id) {
-		Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
-		repository.delete(product);
-		repository.flush();
+		service.delete(id);
 		return ResponseEntity.ok().build();
 	}
 	
 	@PostMapping("/saveBulk")
-	public ResponseEntity<?> createBuilk(@RequestBody List<Product> entities) {
+	public ResponseEntity<?> createBuilk(@RequestBody List<ProductDto> productsDto) {
 		try {
-			repository.saveAll(entities);
-			repository.flush();
+			service.createBuilk(productsDto);
 			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());

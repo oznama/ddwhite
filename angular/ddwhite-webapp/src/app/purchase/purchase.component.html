@@ -34,7 +34,7 @@
   	    	<mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
   	    </mat-form-field>
   	    <mat-form-field class="third-width-input">
-  	    	<input matInput formControlName="unitPrice" style="text-align:right; padding: 0 10px" placeholder="Costo" maxlength="15" autocomplete="off" required>
+  	    	<input matInput formControlName="cost" style="text-align:right; padding: 0 10px" placeholder="Costo" maxlength="15" autocomplete="off" required>
   	    	<mat-error>Campo incorrecto, solo monto con maximo 2 decimales opcionales</mat-error>
   	    </mat-form-field>
 	    
@@ -77,7 +77,7 @@
           <td>{{purchase.providerId}}</td>
           <td>{{purchase.product.id}}</td>
           <td>{{purchase.quantity}}</td>
-          <td>{{purchase.unitPrice}}</td>
+          <td>{{purchase.cost}}</td>
           <td>
             <button mat-raised-button color="warn" (click)="remove(purchase)">Borrar</button>
           </td>

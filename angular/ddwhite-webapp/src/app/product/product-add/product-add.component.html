@@ -6,7 +6,7 @@
     </mat-card-header>
 
     <mat-card-content>
-      <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
+      <form [formGroup]="addForm"> <!--(ngSubmit)="onSubmit()"-->
         <mat-form-field class="third-width-input">
           <input matInput formControlName="sku" placeholder="SKU" maxlength="15" autocomplete="off" required>
           <mat-error>Campo incorrecto, solo letras y numeros</mat-error>
@@ -19,7 +19,7 @@
 
         <mat-form-field class="midle-width-input">
           <input matInput formControlName="nameShort" placeholder="Nombre corto"  maxlength="10" required>
-          <mat-error>Campo obligatorio</mat-error>
+          <mat-error>Campo obligatorio sin espacios</mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
@@ -41,10 +41,10 @@
         </mat-form-field>
 
         <div class="wrapper">
-          <button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button>
+          <button mat-raised-button color="warn" type="button" (click)="cancelar()">Cancelar</button>
           <span class="spacer"></span>
-          <button mat-raised-button type="button" [disabled]="addForm.invalid" (click)="agregar()">Agregar</button>
-          <button mat-raised-button color="primary" [disabled]="addForm.invalid && tableValid()">Guardar</button>
+          <button mat-raised-button type="button" type="button" [disabled]="addForm.invalid" (click)="agregar()">Agregar</button>
+          <!--button mat-raised-button color="primary" [disabled]="addForm.invalid && tableValid()">Guardar</button-->
         </div>
       </form>
     </mat-card-content>

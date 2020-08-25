@@ -1,0 +1,140 @@
+<div class="div-sale">
+
+	<div class="div-sale-child">
+
+		  <div class="div-total">
+		  	<span class="total">Total a pagar</span>
+			<span class="total">$ {{sale.total}}</span>
+			<div class="box-payment">
+				
+				<div id="table-wrapper">
+			    <div id="table-scroll">
+			      <table class="table table-striped">
+			        <thead>
+			        <tr>
+			          <th>Met. de pago</th>
+			          <th>Monto</th>
+			          <th>
+			          	<button mat-raised-button color="primary" >Agregar</button>
+			          </th>
+			        </tr>
+			        </thead>
+			        <tbody>
+			        <tr >
+			          <td></td>
+			          <td></td>
+			          <td>
+			            <button mat-raised-button color="warn" >Borrar</button>
+			          </td>
+			        </tr>
+			        </tbody>
+			      </table>
+			    </div>
+			  </div>
+
+
+			</div>
+			<div class="box-total-detail">
+				<div class="box-total-detail-arrow">
+					<span class="span-block">Sub total: $ {{sale.subTotal}}</span>
+					<span class="span-block">Iva: $ {{sale.iva}}</span>
+					<span class="span-block">Total: $ {{sale.total}}</span>
+					<span class="span-block">Cambio: $0.00</span>
+				</div>
+			</div>
+			<div class="box-pay">
+				<button mat-raised-button class="button-pay" type="button" >Pagar</button>
+			</div>
+		  </div>
+
+		  <div class="div-container">
+
+		  	<mat-card-header>
+		      <mat-card-title>Registrar venta</mat-card-title>
+		    </mat-card-header>
+
+		  	<mat-card-header>Fecha: Lunes, 24 de agosto de 2020</mat-card-header>
+
+			  <mat-card class="box-form">
+
+			    <mat-card-content>
+
+			      <form [formGroup]="saleForm">
+
+			        <div class="wrapper">
+			          <mat-form-field class="midle-width-input">
+					    <input type="text"
+					           placeholder="Escriba para buscar cliente..."
+					           aria-label="Number"
+					           matInput
+					           [formControl]="autoCompleteClient"
+					           [matAutocomplete]="autoClient">
+					    <mat-autocomplete autoActiveFirstOption #autoClient="matAutocomplete">
+					      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+					      	{{option}}
+					      </mat-option>
+					    </mat-autocomplete>
+					  </mat-form-field>
+					  <span class="spacer"></span>
+			          <button mat-raised-button color="primary" >Registrar nuevo</button>
+			        </div>
+			        <div class="wrapper">
+			          <span style="font-size: 20px; text-transform: uppercase;">Producto</span>
+			          <span class="text-red" *ngIf="!product.id">Click en la lupa para buscar producto...</span>
+			          <span class="text-blue" *ngIf="product.id">{{product.sku + ' ' + product.nameLarge}}</span>
+			          <span style="font-size: 20px; text-transform: uppercase;">Precio:</span>
+			  	      <span class="text-blue"> $ {{product.price}}</span>
+			          <mat-form-field style="width: 10%;">
+			  	    	<input matInput formControlName="quantity" placeholder="Cantidad" maxlength="3" type="number" autocomplete="off" required>
+			  	    	<mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
+			  	      </mat-form-field>
+			          <span class="spacer"></span>
+			          <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogProductSearch()">search</mat-icon>  
+			        </div>
+
+					<div class="wrapper">
+			          <span class="spacer"></span>
+			          <button mat-raised-button type="button" [disabled]="formInvalid()" (click)="agregar()">Agregar</button>
+			        </div>
+
+			      </form>
+			    </mat-card-content>
+			  </mat-card>
+
+			  <div id="table-wrapper">
+			    <div id="table-scroll">
+			      <table class="table table-striped">
+			        <thead>
+			        <tr>
+			          <th>Cantidad</th>
+			          <th>Producto</th>
+			          <th>Precio</th>
+			          <th>Total</th>
+			          <th></th>
+			        </tr>
+			        </thead>
+			        <tbody>
+			        <tr *ngFor="let product of saleDetail">
+			          <td>{{product.quantity}}</td>
+			          <td>{{product.productName}}</td>
+			          <td>{{product.price}}</td>
+			          <td>{{product.total}}</td>
+			          <td>
+			            <button mat-raised-button color="warn" (click)="remove(product.productId)">Borrar</button>
+			          </td>
+			        </tr>
+			        </tbody>
+			      </table>
+			    </div>
+			  </div>
+
+			</div>	
+
+
+
+
+
+	</div>
+
+
+</div>

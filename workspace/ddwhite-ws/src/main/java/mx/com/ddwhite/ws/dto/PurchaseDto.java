@@ -1,43 +1,23 @@
-package mx.com.ddwhite.ws.model;
+package mx.com.ddwhite.ws.dto;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import mx.com.ddwhite.ws.model.Product;
 
-@Entity
-@Table(name = "compras")
-public class Purchase implements Serializable {
+public class PurchaseDto implements java.io.Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 4214832502983390633L;
+	private static final long serialVersionUID = 8736913074809182382L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "id_usuario")
 	private Long userId;
-	@Column(name = "id_proveedor")
 	private Long providerId;
-	@Column(name = "cantidad")
 	private Integer quantity;
-	@Column(name = "costo")
 	private BigDecimal cost;
-	@Column(name = "unidad")
 	private Long unity;
-	@Column(name = "fecha_registro", insertable = false, updatable = false)
 	private String dateCreated;
-	@JoinColumn(name = "id_producto", referencedColumnName = "id", updatable = false)
-	@ManyToOne(optional = false)
 	private Product product;
 
 	public Long getId() {
@@ -97,7 +77,6 @@ public class Purchase implements Serializable {
 	}
 
 	public Product getProduct() {
-		if(product == null) product = new Product();
 		return product;
 	}
 

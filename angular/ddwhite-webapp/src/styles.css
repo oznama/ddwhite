@@ -19,7 +19,7 @@ body{
 	background-color:#F5EEF8;
 }
 
-input,th,td,mat-card-title{
+p,input,th,td,mat-card-title{
 	text-transform: uppercase;
 }
 input[type=number] {

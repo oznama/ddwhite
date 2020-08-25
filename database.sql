@@ -2,7 +2,7 @@ create database ddwhite default character SET utf8;
 
 drop table if exists venta_detalle;
 drop table if exists venta_total;
-drop table if exists cliente;
+drop table if exists clientes;
 drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
@@ -46,6 +46,7 @@ create table if not exists productos(
 	sku char(15) unique not null,
 	descripcion char(255),
 	porcentaje_ganancia decimal(5,2) not null,
+	costo decimal(5,2) default 0,
 	grupo bigint not null,
 	fecha_registro datetime default current_timestamp,
 	id_usuario bigint not null,
@@ -59,7 +60,7 @@ create table if not exists compras(
 	id_proveedor bigint not null,
 	id_producto bigint not null,
 	cantidad int not null,
-	precio_unitario decimal(5,2) not null,
+	costo decimal(5,2) not null,
 	unidad bigint,
 	fecha_registro datetime default current_timestamp,
 	primary key(id)
@@ -88,20 +89,19 @@ alter table clientes add constraint foreign key (id_usuario) references usuarios
 create table if not exists venta_total(
 	id bigint not null auto_increment,
 	id_usuario bigint not null,
-	id_cliente bigint not null,
+	id_cliente bigint,
 	fecha_registro datetime default current_timestamp,
 	primary key(id)
 );
 alter table venta_total add constraint foreign key (id_usuario) references usuarios (id);
-alter table venta_total add constraint foreign key (id_cliente) references clientes (id);
 
 create table if not exists venta_detalle(
 	id bigint not null auto_increment,
 	id_venta bigint not null,
-	id_compra bigint not null,
+	id_producto bigint not null,
 	cantidad int not null,
 	precio decimal(5,2),
 	primary key(id)
 );
 alter table venta_detalle add constraint foreign key (id_venta) references venta_total (id);
-alter table venta_detalle add constraint foreign key (id_compra) references compras (id);
+alter table venta_detalle add constraint foreign key (id_producto) references productos (id);

@@ -1,0 +1,13 @@
+<div mat-dialog-content>
+  <p>
+  	El producto tiene costo actual de: <span class="text-blue" style="font-weight: bold;">$ {{data.currentCost}}</span>
+  	<br>
+  	¿Desea cambiarlo por: <span class="text-red" style="font-weight: bold;">$ {{data.newCost}}</span>?
+  </p>
+  <p class="text-red">Recuerda que el costo del producto es utilizado para generar el precio en base al % de ganancia</p>
+</div>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">No Thanks</button>
+  <span class="spacer"></span>
+  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Ok</button>
+</div>

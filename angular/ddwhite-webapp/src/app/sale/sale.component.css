@@ -1,0 +1,74 @@
+.span-block {
+  display: block;
+}
+
+.div-sale{
+  display: flex;
+  border-radius:10px;
+  flex-direction: column;
+  padding: 10px;
+  margin: 50px auto;
+  background:#fff;
+  height: 800px;
+  max-width:90%;
+}
+.div-sale-child {
+    overflow: hidden;
+    padding: 10px;
+}
+.div-total {
+    float: right;
+    width: 30%;
+    height: 100%
+}
+.div-detail {
+    overflow: hidden;
+    height: 100px;
+}
+/*.box-total, .box-total-2, .box-pay {
+	border-width: 1px;
+	border-style: dashed;
+	border-color: #dcdcdc;
+}*/
+.total, .box-total-detail-arrow, .button-pay{
+	text-transform: uppercase;
+}
+.total {
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+	background: indianred;
+	height: 10%;
+	font-size: 40px;
+	color: white;
+}
+.box-payment {
+	width: 100%;
+	height: 30%;
+}
+.box-total-detail {
+	position:relative;
+	width: 100%;
+	height: 30%;
+}
+.box-total-detail-arrow{
+  position:absolute;
+  right:0;
+  bottom:0;
+  text-align: right;
+  font-size: 30px;
+}
+.box-pay{
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100%;
+	height: 20%;
+}
+.button-pay{
+	width: 50%;
+	height: 50%;
+	font-size: 50px;
+	background: #3CB371;
+	color: white;
+}

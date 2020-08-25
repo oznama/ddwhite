@@ -10,7 +10,7 @@ public class SaleDetailDto implements Serializable {
 	private static final long serialVersionUID = 4368585854288030344L;
 	private Long id;
 	private Long saleId;
-	private Long purchaseId;
+	private Long productId;
 	private Integer quantity;
 
 	public Long getId() {
@@ -29,12 +29,12 @@ public class SaleDetailDto implements Serializable {
 		this.saleId = saleId;
 	}
 
-	public Long getPurchaseId() {
-		return purchaseId;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setPurchaseId(Long purchaseId) {
-		this.purchaseId = purchaseId;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public Integer getQuantity() {

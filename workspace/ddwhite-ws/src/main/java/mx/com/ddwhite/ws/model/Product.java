@@ -31,9 +31,11 @@ public class Product implements Serializable {
 	private String description;
 	@Column(name = "porcentaje_ganancia")
 	private BigDecimal percentage;
+	@Column(name = "costo", insertable = false)
+	private BigDecimal cost;
 	@Column(name = "grupo")
 	private Long group;
-	@Column(name = "fecha_registro", insertable = false, updatable = false)
+	@Column(name = "fecha_registro", insertable = false)
 	private String dateCreated;
 	@Column(name = "id_usuario")
 	private Long userId;
@@ -86,6 +88,14 @@ public class Product implements Serializable {
 		this.percentage = percentage;
 	}
 
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
+	}
+
 	public Long getGroup() {
 		return group;
 	}
@@ -108,6 +118,17 @@ public class Product implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("Product [sku=");
+		builder.append(sku);
+		builder.append(", nameLarge=");
+		builder.append(nameLarge);
+		builder.append("]");
+		return builder.toString();
 	}
 
 }

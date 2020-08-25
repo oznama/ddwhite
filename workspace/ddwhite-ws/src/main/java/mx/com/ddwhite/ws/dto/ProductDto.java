@@ -2,12 +2,12 @@ package mx.com.ddwhite.ws.dto;
 
 import java.math.BigDecimal;
 
-public class ProductInventory implements java.io.Serializable {
+public class ProductDto implements java.io.Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3302756330495223602L;
+	private static final long serialVersionUID = 2774927047524929292L;
 
 	private Long id;
 	private String nameLarge;
@@ -16,11 +16,10 @@ public class ProductInventory implements java.io.Serializable {
 	private String description;
 	private BigDecimal percentage;
 	private BigDecimal cost;
+	private BigDecimal price;
 	private Long group;
 	private String dateCreated;
 	private Long userId;
-
-	private InventoryDto inventory;
 
 	public Long getId() {
 		return id;
@@ -78,6 +77,14 @@ public class ProductInventory implements java.io.Serializable {
 		this.cost = cost;
 	}
 
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+
 	public Long getGroup() {
 		return group;
 	}
@@ -100,15 +107,6 @@ public class ProductInventory implements java.io.Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
-	}
-
-	public InventoryDto getInventory() {
-		if(inventory == null) inventory = new InventoryDto();
-		return inventory;
-	}
-
-	public void setInventory(InventoryDto inventory) {
-		this.inventory = inventory;
 	}
 
 }

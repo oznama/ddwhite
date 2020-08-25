@@ -24,7 +24,7 @@
 
         <mat-form-field class="midle-width-input">
           <input matInput formControlName="nameShort" placeholder="Nombre corto"  maxlength="10" required>
-          <mat-error>Campo obligatorio</mat-error>
+          <mat-error>Campo obligatorio sin espacios</mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
@@ -39,6 +39,8 @@
           </select>
           <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
+
+        <input matInput formControlName="cost" class="hidden">
 
         <mat-form-field class="midle-width-input">
           <input matInput formControlName="percentage" style="text-align:right; padding: 0 10px;" placeholder="% de ganancia" autocomplete="off" maxlength="10">

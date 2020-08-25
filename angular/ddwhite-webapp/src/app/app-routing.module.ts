@@ -10,9 +10,11 @@ import { ProductListComponent } from './product/product-list/product-list.compon
 import { ProductAddComponent } from './product/product-add/product-add.component';
 import { ProductEditComponent } from './product/product-edit/product-edit.component';
 import { PurchaseComponent } from './purchase/purchase.component';
+import { SaleComponent } from './sale/sale.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
+	//{ path: '', pathMatch: 'full', redirectTo: 'sales'},
 	{ path: 'login', component: LoginComponent },
 	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
 	{ path: 'provider-list', component: ProviderListComponent },
@@ -21,7 +23,8 @@ const routes: Routes = [
 	{ path: 'product-list', component: ProductListComponent },
 	{ path: 'product-add', component: ProductAddComponent },
 	{ path: 'product-edit', component: ProductEditComponent },
-	{ path: 'purchases', component: PurchaseComponent }
+	{ path: 'purchases', component: PurchaseComponent },
+	{ path: 'sales', component: SaleComponent}
 ];
 
 @NgModule({

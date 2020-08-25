@@ -28,8 +28,8 @@ public class SaleDetail implements Serializable {
 	private BigDecimal price;
 	@Column(name = "id_venta", updatable = false)
 	private Long saleId;
-	@Column(name = "id_compra", updatable = false)
-	private Long purchaseId;
+	@Column(name = "id_producto", updatable = false)
+	private Long productId;
 
 	public Long getId() {
 		return id;
@@ -63,12 +63,12 @@ public class SaleDetail implements Serializable {
 		this.saleId = saleId;
 	}
 
-	public Long getPurchaseId() {
-		return purchaseId;
+	public Long getProductId() {
+		return productId;
 	}
 
-	public void setPurchaseId(Long purchaseId) {
-		this.purchaseId = purchaseId;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 }

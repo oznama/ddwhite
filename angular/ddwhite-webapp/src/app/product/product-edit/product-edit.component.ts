@@ -38,6 +38,7 @@ export class ProductEditComponent implements OnInit {
       sku: ['', Validators.required],
       description: ['', Validators.required],
       percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
+      cost: [],
       group: ['', Validators.required],
       userId: [],
       dateCreated: []

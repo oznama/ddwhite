@@ -25,6 +25,8 @@ export class Product {
 	sku: string;
 	description: string;
 	percentage: number;
+	cost: number;
+	price: number;
 	group: number;
 	dateCreated: string;
 	userId: number;
@@ -39,7 +41,10 @@ export class Product {
 export class Inventory{
 	productId: number;
 	quantity: number;
-	cost: number;
 	averageCost: number;
 	price: number;
+
+	constructor(init?:Partial<Inventory>){
+		Object.assign(this, init);
+	}
 }

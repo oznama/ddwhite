@@ -4,7 +4,7 @@ export class Purchase {
 	product: PurchaseProduct;
 	providerId: number;
 	quantity: number;
-	unitPrice: number;
+	cost: number;
 	unity: number;
 	userId: number;
 
@@ -15,6 +15,7 @@ export class Purchase {
 
 export class PurchaseProduct{
 	id: number;
+	cost: number;
 
 	constructor(init?:Partial<PurchaseProduct>){
 		Object.assign(this, init);

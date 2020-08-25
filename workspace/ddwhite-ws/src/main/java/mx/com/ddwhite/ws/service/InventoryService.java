@@ -2,13 +2,13 @@ package mx.com.ddwhite.ws.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.InventoryDto;
 import mx.com.ddwhite.ws.dto.ProductInventory;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
@@ -67,26 +67,22 @@ public class InventoryService {
 		inv.setProductId(product.getUserId());
 		inv.setQuantity(sumQuantity(purchase));
 		inv.setAverageCost(averageCost(purchase));
-		purchase.sort(Comparator.comparing(Purchase::getDateCreated).reversed());
-		inv.setCost(purchase.get(0).getUnitPrice());
-		inv.setPrice(purchase.get(0).getUnitPrice().multiply(product.getPercentage()));	
+		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
 		return inv;
 	}
 	
 	private int sumQuantity(List<Purchase> purchases) {
 		int sum = 0;
-		for(Purchase purchase : purchases) {
+		for(Purchase purchase : purchases)
 			sum += purchase.getQuantity();
-		}
 		return sum;
 	}
 	
 	private BigDecimal averageCost(List<Purchase> purchases) {
-		double sum = 0;
-		for(Purchase purchase : purchases) {
-			sum += purchase.getUnitPrice().doubleValue();
-		}
-		double average = sum / purchases.size();
-		return BigDecimal.valueOf(average);
+		BigDecimal average = BigDecimal.valueOf(0);
+		for(Purchase purchase : purchases)
+			average = average.add(purchase.getCost());
+		average = average.divide(BigDecimal.valueOf(purchases.size()), BigDecimal.ROUND_HALF_EVEN);
+		return average;
 	}
 }

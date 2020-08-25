@@ -20,10 +20,14 @@ import { LoginComponent } from './login/login.component';
 import { ProviderListComponent } from './provider/provider-list/provider-list.component';
 import { ProviderAddComponent } from './provider/provider-add/provider-add.component';
 import { ProviderEditComponent } from './provider/provider-edit/provider-edit.component';
+import { ProviderDialogSearchComponent } from './provider/dialog-search/provider-dialog-search-component';
 import { ProductEditComponent } from './product/product-edit/product-edit.component';
 import { ProductAddComponent } from './product/product-add/product-add.component';
 import { ProductListComponent } from './product/product-list/product-list.component';
-import { PurchaseComponent, DialogProviderSearch, DialogoProductSearch } from './purchase/purchase.component';
+import { ProductDialogSearchComponent } from './product/dialog-search/product-dialog-search-component';
+import { PurchaseComponent } from './purchase/purchase.component';
+import { PurchaseDialogCostComponent } from './purchase/purchase-dialog-cost-component';
+import { SaleComponent } from './sale/sale.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +41,11 @@ import { PurchaseComponent, DialogProviderSearch, DialogoProductSearch } from '.
     ProductEditComponent,
     ProductAddComponent,
     ProductListComponent,
-    PurchaseComponent, DialogProviderSearch, DialogoProductSearch
+    PurchaseComponent,
+    ProviderDialogSearchComponent, 
+    ProductDialogSearchComponent,
+    PurchaseDialogCostComponent,
+    SaleComponent
   ],
   imports: [
     BrowserModule,
