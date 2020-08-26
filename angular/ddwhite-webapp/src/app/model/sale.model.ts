@@ -5,8 +5,10 @@ export class Sale {
 	total: number;
 	subTotal: number;
 	tax: number;
+	change: number;
 
 	detail: SaleDetail[];
+	payments: SalePayment[];
 
 	constructor(init?:Partial<Sale>){
 		Object.assign(this, init);
@@ -31,5 +33,6 @@ export class SalePayment{
 	id: number;
 	saleId: number;
 	payment: number;
+	paymentDesc: string;
 	amount: number;
 }

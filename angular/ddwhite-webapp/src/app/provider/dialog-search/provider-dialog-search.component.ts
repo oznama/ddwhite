@@ -7,8 +7,8 @@ import { Provider } from './../../model/provider.model';
 import { ApiProviderService } from './../../service/api.service.provider';
 
 @Component({
-  selector: 'provider-dialog-search-component',
-  templateUrl: 'provider-dialog-search-component.html',
+  selector: 'provider-dialog-search',
+  templateUrl: 'provider-dialog-search.component.html',
 })
 export class ProviderDialogSearchComponent implements OnInit {
   searchForm: FormGroup;

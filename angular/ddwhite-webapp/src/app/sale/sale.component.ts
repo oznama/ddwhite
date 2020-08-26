@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
-import {Sale, SaleDetail} from './../model/sale.model';
+import {Sale, SaleDetail, SalePayment} from './../model/sale.model';
 import { AlertService, alertOptions } from '../_alert';
-//import { ApiCatalogService } from './../service/api.service.catalog';
-import { ApiSaleService } from './../service/api.service.sale';
-import { ProductDialogSearchComponent } from './../product/dialog-search/product-dialog-search-component';
+import { ApiSaleService } from './../service/module.service';
+import { ProductDialogSearchComponent } from './../product/dialog-search/product-dialog-search.component';
 import { ClientAddComponent } from './../client/client-add/client-add.component';
-import { ClientDialogSearchComponent } from './../client/dialog-search/client-dialog-search-component';
+import { ClientDialogSearchComponent } from './../client/dialog-search/client-dialog-search.component';
+import { PaymentDialogComponent } from './payment-dialog.component';
 
 import { Client } from './../model/client.model';
 import { Product } from './../model/product.model';
@@ -25,6 +25,7 @@ export class SaleComponent implements OnInit {
   product: Product = new Product();
   sale: Sale = new Sale();
   saleDetail: SaleDetail[] = [];
+  salePayment: SalePayment[] = [];
   quantityDefault: string = '1';
   iva: number = 1.16;
   decimals: number = 2;
@@ -58,6 +59,14 @@ export class SaleComponent implements OnInit {
     return !(this.product.id && this.saleForm.controls.quantity.value);
   }
 
+  isToPay(){
+    return this.sale && this.sale.total && this.sale && this.sale.change >= 0;
+  }
+
+  isToPayments(){
+    return this.sale && this.sale.total;
+  }
+
   agregar(){
     const saleDetail = this.setSaleDetail();
     this.addProductToList(saleDetail);
@@ -69,15 +78,6 @@ export class SaleComponent implements OnInit {
       return false;
     }
     return true;
-  }
-
-  remove(productId: number){
-  	this.unTotalize(this.saleDetail.find(item => item.productId === productId));
-    this.saleDetail = this.saleDetail.filter(item => item.productId !== productId);
-  }
-
-  tableValid(){
-    return Array.isArray(this.saleDetail) && this.saleDetail.length;
   }
 
   private round(n: number): number {
@@ -138,6 +138,15 @@ export class SaleComponent implements OnInit {
   	}*/
   }
 
+  remove(productId: number){
+    this.unTotalize(this.saleDetail.find(item => item.productId === productId));
+    this.saleDetail = this.saleDetail.filter(item => item.productId !== productId);
+  }
+
+  tableValid(){
+    return Array.isArray(this.saleDetail) && this.saleDetail.length;
+  }
+
   openDialogProductSearch() {
     const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'sale'} });
     dialogRef.afterClosed().subscribe( result =>{
@@ -155,28 +164,34 @@ export class SaleComponent implements OnInit {
 
   openDialogClientSearch() {
     const dialogRef = this.dialog.open(ClientDialogSearchComponent);
-    dialogRef.afterClosed().subscribe( result =>{
-      if( result && result.data ){
-        this.setClient(result.data);
-      }
-    });
+    dialogRef.afterClosed().subscribe( result =>{this.setClient(result);});
   }
 
   openDialogClientAdd() {
     const dialogRef = this.dialog.open(ClientAddComponent);
-    dialogRef.afterClosed().subscribe( result =>{
-      if( result && result.data ){
-        this.setClient(result.data);
-      }
-    });
+    dialogRef.afterClosed().subscribe( result =>{this.setClient(result);});
   }
 
-  private setClient(client: Client): void {
-    this.client.id = client.id;
-    this.client.name = client.name;
-    this.client.midleName = client.midleName;
-    this.client.lastName = client.lastName;
-    this.client.rfc = client.rfc;
+  openDialogPayments(){
+    if( this.isToPayments() ){
+      const dialogRef = this.dialog.open(PaymentDialogComponent, { data: this.sale.total });
+      dialogRef.afterClosed().subscribe( result =>{
+        if( result && result.data ){
+          this.sale.change = result.data.change;
+          this.salePayment = result.data.payments;
+        }
+      });
+    }
+  }
+
+  private setClient(result: any): void {
+    if( result && result.data ){
+      this.client.id = result.data.id;
+      this.client.name = result.data.name;
+      this.client.midleName = result.data.midleName;
+      this.client.lastName = result.data.lastName;
+      this.client.rfc = result.data.rfc;
+    }
   }
 
 
@@ -185,6 +200,7 @@ export class SaleComponent implements OnInit {
     if(this.client.id)
       this.sale.clientId = this.client.id;
     this.sale.detail = this.saleDetail;
+    this.sale.payments = this.salePayment;
     this.apiService.create(this.sale)
       .subscribe( data => {
         this.alertService.success('Venta completada', alertOptions);
@@ -202,5 +218,6 @@ export class SaleComponent implements OnInit {
     this.saleForm.reset();
     this.sale = new Sale();
     this.saleDetail = [];
+    this.salePayment = [];
   }
 }

@@ -4,11 +4,11 @@ import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Client } from './../../model/client.model';
-import { ApiClientService } from './../../service/api.service.client';
+import { ApiClientService } from './../../service/module.service';
 
 @Component({
-  selector: 'client-dialog-search-component',
-  templateUrl: 'client-dialog-search-component.html',
+  selector: 'client-dialog-search',
+  templateUrl: 'client-dialog-search.component.html',
 })
 export class ClientDialogSearchComponent implements OnInit {
   searchForm: FormGroup;

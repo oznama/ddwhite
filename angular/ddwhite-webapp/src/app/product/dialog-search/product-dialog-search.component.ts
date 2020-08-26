@@ -8,7 +8,7 @@ import { ApiProductService } from './../../service/api.service.product';
 
 @Component({
   selector: 'product-dialog-search',
-  templateUrl: 'product-dialog-search-component.html',
+  templateUrl: 'product-dialog-search.component.html',
 })
 export class ProductDialogSearchComponent implements OnInit {
   searchForm: FormGroup;

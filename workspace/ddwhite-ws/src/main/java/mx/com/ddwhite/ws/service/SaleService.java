@@ -10,10 +10,13 @@ import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.dto.SaleDetailDto;
 import mx.com.ddwhite.ws.dto.SaleDto;
+import mx.com.ddwhite.ws.dto.SalePaymentDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.Sale;
 import mx.com.ddwhite.ws.model.SaleDetail;
+import mx.com.ddwhite.ws.model.SalePayment;
 import mx.com.ddwhite.ws.repository.SaleDetailRepository;
+import mx.com.ddwhite.ws.repository.SalePaymentRepository;
 import mx.com.ddwhite.ws.repository.SaleRepository;
 
 @Service
@@ -25,6 +28,9 @@ public class SaleService extends GenericService<Sale> {
 	@Autowired
 	private SaleDetailRepository saleDetailRepository;
 	
+	@Autowired
+	private SalePaymentRepository salePaymentRepository;
+	
 	public SaleDto save(SaleDto saleDto) throws Throwable {
 		Sale sale = new Sale();
 		BeanUtils.copyProperties(saleDto, sale);
@@ -32,6 +38,7 @@ public class SaleService extends GenericService<Sale> {
 			sale = saleRepository.saveAndFlush(sale);
 			System.out.println();
 			persistDetail(saleDto.getDetail(), sale.getId());
+			persistPayment(saleDto.getPayments(), sale.getId());
 			return saleDto;
 		} catch (DataAccessException e) {
 			throw e.getRootCause();
@@ -49,6 +56,22 @@ public class SaleService extends GenericService<Sale> {
 		try {
 			saleDetailRepository.saveAll(detail);
 			saleDetailRepository.flush();
+		} catch (DataAccessException e) {
+			throw e.getRootCause();
+		}
+	}
+	
+	private void persistPayment(List<SalePaymentDto> paymentsDto, Long saleId) throws Throwable {
+		final List<SalePayment> payment = new ArrayList<>();
+		paymentsDto.forEach( d -> {
+			SalePayment salePayment = new SalePayment();
+			BeanUtils.copyProperties(d, salePayment);
+			salePayment.setSaleId(saleId);
+			payment.add(salePayment);
+		});
+		try {
+			salePaymentRepository.saveAll(payment);
+			salePaymentRepository.flush();
 		} catch (DataAccessException e) {
 			throw e.getRootCause();
 		}

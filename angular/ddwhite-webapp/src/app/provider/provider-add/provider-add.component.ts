@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import { ApiProviderService } from "../../service/api.service";
+import { ApiProviderService } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 
 @Component({

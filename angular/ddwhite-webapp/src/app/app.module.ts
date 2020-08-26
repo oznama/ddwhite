@@ -9,8 +9,10 @@ import { AngularMaterialModule } from './angular-material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { 
+  AuthGuard,
+  CustomInterceptor,
   ApiCatalogService, 
   ApiProviderService, 
   ApiUserService, 
@@ -18,33 +20,35 @@ import {
   ApiPurchaseService,
   ApiClientService,
   ApiSaleService
-} from './service/api.service';
+} from './service/module.service';
 import { AlertModule } from './_alert';
-import { AuthGuard } from './login/auth.guard';
 
 import { HomeComponent } from './home/home.component';
+import { LoadingScreenComponent } from './loader/loading-screen.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
 import { ProviderListComponent } from './provider/provider-list/provider-list.component';
 import { ProviderAddComponent } from './provider/provider-add/provider-add.component';
 import { ProviderEditComponent } from './provider/provider-edit/provider-edit.component';
-import { ProviderDialogSearchComponent } from './provider/dialog-search/provider-dialog-search-component';
+import { ProviderDialogSearchComponent } from './provider/dialog-search/provider-dialog-search.component';
 import { ProductEditComponent } from './product/product-edit/product-edit.component';
 import { ProductAddComponent } from './product/product-add/product-add.component';
 import { ProductListComponent } from './product/product-list/product-list.component';
-import { ProductDialogSearchComponent } from './product/dialog-search/product-dialog-search-component';
+import { ProductDialogSearchComponent } from './product/dialog-search/product-dialog-search.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { PurchaseDialogCostComponent } from './purchase/purchase-dialog-cost-component';
 import { SaleComponent } from './sale/sale.component';
+import { PaymentDialogComponent } from './sale/payment-dialog.component';
 import { ClientAddComponent } from './client/client-add/client-add.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
 import { ClientListComponent } from './client/client-list/client-list.component';
-import { ClientDialogSearchComponent } from './client/dialog-search/client-dialog-search-component';
+import { ClientDialogSearchComponent } from './client/dialog-search/client-dialog-search.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
+    LoadingScreenComponent,
     HeaderComponent,
     LoginComponent,
     ProviderListComponent,
@@ -58,6 +62,7 @@ import { ClientDialogSearchComponent } from './client/dialog-search/client-dialo
     ProductDialogSearchComponent,
     PurchaseDialogCostComponent,
     SaleComponent,
+    PaymentDialogComponent,
     ClientAddComponent,
     ClientEditComponent,
     ClientListComponent,
@@ -76,6 +81,7 @@ import { ClientDialogSearchComponent } from './client/dialog-search/client-dialo
   ],
   providers: [
     AuthGuard,
+    { provide: HTTP_INTERCEPTORS, useClass: CustomInterceptor, multi: true},
     ApiCatalogService,
     ApiUserService,
     ApiProviderService,

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
-import { ApiClientService } from "../../service/api.service";
+import { ApiClientService } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 
 @Component({

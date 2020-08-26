@@ -6,44 +6,39 @@
 		  	<span class="total">Total a pagar</span>
 			<span class="total">$ {{sale.total}}</span>
 			<div class="box-payment">
-				
-				<div id="table-wrapper">
-			    <div id="table-scroll">
+			  <div id="table-wrapper">
+			    <div id="table-scroll-payment">
 			      <table class="table table-striped">
 			        <thead>
 			        <tr>
 			          <th>Met. de pago</th>
 			          <th>Monto</th>
 			          <th>
-			          	<button mat-raised-button color="primary" >Agregar</button>
+			          	<button mat-raised-button color="primary" *ngIf="isToPayments()" (click)="openDialogPayments()">Editar</button>
 			          </th>
 			        </tr>
 			        </thead>
 			        <tbody>
-			        <tr >
+			        <tr *ngFor="let payment of salePayment">
+			          <td>{{payment.paymentDesc}}</td>
+			          <td>{{payment.amount}}</td>
 			          <td></td>
-			          <td></td>
-			          <td>
-			            <button mat-raised-button color="warn" >Borrar</button>
-			          </td>
 			        </tr>
 			        </tbody>
 			      </table>
 			    </div>
 			  </div>
-
-
 			</div>
 			<div class="box-total-detail">
 				<div class="box-total-detail-arrow">
 					<span class="span-block">Sub total: $ {{sale.subTotal}}</span>
 					<span class="span-block">Iva: $ {{sale.tax}}</span>
 					<span class="span-block">Total: $ {{sale.total}}</span>
-					<span class="span-block">Cambio: $0.00</span>
+					<span class="span-block">Cambio: $ {{sale.change}}</span>
 				</div>
 			</div>
 			<div class="box-pay">
-				<button mat-raised-button class="button-pay" type="button" (click)="pagar()">Pagar</button>
+				<button mat-raised-button class="button-pay" type="button" *ngIf="isToPay()" (click)="pagar()">Pagar</button>
 			</div>
 		  </div>
 

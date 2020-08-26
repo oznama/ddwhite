@@ -69,6 +69,7 @@ create table if not exists compras(
 alter table compras add constraint foreign key (id_usuario) references usuarios (id);
 alter table compras add constraint foreign key (id_proveedor) references proveedores (id);
 alter table compras add constraint foreign key (id_producto) references productos (id);
+alter table compras add constraint foreign key (unidad) references catalogos (id);
 
 create table if not exists clientes(
 	id bigint not null auto_increment,
@@ -94,6 +95,7 @@ create table if not exists venta_total(
 	sub_total decimal(20,2) not null,
 	iva decimal(10,2) not null,
 	total decimal(20,2) not null,
+	cambio decimal(20,2) not null,
 	fecha_registro datetime default current_timestamp,
 	primary key(id)
 );
@@ -119,3 +121,4 @@ create table if not exists venta_pago(
 	primary key(id)
 );
 alter table venta_pago add constraint foreign key (id_venta) references venta_total (id);
+alter table venta_pago add constraint foreign key (forma_pago) references catalogos (id);

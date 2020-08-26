@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule, CanActivate } from '@angular/router';
-import { AuthGuard } from './login/auth.guard';
+import { AuthGuard } from './service/module.service';
 import { LoginComponent } from './login/login.component';
 import { HomeComponent } from './home/home.component';
 import { ProviderListComponent } from './provider/provider-list/provider-list.component';
@@ -16,19 +16,18 @@ import { ClientListComponent } from './client/client-list/client-list.component'
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
-	//{ path: '', pathMatch: 'full', redirectTo: 'sales'},
 	{ path: 'login', component: LoginComponent },
 	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
-	{ path: 'provider-list', component: ProviderListComponent },
-	{ path: 'provider-add', component: ProviderAddComponent },
-	{ path: 'provider-edit', component: ProviderEditComponent },
-	{ path: 'product-list', component: ProductListComponent },
-	{ path: 'product-add', component: ProductAddComponent },
-	{ path: 'product-edit', component: ProductEditComponent },
-	{ path: 'purchases', component: PurchaseComponent },
-	{ path: 'sales', component: SaleComponent},
-	{ path: 'client-edit', component: ClientEditComponent},
-	{ path: 'client-list', component: ClientListComponent},
+	{ path: 'provider-list', component: ProviderListComponent, canActivate: [AuthGuard] },
+	{ path: 'provider-add', component: ProviderAddComponent, canActivate: [AuthGuard] },
+	{ path: 'provider-edit', component: ProviderEditComponent, canActivate: [AuthGuard] },
+	{ path: 'product-list', component: ProductListComponent, canActivate: [AuthGuard] },
+	{ path: 'product-add', component: ProductAddComponent, canActivate: [AuthGuard] },
+	{ path: 'product-edit', component: ProductEditComponent, canActivate: [AuthGuard] },
+	{ path: 'purchases', component: PurchaseComponent, canActivate: [AuthGuard] },
+	{ path: 'sales', component: SaleComponent, canActivate: [AuthGuard]},
+	{ path: 'client-edit', component: ClientEditComponent, canActivate: [AuthGuard]},
+	{ path: 'client-list', component: ClientListComponent, canActivate: [AuthGuard]},
 ];
 
 @NgModule({

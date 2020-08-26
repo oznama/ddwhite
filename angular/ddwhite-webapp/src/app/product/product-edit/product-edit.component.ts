@@ -2,10 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
-import { ApiProductService } from "../../service/api.service";
+import { ApiProductService, ApiCatalogService } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import {CatalogItem} from './../../model/catalog.model';
-import { ApiCatalogService } from './../../service/api.service.catalog';
 
 @Component({
   selector: 'app-product-edit',

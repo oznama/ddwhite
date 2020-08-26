@@ -8,7 +8,8 @@ MatIconModule,
 MatFormFieldModule,
 MatInputModule,
 MatMenuModule,
-MatDialogModule
+MatDialogModule,
+MatProgressSpinnerModule
 } from '@angular/material';
 
 @NgModule({
@@ -20,7 +21,8 @@ imports: [
    MatFormFieldModule,
    MatInputModule,
    MatMenuModule,
-   MatDialogModule
+   MatDialogModule,
+   MatProgressSpinnerModule
 ],
 exports: [
    MatButtonModule,
@@ -29,7 +31,8 @@ exports: [
    MatInputModule,
    MatFormFieldModule,
    MatMenuModule,
-   MatDialogModule
+   MatDialogModule,
+   MatProgressSpinnerModule
 ],
 providers: []
 })

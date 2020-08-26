@@ -1,11 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import { ApiProductService } from "../../service/api.service";
+import { ApiProductService, ApiCatalogService } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Product } from '../../model/product.model';
 import {CatalogItem} from './../../model/catalog.model';
-import { ApiCatalogService } from './../../service/api.service.catalog';
 
 @Component({
   selector: 'app-product-add',

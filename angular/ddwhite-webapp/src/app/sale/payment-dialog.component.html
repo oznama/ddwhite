@@ -1,0 +1,60 @@
+<div mat-dialog-content style="width: 600px">
+  <div>
+	  <mat-card>
+	    <mat-card-header>
+	      <mat-card-title>Metodos de pago</mat-card-title>
+	    </mat-card-header>
+	    <mat-card-content>
+	      <form [formGroup]="paymentForm">
+	        <mat-form-field class='midle-width-input'>
+	          <select matNativeControl formControlName="payment" placeholder="Forma de pago" required>
+	            <option *ngFor="let item of catalogPayment" [value]="item.id">
+	              {{item.name}}
+	            </option>
+	          </select>
+	          <mat-error>Campo obligatorio</mat-error>
+	        </mat-form-field>
+	        <mat-form-field class="midle-width-input">
+	          <input matInput formControlName="amount" style="text-align:right; padding: 0 10px;" placeholder="Monto" autocomplete="off" maxlength="10">
+	          <mat-error>Campo obligatorio</mat-error>
+	        </mat-form-field>
+	        <div class="wrapper">
+	          <span class="spacer"></span>
+	          <button mat-raised-button type="button" type="button" [disabled]="!isFormValid()" (click)="add()">Agregar</button>
+	        </div>
+	      </form>
+	    </mat-card-content>
+	  </mat-card>
+  <div>
+
+  <div id="table-wrapper">
+    <div id="table-scroll">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Metodo de pago</th>
+          <th>Monto</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let payment of payments">
+          <td>{{payment.paymentDesc}}</td>
+          <td>{{payment.amount}}</td>
+          <td>
+        	<button mat-raised-button color="warn" (click)="remove(payment)">Borrar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="wrapper">
+  	Total a pagar: <span class="text-red">$ {{data}}</span>
+  	Total agregado: <span class="text-blue">$ {{totalAmount}}</span>
+  	<span class="spacer"></span>
+  	<button mat-raised-button color="primary" style="width:100px" type="button" [disabled]="!finalize()" (click)="save()">Guardar</button>
+  </div>
+
+</div>

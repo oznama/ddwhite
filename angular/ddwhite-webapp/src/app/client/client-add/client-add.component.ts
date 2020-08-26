@@ -1,7 +1,7 @@
 import { Component, OnInit, Optional, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import { ApiClientService } from "../../service/api.service";
+import { ApiClientService } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Client } from './../../model/client.model';

@@ -11,16 +11,18 @@ public class SaleDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -6154734036682052090L;
-	
+
 	private Long id;
 	private Long userId;
 	private Long clientId;
 	private BigDecimal subTotal;
 	private BigDecimal tax;
 	private BigDecimal total;
+	private BigDecimal change;
 	private String dateCreated;
 	private List<SaleDetailDto> detail;
-	
+	private List<SalePaymentDto> payments;
+
 	public SaleDto() {
 		this.detail = new ArrayList<>();
 	}
@@ -73,6 +75,14 @@ public class SaleDto implements Serializable {
 		this.total = total;
 	}
 
+	public BigDecimal getChange() {
+		return change;
+	}
+
+	public void setChange(BigDecimal change) {
+		this.change = change;
+	}
+
 	public String getDateCreated() {
 		return dateCreated;
 	}
@@ -87,6 +97,14 @@ public class SaleDto implements Serializable {
 
 	public void setDetail(List<SaleDetailDto> detail) {
 		this.detail = detail;
+	}
+
+	public List<SalePaymentDto> getPayments() {
+		return payments;
+	}
+
+	public void setPayments(List<SalePaymentDto> payments) {
+		this.payments = payments;
 	}
 
 }
