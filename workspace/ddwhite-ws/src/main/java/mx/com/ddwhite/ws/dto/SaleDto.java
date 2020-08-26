@@ -1,6 +1,7 @@
 package mx.com.ddwhite.ws.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +15,9 @@ public class SaleDto implements Serializable {
 	private Long id;
 	private Long userId;
 	private Long clientId;
+	private BigDecimal subTotal;
+	private BigDecimal tax;
+	private BigDecimal total;
 	private String dateCreated;
 	private List<SaleDetailDto> detail;
 	
@@ -43,6 +47,30 @@ public class SaleDto implements Serializable {
 
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+	public BigDecimal getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(BigDecimal subTotal) {
+		this.subTotal = subTotal;
+	}
+
+	public BigDecimal getTax() {
+		return tax;
+	}
+
+	public void setTax(BigDecimal tax) {
+		this.tax = tax;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 
 	public String getDateCreated() {

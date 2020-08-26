@@ -30,6 +30,7 @@ public class SaleService extends GenericService<Sale> {
 		BeanUtils.copyProperties(saleDto, sale);
 		try {
 			sale = saleRepository.saveAndFlush(sale);
+			System.out.println();
 			persistDetail(saleDto.getDetail(), sale.getId());
 			return saleDto;
 		} catch (DataAccessException e) {
@@ -42,6 +43,7 @@ public class SaleService extends GenericService<Sale> {
 		detailsDto.forEach( d -> {
 			SaleDetail saleDetail = new SaleDetail();
 			BeanUtils.copyProperties(d, saleDetail);
+			saleDetail.setSaleId(saleId);
 			detail.add(saleDetail);
 		});
 		try {

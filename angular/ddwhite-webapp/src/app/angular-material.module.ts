@@ -5,16 +5,9 @@ import {
 MatButtonModule,
 MatToolbarModule,
 MatIconModule,
-MatListModule,
-MatGridListModule,
 MatFormFieldModule,
 MatInputModule,
-MatRadioModule,
-MatDatepickerModule,
-MatNativeDateModule,
-MatTooltipModule,
 MatMenuModule,
-MatAutocompleteModule,
 MatDialogModule
 } from '@angular/material';
 
@@ -24,36 +17,21 @@ imports: [
    MatButtonModule,
    MatToolbarModule,
    MatIconModule,
-   MatListModule,
-   MatGridListModule,
    MatFormFieldModule,
    MatInputModule,
-   MatRadioModule,
-   MatDatepickerModule,
-   MatNativeDateModule,
-   MatTooltipModule,
    MatMenuModule,
-   MatAutocompleteModule,
    MatDialogModule
 ],
 exports: [
    MatButtonModule,
    MatToolbarModule,
    MatIconModule,
-   MatListModule,
-   MatGridListModule,
    MatInputModule,
    MatFormFieldModule,
-   MatRadioModule,
-   MatDatepickerModule,
-   MatTooltipModule,
    MatMenuModule,
-   MatAutocompleteModule,
    MatDialogModule
 ],
-providers: [
-   MatDatepickerModule,
-]
+providers: []
 })
 
 export class AngularMaterialModule { }

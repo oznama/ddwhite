@@ -43,4 +43,8 @@ export class ApiProductService {
     return this.http.get<Inventory>(baseUrl + '/inventory/find/' + productId);
   }
 
+  getProductsForSale() : Observable<Product[]> {
+    return this.http.get<Product[]>(baseUrl + '/inventory/find/sale');
+  }
+
 }

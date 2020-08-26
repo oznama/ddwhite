@@ -11,6 +11,8 @@ import { ProductAddComponent } from './product/product-add/product-add.component
 import { ProductEditComponent } from './product/product-edit/product-edit.component';
 import { PurchaseComponent } from './purchase/purchase.component';
 import { SaleComponent } from './sale/sale.component';
+import { ClientEditComponent } from './client/client-edit/client-edit.component';
+import { ClientListComponent } from './client/client-list/client-list.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
@@ -24,7 +26,9 @@ const routes: Routes = [
 	{ path: 'product-add', component: ProductAddComponent },
 	{ path: 'product-edit', component: ProductEditComponent },
 	{ path: 'purchases', component: PurchaseComponent },
-	{ path: 'sales', component: SaleComponent}
+	{ path: 'sales', component: SaleComponent},
+	{ path: 'client-edit', component: ClientEditComponent},
+	{ path: 'client-list', component: ClientListComponent},
 ];
 
 @NgModule({

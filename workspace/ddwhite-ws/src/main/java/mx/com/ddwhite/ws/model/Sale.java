@@ -1,6 +1,7 @@
 package mx.com.ddwhite.ws.model;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -25,6 +26,12 @@ public class Sale implements Serializable {
 	private Long userId;
 	@Column(name = "id_cliente")
 	private Long clientId;
+	@Column(name = "sub_total")
+	private BigDecimal subTotal;
+	@Column(name = "iva")
+	private BigDecimal tax;
+	@Column(name = "total")
+	private BigDecimal total;
 	@Column(name = "fecha_registro", insertable = false, updatable = false)
 	private String dateCreated;
 
@@ -50,6 +57,30 @@ public class Sale implements Serializable {
 
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+	public BigDecimal getSubTotal() {
+		return subTotal;
+	}
+
+	public void setSubTotal(BigDecimal subTotal) {
+		this.subTotal = subTotal;
+	}
+
+	public BigDecimal getTax() {
+		return tax;
+	}
+
+	public void setTax(BigDecimal tax) {
+		this.tax = tax;
+	}
+
+	public BigDecimal getTotal() {
+		return total;
+	}
+
+	public void setTotal(BigDecimal total) {
+		this.total = total;
 	}
 
 	public String getDateCreated() {

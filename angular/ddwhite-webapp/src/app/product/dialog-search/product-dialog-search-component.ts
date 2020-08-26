@@ -1,9 +1,9 @@
-import { Component, OnInit, Optional, Inject } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Product } from './../../model/product.model';
+import { Product, ModeProductDialog } from './../../model/product.model';
 import { ApiProductService } from './../../service/api.service.product';
 
 @Component({
@@ -16,7 +16,8 @@ export class ProductDialogSearchComponent implements OnInit {
   productFiltred$: Observable<Product[]>;
 
   constructor(
-    public dialogRef: MatDialogRef<ProductDialogSearchComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public dProduct: Product,
+    public dialogRef: MatDialogRef<ProductDialogSearchComponent>, 
+    @Inject(MAT_DIALOG_DATA) public data: ModeProductDialog,
     private apiService: ApiProductService, 
     private formBuilder: FormBuilder) {
   }
@@ -30,10 +31,17 @@ export class ProductDialogSearchComponent implements OnInit {
   }
 
   private loadProducts(): void{
-    this.apiService.get().subscribe( data => {
-      this.products = of(data.content);
-      this.productFiltred$ = of(data.content);
-    });
+    if( this.data.mode === 'inventory' ){
+      this.apiService.getInventory().subscribe( data => {
+        this.products = of(data);
+        this.productFiltred$ = of(data);
+      });
+    } else if( this.data.mode === 'sale' ){
+      this.apiService.getProductsForSale().subscribe( data => {
+        this.products = of(data);
+        this.productFiltred$ = of(data);
+      });
+    }
   }
 
   doFilter(): void{

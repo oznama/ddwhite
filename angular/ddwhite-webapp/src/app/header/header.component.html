@@ -11,9 +11,11 @@
   <button mat-button [matMenuTriggerFor]="menuAdmin">Administracion</button>
   <mat-menu #menuAdmin="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item routerLink="/provider-list"><span>Proveedores</span></button>
+    <button mat-menu-item routerLink="/client-list"><span>Clientes</span></button>
     <button mat-menu-item><span>Usuarios</span></button>
   </mat-menu>
   
   <span class="spacer"></span>
+  <span style="padding: 0 50px;">Bienvenido: {{userFullName}}</span>
   <button mat-raised-button (click)="onLogout()" *ngIf="isLoggedIn$ | async">Log out</button>
 </mat-toolbar>

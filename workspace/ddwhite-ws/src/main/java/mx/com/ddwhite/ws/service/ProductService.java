@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
+import mx.com.ddwhite.ws.constants.Utils;
 import mx.com.ddwhite.ws.dto.ProductDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.Product;
@@ -61,6 +62,7 @@ public class ProductService extends GenericService<ProductDto> {
 		BeanUtils.copyProperties(productDto, product);
 		repository.findById(productDto.getId()).map(t -> {
 			BeanUtils.copyProperties(productDto, t);
+			t.setDateCreated(Utils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 			return repository.saveAndFlush(t);
 		}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", productDto.getId()));
 	}

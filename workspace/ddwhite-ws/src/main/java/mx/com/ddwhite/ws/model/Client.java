@@ -40,7 +40,7 @@ public class Client implements Serializable {
 	private String bussinessPhone;
 	@Column(name = "id_usuario")
 	private Long userId;
-	@Column(name = "fecha_registro", insertable = false, updatable = false)
+	@Column(name = "fecha_registro", insertable = false)
 	private String dateCreated;
 
 	public Long getId() {

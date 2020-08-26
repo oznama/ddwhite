@@ -11,7 +11,12 @@ import { AlertService, alertOptions } from '../../_alert';
 })
 export class ProviderAddComponent implements OnInit {
 
-  constructor(private formBuilder: FormBuilder,private router: Router, private apiService: ApiProviderService, public alertService:AlertService) { }
+  constructor(
+    private formBuilder: FormBuilder,
+    private router: Router, 
+    private apiService: ApiProviderService, 
+    public alertService:AlertService) {
+  }
 
   addForm: FormGroup;
 

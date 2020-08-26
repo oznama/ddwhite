@@ -35,6 +35,7 @@ export class Product {
 
 	constructor(init?:Partial<Product>){
 		Object.assign(this, init);
+		this.inventory = new Inventory();
 	}
 }
 
@@ -47,4 +48,8 @@ export class Inventory{
 	constructor(init?:Partial<Inventory>){
 		Object.assign(this, init);
 	}
+}
+
+export interface ModeProductDialog {
+  mode: 'inventory' | 'sale';
 }

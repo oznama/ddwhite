@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
+import mx.com.ddwhite.ws.constants.Utils;
 import mx.com.ddwhite.ws.dto.PurchaseDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.Product;
@@ -63,6 +64,7 @@ public class PurchaseService extends GenericService<PurchaseDto> {
 		BeanUtils.copyProperties(purchaseDto, purchase);
 		repository.findById(purchaseDto.getId()).map(t -> {
 			BeanUtils.copyProperties(purchaseDto, t);
+			t.setDateCreated(Utils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 			return repository.saveAndFlush(t);
 		}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", purchaseDto.getId()));
 	}
@@ -91,7 +93,7 @@ public class PurchaseService extends GenericService<PurchaseDto> {
 				Product pFinded = productRepository.findById(e.getProduct().getId()).orElse(null); // Por si el producto no existiera, se asigna nulo
 				if(pFinded != null) { // Cuando el producto si existe
 					pFinded.setCost(e.getProduct().getCost()); // Cambiando el precio
-					pFinded.setDateCreated(currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+					pFinded.setDateCreated(Utils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 					pFinded.setUserId(e.getUserId());
 					productRepository.saveAndFlush(pFinded);
 				}

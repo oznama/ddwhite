@@ -37,13 +37,13 @@
 			<div class="box-total-detail">
 				<div class="box-total-detail-arrow">
 					<span class="span-block">Sub total: $ {{sale.subTotal}}</span>
-					<span class="span-block">Iva: $ {{sale.iva}}</span>
+					<span class="span-block">Iva: $ {{sale.tax}}</span>
 					<span class="span-block">Total: $ {{sale.total}}</span>
 					<span class="span-block">Cambio: $0.00</span>
 				</div>
 			</div>
 			<div class="box-pay">
-				<button mat-raised-button class="button-pay" type="button" >Pagar</button>
+				<button mat-raised-button class="button-pay" type="button" (click)="pagar()">Pagar</button>
 			</div>
 		  </div>
 
@@ -62,21 +62,14 @@
 			      <form [formGroup]="saleForm">
 
 			        <div class="wrapper">
-			          <mat-form-field class="midle-width-input">
-					    <input type="text"
-					           placeholder="Escriba para buscar cliente..."
-					           aria-label="Number"
-					           matInput
-					           [formControl]="autoCompleteClient"
-					           [matAutocomplete]="autoClient">
-					    <mat-autocomplete autoActiveFirstOption #autoClient="matAutocomplete">
-					      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-					      	{{option}}
-					      </mat-option>
-					    </mat-autocomplete>
-					  </mat-form-field>
+			          <span style="font-size: 20px; text-transform: uppercase;">Cliente selecionado: </span>
+			          <span class="text-red" *ngIf="!client.id">SIN FACTURA &oacute; click en la lupa para buscar...</span>
+			          <span class="text-blue" *ngIf="client.id">{{client.name + ' ' +  client.lastName + ' ' +  client.midleName}}</span>
+			          <span class="spacer"></span>
+			          <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogClientSearch()">search</mat-icon>
+			          <mat-icon aria-hidden="false" aria-label="Example clear icon" *ngIf="client.id" (click)="unSelectClient()">clear</mat-icon>
 					  <span class="spacer"></span>
-			          <button mat-raised-button color="primary" >Registrar nuevo</button>
+			          <button mat-raised-button color="primary" (click)="openDialogClientAdd()">Registrar cliente</button>
 			        </div>
 			        <div class="wrapper">
 			          <span style="font-size: 20px; text-transform: uppercase;">Producto</span>
@@ -88,8 +81,8 @@
 			  	    	<input matInput formControlName="quantity" placeholder="Cantidad" maxlength="3" type="number" autocomplete="off" required>
 			  	    	<mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
 			  	      </mat-form-field>
+			  	      <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogProductSearch()">search</mat-icon>
 			          <span class="spacer"></span>
-			          <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogProductSearch()">search</mat-icon>  
 			        </div>
 
 					<div class="wrapper">

@@ -1,6 +1,7 @@
 package mx.com.ddwhite.ws.dto;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class SaleDetailDto implements Serializable {
 
@@ -12,6 +13,7 @@ public class SaleDetailDto implements Serializable {
 	private Long saleId;
 	private Long productId;
 	private Integer quantity;
+	private BigDecimal price;
 
 	public Long getId() {
 		return id;
@@ -43,6 +45,14 @@ public class SaleDetailDto implements Serializable {
 
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
+	}
+
+	public BigDecimal getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigDecimal price) {
+		this.price = price;
 	}
 
 }

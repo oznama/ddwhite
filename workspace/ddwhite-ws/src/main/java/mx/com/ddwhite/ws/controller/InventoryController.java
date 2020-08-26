@@ -35,6 +35,11 @@ public class InventoryController {
 	public List<ProductInventory> findInventory() {
 		return service.findInventory();
 	}
+	
+	@GetMapping("/find/sale")
+	public List<ProductInventory> findForSale() {
+		return service.findForSale();
+	}
 
 	
 

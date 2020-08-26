@@ -168,7 +168,7 @@ export class PurchaseComponent implements OnInit {
   }
 
   openDialogProductSearch() {
-    const dialogRef = this.dialog.open(ProductDialogSearchComponent);
+    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'inventory'} });
     dialogRef.afterClosed().subscribe( result =>{
       if( result && result.data ){
         this.product.id = result.data.id;

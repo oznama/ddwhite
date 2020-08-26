@@ -10,11 +10,16 @@ export class ApiUserService {
 
   private loggedIn = new BehaviorSubject<boolean>(false);
 
+
   set LoggedIn(b: boolean){
     this.loggedIn.next(b);
   }
 
+
   get isLoggedIn() {
+    /*const userId = window.localStorage.getItem("userId");
+    if(userId) this.loggedIn.next(true);
+    else this.loggedIn.next(false);*/
     return this.loggedIn.asObservable();
   }
 
@@ -27,6 +32,7 @@ export class ApiUserService {
   }
 
   logout() {
+    //window.localStorage.removeItem("userId");
     this.loggedIn.next(false);
     this.router.navigate(['/login']);
   }

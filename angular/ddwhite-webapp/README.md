@@ -26,6 +26,16 @@ Run `ng e2e` to execute the end-to-end tests via [Protractor](http://www.protrac
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
 
+	- install Angular on your local system
+	- check that you have the npm client installed, run npm -v in a terminal
+	- install the Angular CLI: npm install -g @angular/cli
+	- create a new workspace and initial starter app: ng new my-app
+	- Install material: npm install @angular/material @angular/cdk @angular/animations --save
+	- can build and serve your app locally:
+		- cd my-app	
+		- ng serve --open
+	- create module
+		- ng generate component <component-name> --module app
 
 ## Tutorials References
 https://dzone.com/articles/create-a-beautiful-login-form-with-angular-material

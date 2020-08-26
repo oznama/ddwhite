@@ -2,45 +2,50 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
-import { ApiProviderService } from "../../service/api.service";
+import { ApiClientService } from "../../service/api.service";
 import { AlertService, alertOptions } from '../../_alert';
 
 @Component({
-  selector: 'app-provider-edit',
-  templateUrl: './provider-edit.component.html',
-  styleUrls: ['./provider-edit.component.css']
+  selector: 'app-client-edit',
+  templateUrl: './client-edit.component.html',
+  styleUrls: ['./client-edit.component.css']
 })
-export class ProviderEditComponent implements OnInit {
-
-  editForm: FormGroup;
+export class ClientEditComponent implements OnInit {
 
   constructor(
-    private formBuilder: FormBuilder,
+  	private formBuilder: FormBuilder,
     private router: Router, 
-    private apiService: ApiProviderService, 
+    private apiService: ApiClientService, 
     public alertService:AlertService) {
   }
 
+  editForm: FormGroup;
+  phonePatter: string = "[0-9]{10,}";
+
   ngOnInit(): void {
-  	let editProviderId = window.localStorage.getItem("editProviderId");
-    if(!editProviderId) {
+  	let editClientId = window.localStorage.getItem("editClientId");
+    if(!editClientId) {
       alert("Invalid action.")
       this.cancelar();
       return;
     }
   	this.editForm = this.formBuilder.group({
       id: [],
-      bussinesName: ['', Validators.required],
+      name: ['', Validators.required],
+      midleName: ['', Validators.required],
+      lastName: ['', Validators.required],
       address: ['', Validators.required],
-      phone: ['', [Validators.required, Validators.pattern("[0-9]{10,}")]],
-      contactName: ['', Validators.required],
-      website: ['', [Validators.pattern("(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?")]],
+      phone: ['', [Validators.required, Validators.pattern(this.phonePatter)]],
+      email: [, [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+      rfc: [, [Validators.pattern("[a-zA-Z0-9]{12,13}")]],
+      bussinessAddress: [],
+      bussinessPhone: [, [Validators.pattern(this.phonePatter)]],
       userId: [],
       dateCreated: []
     });
     this.editForm.controls.userId.disable();
     this.editForm.controls.dateCreated.disable();
-    this.apiService.getById(+editProviderId)
+    this.apiService.getById(+editClientId)
       .subscribe( data => {
         this.editForm.setValue(data);
       }
@@ -53,7 +58,7 @@ export class ProviderEditComponent implements OnInit {
     this.apiService.update(body).pipe(first()).subscribe(
         data => {
           if(data.status === 200) {
-            this.alertService.success('Proveedor actualizado', alertOptions);
+            this.alertService.success('Cliente actualizado', alertOptions);
             this.cancelar();
           }else {
             this.alertService.error(data.message, alertOptions);
@@ -66,7 +71,7 @@ export class ProviderEditComponent implements OnInit {
   }
 
    cancelar(){
-    this.router.navigate(['provider-list']);
+    this.router.navigate(['client-list']);
   }
 
 }

@@ -27,6 +27,7 @@
           <th class="hidden">Id</th>
           <th>SKU</th>
           <th>Nombre completo</th>
+          <th>Cantidad</th>
           <th></th>
         </tr>
         </thead>
@@ -35,6 +36,7 @@
           <td class="hidden">{{product.id}}</td>
           <td>{{product.sku}}</td>
           <td>{{product.nameLarge}}</td>
+          <td>{{product.inventory.quantity}}</td>
           <td>
             <button mat-raised-button color="primary" (click)="select(product)" style="margin-left: 20px;">Seleccionar</button>
           </td>

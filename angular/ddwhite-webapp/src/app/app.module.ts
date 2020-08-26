@@ -10,7 +10,15 @@ import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { HttpClientModule } from '@angular/common/http';
-import { ApiCatalogService, ApiProviderService, ApiUserService, ApiProductService, ApiPurchaseService } from './service/api.service';
+import { 
+  ApiCatalogService, 
+  ApiProviderService, 
+  ApiUserService, 
+  ApiProductService, 
+  ApiPurchaseService,
+  ApiClientService,
+  ApiSaleService
+} from './service/api.service';
 import { AlertModule } from './_alert';
 import { AuthGuard } from './login/auth.guard';
 
@@ -28,6 +36,10 @@ import { ProductDialogSearchComponent } from './product/dialog-search/product-di
 import { PurchaseComponent } from './purchase/purchase.component';
 import { PurchaseDialogCostComponent } from './purchase/purchase-dialog-cost-component';
 import { SaleComponent } from './sale/sale.component';
+import { ClientAddComponent } from './client/client-add/client-add.component';
+import { ClientEditComponent } from './client/client-edit/client-edit.component';
+import { ClientListComponent } from './client/client-list/client-list.component';
+import { ClientDialogSearchComponent } from './client/dialog-search/client-dialog-search-component';
 
 @NgModule({
   declarations: [
@@ -45,7 +57,11 @@ import { SaleComponent } from './sale/sale.component';
     ProviderDialogSearchComponent, 
     ProductDialogSearchComponent,
     PurchaseDialogCostComponent,
-    SaleComponent
+    SaleComponent,
+    ClientAddComponent,
+    ClientEditComponent,
+    ClientListComponent,
+    ClientDialogSearchComponent
   ],
   imports: [
     BrowserModule,
@@ -64,7 +80,9 @@ import { SaleComponent } from './sale/sale.component';
     ApiUserService,
     ApiProviderService,
     ApiProductService,
-    ApiPurchaseService
+    ApiPurchaseService,
+    ApiClientService,
+    ApiSaleService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

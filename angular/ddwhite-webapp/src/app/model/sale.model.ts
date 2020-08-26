@@ -1,9 +1,10 @@
 export class Sale {
-	clientId: string;
+	id: number;
+	clientId: number;
 	userId: number;
 	total: number;
 	subTotal: number;
-	iva: number;
+	tax: number;
 
 	detail: SaleDetail[];
 
@@ -13,6 +14,8 @@ export class Sale {
 }
 
 export class SaleDetail{
+	id: number;
+	saleId: number;
 	productId: number;
 	productName: string
 	quantity: number;
@@ -22,4 +25,11 @@ export class SaleDetail{
 	constructor(init?:Partial<SaleDetail>){
 		Object.assign(this, init);
 	}
+}
+
+export class SalePayment{
+	id: number;
+	saleId: number;
+	payment: number;
+	amount: number;
 }

@@ -33,7 +33,7 @@ public class Provider implements Serializable {
 	private String contactName;
 	@Column(name = "id_usuario")
 	private Long userId;
-	@Column(name = "fecha_registro", insertable = false, updatable = false)
+	@Column(name = "fecha_registro", insertable = false)
 	private String dateCreated;
 
 	public Long getId() {
