@@ -12,7 +12,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { 
   AuthGuard,
-  CustomInterceptor,
+  LoaderService,
+  LoaderInterceptor,
   ApiCatalogService, 
   ApiProviderService, 
   ApiUserService, 
@@ -25,7 +26,7 @@ import {
 import { AlertModule } from './_alert';
 
 import { HomeComponent } from './home/home.component';
-import { LoadingScreenComponent } from './loader/loading-screen.component';
+import { LoaderComponent } from './loader/loader.component';
 import { HeaderComponent } from './header/header.component';
 import { LoginComponent } from './login/login.component';
 import { ProviderListComponent } from './provider/provider-list/provider-list.component';
@@ -48,12 +49,13 @@ import { UserAddComponent } from './user/user-add/user-add.component';
 import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { UserListComponent } from './user/user-list/user-list.component';
 import { ExpenseComponent } from './expense/expense.component';
+import { TicketComponent } from './sale/ticket-component/ticket.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     HomeComponent,
-    LoadingScreenComponent,
+    LoaderComponent,
     HeaderComponent,
     LoginComponent,
     ProviderListComponent,
@@ -75,7 +77,8 @@ import { ExpenseComponent } from './expense/expense.component';
     UserAddComponent,
     UserEditComponent,
     UserListComponent,
-    ExpenseComponent
+    ExpenseComponent,
+    TicketComponent
   ],
   imports: [
     BrowserModule,
@@ -90,7 +93,8 @@ import { ExpenseComponent } from './expense/expense.component';
   ],
   providers: [
     AuthGuard,
-    { provide: HTTP_INTERCEPTORS, useClass: CustomInterceptor, multi: true},
+    LoaderService,
+    { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true},
     ApiCatalogService,
     ApiUserService,
     ApiProviderService,

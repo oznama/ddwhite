@@ -1,0 +1,76 @@
+* {
+    font-size: 10px;
+    font-family: 'Arial';
+    text-transform: uppercase;
+    -webkit-font-smoothing : none;
+}
+/*td,th,tr,table {
+    border-top: 1px dashed black;
+    border-collapse: collapse;
+}*/
+hr.dashed {
+  border-top: 1px dashed black;
+  width: 100%;
+}
+td.producto,th.producto {
+    /*width: 75px;
+    max-width: 75px;*/
+    width: 25mm;
+    max-width: 25mm;
+}
+td.cantidad,th.cantidad {
+    /*width: 40px;
+    max-width: 40px;*/
+    width: 15mm;
+    max-width: 15mm;
+    word-break: break-all;
+}
+td.precio,th.precio {
+    /*width: 40px;
+    max-width: 40px;*/
+    width: 20mm;
+    max-width: 20mm;
+    word-break: break-all;
+}
+td.pago-dec,th.pago-dec {
+    width: 50mm;
+    max-width: 50mm;
+    text-align: left;
+    word-break: break-all;
+}
+td.pago-monto,th.pago-monto {
+    width: 25mm;
+    max-width: 25mm;
+    text-align: right;
+    word-break: break-all;
+}
+.centrado {
+    text-align: center;
+    align-content: center;
+}
+.left {
+    float:left;
+}
+.right {
+    float:right;
+}
+.ticket {
+    /*width: 155px;
+    max-width: 155px;*/
+    width: 58mm;
+    max-width: 58mm;
+}
+img {
+    max-width: inherit;
+    width: inherit;
+}
+@media print {
+    body.receipt { width: 58mm };
+    .oculto-impresion,
+    .oculto-impresion * {
+        display: none !important;
+    };
+    @page {
+        margin: 0cm;
+    }
+}

@@ -37,7 +37,7 @@ public class SaleController implements GenericController<SaleDto> {
 	@Override
 	public ResponseEntity<?> create(SaleDto entity) {
 		try {
-			return ResponseEntity.ok(service.save(entity));
+			return ResponseEntity.ok(service.save(entity).getId());
 		} catch (Throwable e) {
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}

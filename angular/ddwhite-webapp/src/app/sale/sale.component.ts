@@ -9,6 +9,7 @@ import { ProductDialogSearchComponent } from './../product/dialog-search/product
 import { ClientAddComponent } from './../client/client-add/client-add.component';
 import { ClientDialogSearchComponent } from './../client/dialog-search/client-dialog-search.component';
 import { PaymentDialogComponent } from './payment-dialog.component';
+import { TicketComponent } from './ticket-component/ticket.component';
 
 import { Client } from './../model/client.model';
 import { Product } from './../model/product.model';
@@ -20,6 +21,7 @@ import { Product } from './../model/product.model';
 })
 export class SaleComponent implements OnInit {
 
+  date: Date;
   saleForm: FormGroup;
   client: Client = new Client();
   product: Product = new Product();
@@ -34,11 +36,13 @@ export class SaleComponent implements OnInit {
   	private formBuilder: FormBuilder,
   	private apiService: ApiSaleService,
     public alertService:AlertService,
-  	public dialog: MatDialog) { }
+  	public dialog: MatDialog) {
+    setInterval(() => { this.date =  new Date()}, 1000)
+  }
 
   ngOnInit(): void {
     this.saleForm = this.formBuilder.group({
-  		quantity: [, [Validators.required,Validators.pattern("[0-9]{1,5}")]]
+  		quantity: [this.quantityDefault, [Validators.required,Validators.pattern("[0-9]{1,5}")]]
   	})
   }
 
@@ -50,6 +54,7 @@ export class SaleComponent implements OnInit {
     return <SaleDetail> {
       productId: this.product.id,
       productName: this.product.nameLarge,
+      productShortName: this.product.nameShort,
       quantity: +this.saleForm.controls.quantity.value,
       price: this.product.price
     };
@@ -122,6 +127,7 @@ export class SaleComponent implements OnInit {
   		this.sale.subTotal = this.round(this.sale.subTotal + total);
   		this.sale.total = this.sale.subTotal;
   	}*/
+    this.saleForm.controls.quantity.setValue(this.quantityDefault);
   }
 
   private unTotalize(saleDetail: SaleDetail){
@@ -154,10 +160,10 @@ export class SaleComponent implements OnInit {
         this.product.id = result.data.id;
         this.product.sku = result.data.sku;
         this.product.nameLarge = result.data.nameLarge;
+        this.product.nameShort = result.data.nameShort;
         this.product.cost = result.data.cost;
         this.product.price = result.data.inventory.price;
         this.product.inventory.quantity = result.data.inventory.quantity;
-        this.saleForm.controls.quantity.setValue(this.quantityDefault);
       }
     });
   }
@@ -184,8 +190,17 @@ export class SaleComponent implements OnInit {
     }
   }
 
+  openPrintTicket() {
+    const dialogRef = this.dialog.open(TicketComponent, {data: this.sale});
+    dialogRef.afterClosed().subscribe(result =>{
+      this.reset(); 
+      this.alertService.success('Venta completada', alertOptions);
+    });
+  }
+
   private setClient(result: any): void {
     if( result && result.data ){
+      console.log('Cliente registrado' + result.data);
       this.client.id = result.data.id;
       this.client.name = result.data.name;
       this.client.midleName = result.data.midleName;
@@ -194,18 +209,18 @@ export class SaleComponent implements OnInit {
     }
   }
 
-
   pagar(){
     this.sale.userId = +window.localStorage.getItem("userId");
-    if(this.client.id)
+    if(this.client.id){
       this.sale.clientId = this.client.id;
+      this.sale.clientName = this.client.name+ ' ' + this.client.lastName + ' ' + this.client.midleName;
+      this.sale.clientRfc = this.client.rfc;
+    }
     this.sale.detail = this.saleDetail;
     this.sale.payments = this.salePayment;
-    this.apiService.create(this.sale)
-      .subscribe( data => {
-        this.alertService.success('Venta completada', alertOptions);
-        // imprimir ticket
-        this.reset();
+    this.apiService.create(this.sale).subscribe( data => {
+      this.sale.id = data;
+        this.openPrintTicket();
       }, error => {
         this.alertService.error('La venta no ha sido registrada: ' + error.error, alertOptions);
       }
@@ -219,5 +234,6 @@ export class SaleComponent implements OnInit {
     this.sale = new Sale();
     this.saleDetail = [];
     this.salePayment = [];
+    this.saleForm.controls.quantity.setValue(this.quantityDefault);
   }
 }

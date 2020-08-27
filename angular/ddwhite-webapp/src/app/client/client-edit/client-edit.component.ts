@@ -36,7 +36,7 @@ export class ClientEditComponent implements OnInit {
       lastName: ['', Validators.required],
       address: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(this.phonePatter)]],
-      email: [, [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+      email: [, [Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}")]],
       rfc: [, [Validators.pattern("[a-zA-Z0-9]{12,13}")]],
       bussinessAddress: [],
       bussinessPhone: [, [Validators.pattern(this.phonePatter)]],

@@ -32,11 +32,13 @@ export class PaymentDialogComponent implements OnInit {
       amount: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
     });
     this.loadCatalogPayment();
+    this.paymentForm.controls.amount.setValue(Math.ceil(this.data));
   }
 
   private loadCatalogPayment(): void{
     this.catalogService.getByName('METODPAG').subscribe( response => {
       this.catalogPayment = response.items;
+      this.paymentForm.controls.payment.setValue(this.catalogPayment[0].id);
     }, error =>{
       console.log(error);
     });
@@ -67,6 +69,7 @@ export class PaymentDialogComponent implements OnInit {
     this.payments.push(payment);
     this.totalAmount = this.round(this.totalAmount+payment.amount);
     this.paymentForm.reset();
+    this.paymentForm.controls.payment.setValue(this.catalogPayment[0].id);
   }
 
   remove(payment: SalePayment){

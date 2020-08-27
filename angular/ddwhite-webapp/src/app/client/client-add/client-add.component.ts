@@ -31,20 +31,20 @@ export class ClientAddComponent implements OnInit {
       lastName: ['', Validators.required],
       address: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern(this.phonePatter)]],
-      email: [, [Validators.pattern("^[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$")]],
+      email: [, [Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}")]],
       rfc: [, [Validators.pattern("[a-zA-Z0-9]{12,13}")]],
       bussinessAddress: [],
       bussinessPhone: [, [Validators.pattern(this.phonePatter)]],
     });
   }
 
-  onSubmit() {
+  save() {
   	var body = this.addForm.value;
   	body.userId = window.localStorage.getItem("userId");
     this.apiService.create(body)
       .subscribe( data => {
         this.alertService.success('Cliente guardado', alertOptions);
-        this.dialogRef.close({ event: 'close', data: body });
+        this.dialogRef.close({ event: 'close', data: data });
       }, error => {
         this.alertService.error('El registro no ha sido guardado: ' + error.error, alertOptions);
       }

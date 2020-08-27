@@ -1,5 +1,7 @@
 mat-card-title,input{
 	text-transform: none;
+	text-align: center;
+    align-content: center;
 }
 
 .login-container {

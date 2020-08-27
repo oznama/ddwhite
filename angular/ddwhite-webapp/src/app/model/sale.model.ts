@@ -1,6 +1,8 @@
 export class Sale {
 	id: number;
 	clientId: number;
+	clientName: string;
+	clientRfc: string;
 	userId: number;
 	total: number;
 	subTotal: number;
@@ -19,7 +21,8 @@ export class SaleDetail{
 	id: number;
 	saleId: number;
 	productId: number;
-	productName: string
+	productName: string;
+	productShortName: string;
 	quantity: number;
 	price: number;
 	total: number;

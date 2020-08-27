@@ -36,9 +36,9 @@ public class SaleService extends GenericService<Sale> {
 		BeanUtils.copyProperties(saleDto, sale);
 		try {
 			sale = saleRepository.saveAndFlush(sale);
-			System.out.println();
 			persistDetail(saleDto.getDetail(), sale.getId());
 			persistPayment(saleDto.getPayments(), sale.getId());
+			saleDto.setId(sale.getId());
 			return saleDto;
 		} catch (DataAccessException e) {
 			throw e.getRootCause();
