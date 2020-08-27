@@ -1,0 +1,8 @@
+input{
+	text-transform: none;
+}
+
+.input-uppercase {
+	width: 100%;
+	text-transform: uppercase;
+}

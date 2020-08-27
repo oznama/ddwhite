@@ -13,6 +13,10 @@ import { PurchaseComponent } from './purchase/purchase.component';
 import { SaleComponent } from './sale/sale.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
 import { ClientListComponent } from './client/client-list/client-list.component';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { UserAddComponent } from './user/user-add/user-add.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { ExpenseComponent } from './expense/expense.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
@@ -28,6 +32,10 @@ const routes: Routes = [
 	{ path: 'sales', component: SaleComponent, canActivate: [AuthGuard]},
 	{ path: 'client-edit', component: ClientEditComponent, canActivate: [AuthGuard]},
 	{ path: 'client-list', component: ClientListComponent, canActivate: [AuthGuard]},
+	{ path: 'user-list', component: UserListComponent, canActivate: [AuthGuard] },
+	{ path: 'user-add', component: UserAddComponent, canActivate: [AuthGuard] },
+	{ path: 'user-edit', component: UserEditComponent, canActivate: [AuthGuard] },
+	{ path: 'expenses', component: ExpenseComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

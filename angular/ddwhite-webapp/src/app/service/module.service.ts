@@ -8,3 +8,4 @@ export * from './api.service.user';
 export * from './api.service.purchase';
 export * from './api.service.client';
 export * from './api.service.sale';
+export * from './api.service.expense';

@@ -19,7 +19,8 @@ import {
   ApiProductService, 
   ApiPurchaseService,
   ApiClientService,
-  ApiSaleService
+  ApiSaleService,
+  ApiExpenseService
 } from './service/module.service';
 import { AlertModule } from './_alert';
 
@@ -43,6 +44,10 @@ import { ClientAddComponent } from './client/client-add/client-add.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
 import { ClientListComponent } from './client/client-list/client-list.component';
 import { ClientDialogSearchComponent } from './client/dialog-search/client-dialog-search.component';
+import { UserAddComponent } from './user/user-add/user-add.component';
+import { UserEditComponent } from './user/user-edit/user-edit.component';
+import { UserListComponent } from './user/user-list/user-list.component';
+import { ExpenseComponent } from './expense/expense.component';
 
 @NgModule({
   declarations: [
@@ -66,7 +71,11 @@ import { ClientDialogSearchComponent } from './client/dialog-search/client-dialo
     ClientAddComponent,
     ClientEditComponent,
     ClientListComponent,
-    ClientDialogSearchComponent
+    ClientDialogSearchComponent,
+    UserAddComponent,
+    UserEditComponent,
+    UserListComponent,
+    ExpenseComponent
   ],
   imports: [
     BrowserModule,
@@ -88,7 +97,8 @@ import { ClientDialogSearchComponent } from './client/dialog-search/client-dialo
     ApiProductService,
     ApiPurchaseService,
     ApiClientService,
-    ApiSaleService
+    ApiSaleService,
+    ApiExpenseService
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

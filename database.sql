@@ -4,6 +4,7 @@ drop table if exists venta_pago;
 drop table if exists venta_detalle;
 drop table if exists venta_total;
 drop table if exists clientes;
+drop table if exists gastos;
 drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
@@ -54,6 +55,16 @@ create table if not exists productos(
 	primary key(id)
 );
 alter table productos add constraint foreign key (id_usuario) references usuarios (id);
+
+create table if not exists gastos(
+	id bigint not null auto_increment,
+	id_usuario bigint not null,
+	descripcion char(255) not null,
+	monto decimal(20,2) not null,
+	fecha_registro datetime default current_timestamp,
+	primary key(id)
+);
+alter table gastos add constraint foreign key (id_usuario) references usuarios (id);
 
 create table if not exists compras(
 	id bigint not null auto_increment,

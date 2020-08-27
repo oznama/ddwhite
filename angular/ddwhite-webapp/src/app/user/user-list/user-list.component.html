@@ -1,0 +1,54 @@
+<div class="div-container">
+
+  <div>
+    <mat-card class="box-form">
+      <mat-card-header>
+        <mat-card-title>Usuarios</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="searchForm">
+          <mat-form-field style="width: 45%;">
+            <input matInput class="input-uppercase" formControlName="fullName" placeholder="Nombre completo" maxlength="100">
+          </mat-form-field>
+          <mat-form-field style="width: 45%;">
+            <input matInput formControlName="username" placeholder="Username" maxlength="10">
+          </mat-form-field>
+          <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="doFilter()">search</mat-icon>
+          <mat-icon aria-hidden="false" aria-label="Example clear icon" (click)="clearFilter()">clear</mat-icon>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div id="table-wrapper">
+    <div id="table-scroll">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th class="hidden">Id</th>
+          <th>Nombre completo</th>
+          <th>Username</th>
+          <th>
+            <div class="wrapper">
+              <span class="spacer"></span>
+              <button mat-raised-button color="primary" style="width:100px" (click)="add()">Nuevo</button>
+            </div>
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let user of usersFiltred$ | async">
+          <td class="hidden">{{user.id}}</td>
+          <td class="input-uppercase">{{user.fullName}}</td>
+          <td>{{user.username}}</td>
+          <td>
+          	<button mat-raised-button color="warn" (click)="delete(user)">Borrar</button>
+            <button mat-raised-button color="primary" (click)="edit(user)" style="margin-left: 20px;">Modificar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -54,7 +54,7 @@ export class ClientEditComponent implements OnInit {
 
   onSubmit() {
   	var body = this.editForm.value;
-  	body.userId = window.localStorage.getItem("userId");
+  	body.userId = +window.localStorage.getItem("userId");
     this.apiService.update(body).pipe(first()).subscribe(
         data => {
           if(data.status === 200) {

@@ -18,12 +18,12 @@ export class ApiClientService {
     return this.http.get<Client>(this.context + '/find/' + id);
   }
 
-  create(provider: Client): Observable<any> {
-    return this.http.post<any>(this.context + '/save', provider);
+  create(client: Client): Observable<any> {
+    return this.http.post<any>(this.context + '/save', client);
   }
 
-  update(provider: Client): Observable<any> {
-    return this.http.put<any>(this.context + '/update', provider, observeResponse);
+  update(client: Client): Observable<any> {
+    return this.http.put<any>(this.context + '/update', client, observeResponse);
   }
 
   delete(id: number) {

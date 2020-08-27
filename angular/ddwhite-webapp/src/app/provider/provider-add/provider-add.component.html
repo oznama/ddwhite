@@ -8,23 +8,17 @@
       <form [formGroup]="addForm" (ngSubmit)="onSubmit()">
         <mat-form-field class="full-width-input">
           <input matInput formControlName="bussinesName" placeholder="Nombre" maxlength="150" required>
-          <mat-error>
-            Campo obligatorio
-          </mat-error>
+          <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
         <mat-form-field class="full-width-input">
           <input matInput formControlName="address" placeholder="Direccion" maxlength="80" required>
-          <mat-error>
-            Campo obligatorio
-          </mat-error>
+          <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
         <mat-form-field class="midle-width-input">
           <input matInput formControlName="phone" placeholder="Telefono" autocomplete="off" maxlength="11" required>
-          <mat-error>
-            Campo obligatorio, Ejemplo: 5512345678
-          </mat-error>
+          <mat-error>Campo obligatorio, Ejemplo: 5512345678</mat-error>
         </mat-form-field>
 
         <mat-form-field class="midle-width-input">
@@ -36,13 +30,11 @@
 
         <mat-form-field class="midle-width-input">
           <input matInput formControlName="website" placeholder="Pagina web" maxlength="100">
-          <mat-error>
-            Campo obligatorio, Ejemplo: www.pagina.com
-          </mat-error>
+          <mat-error>Campo obligatorio, Ejemplo: www.pagina.com</mat-error>
         </mat-form-field>
 
         <div class="wrapper">
-          <button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button>
+          <button mat-raised-button color="warn" type="button" (click)="cancelar()">Cancelar</button>
           <span class="spacer"></span>
           <button mat-raised-button color="primary" [disabled]="addForm.invalid">Guardar</button>
         </div>

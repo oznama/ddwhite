@@ -47,12 +47,12 @@ mat-card-header mat-card-title{
 
 .div-container {
   padding: 10px;
-  margin: 50px auto;
+  margin: 10px auto;
   display: flex;
   background:#fff;
   flex-direction: column;
   border-radius:10px;
-  max-width:70%;
+  max-width:90%;
 }
 
 .box-form {

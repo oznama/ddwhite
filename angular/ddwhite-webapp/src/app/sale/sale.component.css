@@ -7,7 +7,7 @@
   border-radius:10px;
   flex-direction: column;
   padding: 10px;
-  margin: 50px auto;
+  margin: 10px auto;
   background:#fff;
   height: 600px;
   max-width:90%;
@@ -74,6 +74,11 @@
 }
 #table-scroll-payment {
   height:150px;
+  overflow:auto;  
+  margin-top:20px;
+}
+#table-scroll-payment-dialog {
+  height:200px;
   overflow:auto;  
   margin-top:20px;
 }

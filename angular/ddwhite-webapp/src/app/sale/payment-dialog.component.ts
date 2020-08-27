@@ -9,6 +9,7 @@ import { ApiCatalogService } from './../service/api.service.catalog';
 @Component({
   selector: 'payment-dialog',
   templateUrl: 'payment-dialog.component.html',
+  styleUrls: ['./sale.component.css']
 })
 export class PaymentDialogComponent implements OnInit {
   paymentForm: FormGroup;

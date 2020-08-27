@@ -21,11 +21,12 @@ public class User implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	@Column(name = "username", updatable = false)
 	private String username;
 	private String password;
 	@Column(name = "nombre_completo")
 	private String fullName;
-	@Column(name = "fecha_registro", insertable = false, updatable = false)
+	@Column(name = "fecha_registro", insertable = false)
 	private String dateCreated;
 
 	public Long getId() {

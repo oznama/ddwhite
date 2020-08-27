@@ -29,7 +29,7 @@ export class Client {
 	rfc: string;
 	bussinessAddress: string;
 	bussinessPhone: string;
-	userId: string;
+	userId: number;
 
 	constructor(init?:Partial<Client>){
 		Object.assign(this, init);

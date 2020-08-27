@@ -36,7 +36,6 @@ export class ProviderListComponent implements OnInit {
 
   private loadProviders() {
     this.apiService.get().subscribe( data => {
-        //this.providers = data.content;
         this.providers = of(data.content);
         this.providersFiltred$ = of(data.content);
       }

@@ -1,0 +1,9 @@
+.mat-toolbar {
+  min-height: 20% !important; 
+  height: 20% !important;
+}
+
+.mat-toolbar-row {
+  min-height: 20% !important; 
+  height: 20% !important;
+}

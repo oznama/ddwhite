@@ -6,7 +6,7 @@ export const environment = {
   production: false
 };
 
-export const baseUrl: string = 'http://localhost:8080/ddwhite';
+export const baseUrl: string = 'http://192.168.0.4:8080/ddwhite';
 export const observeResponse: any = {observe:'response'};
 
 /*

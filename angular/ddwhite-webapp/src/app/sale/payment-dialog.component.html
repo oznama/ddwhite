@@ -1,9 +1,12 @@
-<div mat-dialog-content style="width: 600px">
+<div mat-dialog-content>
   <div>
 	  <mat-card>
-	    <mat-card-header>
-	      <mat-card-title>Metodos de pago</mat-card-title>
-	    </mat-card-header>
+      <div class="wrapper">
+        Total a pagar: <span class="text-red">$ {{data}}</span>
+        Total agregado: <span class="text-blue">$ {{totalAmount}}</span>
+        <span class="spacer"></span>
+        <button mat-raised-button color="primary" style="width:100px" type="button" [disabled]="!finalize()" (click)="save()">Guardar</button>
+      </div>
 	    <mat-card-content>
 	      <form [formGroup]="paymentForm">
 	        <mat-form-field class='midle-width-input'>
@@ -28,7 +31,7 @@
   <div>
 
   <div id="table-wrapper">
-    <div id="table-scroll">
+    <div id="table-scroll-payment-dialog">
       <table class="table table-striped">
         <thead>
         <tr>
@@ -42,19 +45,12 @@
           <td>{{payment.paymentDesc}}</td>
           <td>{{payment.amount}}</td>
           <td>
-        	<button mat-raised-button color="warn" (click)="remove(payment)">Borrar</button>
+        	 <button mat-raised-button color="warn" (click)="remove(payment)">Borrar</button>
           </td>
         </tr>
         </tbody>
       </table>
     </div>
-  </div>
-
-  <div class="wrapper">
-  	Total a pagar: <span class="text-red">$ {{data}}</span>
-  	Total agregado: <span class="text-blue">$ {{totalAmount}}</span>
-  	<span class="spacer"></span>
-  	<button mat-raised-button color="primary" style="width:100px" type="button" [disabled]="!finalize()" (click)="save()">Guardar</button>
   </div>
 
 </div>

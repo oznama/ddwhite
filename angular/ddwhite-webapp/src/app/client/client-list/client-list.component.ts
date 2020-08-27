@@ -49,7 +49,6 @@ export class ClientListComponent implements OnInit {
         this.loadClients();
         this.alertService.success('Cliente eliminado', alertOptions);
   	  }, error => {
-        console.log(error);
         this.alertService.error(error.error, alertOptions);
       }
     );

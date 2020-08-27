@@ -1,0 +1,9 @@
+input{
+	text-transform: none;
+}
+td{
+	text-transform: none;
+}
+.input-uppercase {
+	text-transform: uppercase;
+}
