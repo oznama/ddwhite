@@ -60,7 +60,7 @@ export class ProductEditComponent implements OnInit {
     this.catalogService.getByName('GRUPOPROD').subscribe( response => {
       this.catalogGroup = response.items;
     }, error =>{
-      console.log(error);
+      console.error(error);
     });
   }
 

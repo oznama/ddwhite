@@ -7,3 +7,8 @@
   min-height: 20% !important; 
   height: 20% !important;
 }
+
+.data-user {
+	padding: 0 50px;
+	text-transform: uppercase;
+}

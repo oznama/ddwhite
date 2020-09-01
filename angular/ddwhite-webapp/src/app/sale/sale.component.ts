@@ -200,7 +200,6 @@ export class SaleComponent implements OnInit {
 
   private setClient(result: any): void {
     if( result && result.data ){
-      console.log('Cliente registrado' + result.data);
       this.client.id = result.data.id;
       this.client.name = result.data.name;
       this.client.midleName = result.data.midleName;

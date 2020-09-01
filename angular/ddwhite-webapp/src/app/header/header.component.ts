@@ -10,13 +10,13 @@ import { ApiUserService } from './../service/module.service';
 export class HeaderComponent implements OnInit {
 
   isLoggedIn$: Observable<boolean>;
-  userFullName: string;
+  userFullName$: Observable<string>;
 
   constructor(private apiService: ApiUserService) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.apiService.isLoggedIn;
-    this.userFullName = window.localStorage.getItem("userFullName"); 
+    this.userFullName$ = this.apiService.fullName;
   }
 
   onLogout(){

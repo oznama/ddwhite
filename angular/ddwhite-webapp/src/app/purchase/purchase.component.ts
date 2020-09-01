@@ -74,7 +74,7 @@ export class PurchaseComponent implements OnInit {
   	this.catalogService.getByName('UNIDADES').subscribe( response => {
     	this.catalogUnity = response.items;
     }, error =>{
-    	console.log(error);
+    	console.error(error);
     });
   }
 

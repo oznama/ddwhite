@@ -37,10 +37,9 @@ export class LoginComponent implements OnInit {
     }
     this.apiService.login(body).subscribe(response => {
       if(response.status === 200){
-        //this.alertService.success('Bienvenido ' + response.body.fullName, alertOptions);
         window.localStorage.setItem('userId', response.body.id);
-        window.localStorage.setItem('userFullName', response.body.fullName);
         this.apiService.LoggedIn = true;
+        this.apiService.UserFullName = response.body.fullName;
         this.router.navigate(['home']);
       } else {
         this.alertService.warn(response.message, alertOptions);

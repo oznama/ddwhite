@@ -10,6 +10,7 @@ import { User, UserPageable } from './../model/user.model';
 export class ApiUserService {
 
   private loggedIn = new BehaviorSubject<boolean>(false);
+  private userFullName = new BehaviorSubject<string>('');
 
   set LoggedIn(b: boolean){
     this.loggedIn.next(b);
@@ -17,6 +18,14 @@ export class ApiUserService {
 
   get isLoggedIn() {
     return this.loggedIn.asObservable();
+  }
+
+  set UserFullName(userFullName: string){
+    this.userFullName.next(userFullName);
+  }
+
+  get fullName(){
+    return this.userFullName.asObservable();
   }
 
   private context: string = baseUrl + '/user';

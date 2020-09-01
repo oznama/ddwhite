@@ -16,7 +16,7 @@
     <button mat-menu-item routerLink="/user-list"><mat-icon>person</mat-icon><span>Usuarios</span></button>
   </mat-menu>
   
-  <span class="spacer"></span>
-  <span style="padding: 0 50px;">Bienvenido: {{userFullName}}</span>
-  <button mat-raised-button (click)="onLogout()" *ngIf="isLoggedIn$ | async">Log out</button>
+  <span class="spacer"></span>Bienvenido:
+  <span class="data-user">{{ userFullName$ | async }}</span>
+  <button mat-raised-button (click)="onLogout()">Log out</button>
 </mat-toolbar>

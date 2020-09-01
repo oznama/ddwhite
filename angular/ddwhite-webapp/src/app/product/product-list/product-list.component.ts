@@ -47,7 +47,7 @@ export class ProductListComponent implements OnInit {
         this.loadProducts();
         this.alertService.success('Producto eliminado', alertOptions);
   	  }, error => {
-        console.log(error);
+        console.error(error);
         this.alertService.error(error.error, alertOptions);
       }
     );

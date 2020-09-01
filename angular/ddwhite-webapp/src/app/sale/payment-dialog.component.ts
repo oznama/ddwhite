@@ -40,7 +40,7 @@ export class PaymentDialogComponent implements OnInit {
       this.catalogPayment = response.items;
       this.paymentForm.controls.payment.setValue(this.catalogPayment[0].id);
     }, error =>{
-      console.log(error);
+      console.error(error);
     });
   }
 

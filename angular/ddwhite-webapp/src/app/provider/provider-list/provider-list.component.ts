@@ -50,7 +50,7 @@ export class ProviderListComponent implements OnInit {
         this.loadProviders();
         this.alertService.success('Proveedor eliminado', alertOptions);
   	  }, error => {
-        console.log(error);
+        console.error(error);
         this.alertService.error(error.error, alertOptions);
       }
     );

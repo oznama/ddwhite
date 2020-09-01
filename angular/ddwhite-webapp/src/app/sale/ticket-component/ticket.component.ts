@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Sale, SalePayment } from './../../model/sale.model';
 import {CatalogItem} from './../../model/catalog.model';
-import { ApiCatalogService } from './../../service/api.service.catalog';
+import { ApiCatalogService, ApiUserService } from './../../service/module.service';
 
 @Component({
   selector: 'sale-ticket',
@@ -24,10 +24,11 @@ export class TicketComponent implements OnInit {
   userName: string;
 
   constructor(public dialogRef: MatDialogRef<TicketComponent>, @Inject(MAT_DIALOG_DATA) public data: Sale,
-    private catalogService: ApiCatalogService, ) { }
+    private catalogService: ApiCatalogService,
+    private userService: ApiUserService ) { }
 
   ngOnInit(): void {
-    this.userName = window.localStorage.getItem('userFullName');
+    this.userService.fullName.subscribe( value => this.userName = value.toUpperCase());
     this.loadCompanyData();
   }
 
@@ -69,7 +70,7 @@ export class TicketComponent implements OnInit {
         });
       }
     }, error =>{
-      console.log(error);
+      console.error(error);
     });
   }
 
