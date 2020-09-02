@@ -21,7 +21,7 @@ import mx.com.ddwhite.ws.repository.ProductRepository;
 import mx.com.ddwhite.ws.repository.PurchaseRepository;
 
 @Service
-public class PurchaseService extends GenericService<PurchaseDto> {
+public class PurchaseService {
 	
 	private final String MODULE = Purchase.class.getSimpleName();
 
@@ -32,16 +32,14 @@ public class PurchaseService extends GenericService<PurchaseDto> {
 	private ProductRepository productRepository;
 	
 	public Page<PurchaseDto> findAll(Pageable pageable) {
-		Page<PurchaseDto> result = null;
 		final List<PurchaseDto> purchasesDto = new ArrayList<>();
-		List<Purchase> purchases = repository.findAll();
+		Page<Purchase> purchases = repository.findAll(pageable);
 		purchases.forEach( purchase -> {
 			PurchaseDto purchaseDto = new PurchaseDto();
 			BeanUtils.copyProperties(purchase, purchaseDto);
 			purchasesDto.add(purchaseDto);
 		});
-		result = new PageImpl<>(purchasesDto, pageable, purchasesDto.size());
-		return result;
+		return new PageImpl<>(purchasesDto, pageable, repository.count());
 	}
 
 	public PurchaseDto findById(Long id) {

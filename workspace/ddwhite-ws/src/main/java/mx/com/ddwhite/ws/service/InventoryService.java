@@ -7,6 +7,9 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
@@ -22,57 +25,60 @@ import mx.com.ddwhite.ws.repository.SaleDetailRepository;
 
 @Service
 public class InventoryService {
-	
+
 	@Autowired
 	private ProductRepository productRepository;
 	@Autowired
 	private PurchaseRepository purchaseRepository;
 	@Autowired
 	private SaleDetailRepository saleDetailRepository;
-	
-	public List<ProductInventory> findInventory() {
+
+	public Page<ProductInventory> findInventory(Pageable pageable) {
 		List<ProductInventory> list = new ArrayList<>();
-		List<Product> products = productRepository.findAll();
-		products.forEach( product -> {
+		Page<Product> products = productRepository.findAll(pageable);
+		products.forEach(product -> {
 			ProductInventory pi = new ProductInventory();
 			BeanUtils.copyProperties(product, pi);
 			List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
-			if(!purchase.isEmpty()) {
+			if (!purchase.isEmpty()) {
 				pi.setInventory(getPurchase(product, purchase));
 			}
 			list.add(pi);
 		});
-		return list;
+		return new PageImpl<>(list, pageable, productRepository.count());
 	}
-	
-	public List<ProductInventory> findForSale() {
-		List<ProductInventory> list = findInventory();
+
+	public Page<ProductInventory> findForSale(Pageable pageable) {
+		Page<ProductInventory> list = findInventory(pageable);
 		list.forEach(product -> {
 			int quantity = product.getInventory().getQuantity();
-			product.getInventory().setQuantity(quantity - sumSaleQuantity(saleDetailRepository.findByProduct(product.getId())));
+			product.getInventory()
+					.setQuantity(quantity - sumSaleQuantity(saleDetailRepository.findByProduct(product.getId())));
 		});
-		return list.stream().filter( p -> p.getInventory().getQuantity() > 0).collect(Collectors.toList());
+		List<ProductInventory> listForSale = list.stream().filter(p -> p.getInventory().getQuantity() > 0)
+				.collect(Collectors.toList());
+		return new PageImpl<>(listForSale, pageable, listForSale.size());
 	}
-	
-	public List<InventoryDto> getInventory() {
+
+	public Page<InventoryDto> getInventory(Pageable pageable) {
 		final List<InventoryDto> inventory = new ArrayList<>();
 		List<Product> products = productRepository.findAll();
-		products.forEach( product -> {
+		products.forEach(product -> {
 			List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
-			if(!purchase.isEmpty()) {
+			if (!purchase.isEmpty()) {
 				inventory.add(getPurchase(product, purchase));
 			}
 		});
-		return inventory;
+		return new PageImpl<>(inventory, pageable, inventory.size());
 	}
 
 	public InventoryDto getInventory(Long productId) {
-		Product product = productRepository.findById(productId).orElseThrow(() -> new ResourceNotFoundException(Product.class.getSimpleName(), "id", productId));
-			List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
-			if(!purchase.isEmpty()) {
-				return getPurchase(product, purchase);
-			}
-
+		Product product = productRepository.findById(productId)
+				.orElseThrow(() -> new ResourceNotFoundException(Product.class.getSimpleName(), "id", productId));
+		List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
+		if (!purchase.isEmpty()) {
+			return getPurchase(product, purchase);
+		}
 		return null;
 	}
 
@@ -81,27 +87,28 @@ public class InventoryService {
 		inv.setProductId(product.getUserId());
 		inv.setQuantity(sumPurchaseQuantity(purchase));
 		inv.setAverageCost(averageCost(purchase));
-		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
+		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
+				BigDecimal.ROUND_HALF_EVEN));
 		return inv;
 	}
-	
+
 	private int sumPurchaseQuantity(List<Purchase> purchases) {
 		int sum = 0;
-		for(Purchase purchase : purchases)
+		for (Purchase purchase : purchases)
 			sum += purchase.getQuantity();
 		return sum;
 	}
-	
+
 	private int sumSaleQuantity(List<SaleDetail> salesDetail) {
 		int sum = 0;
-		for(SaleDetail saleDetail : salesDetail)
+		for (SaleDetail saleDetail : salesDetail)
 			sum += saleDetail.getQuantity();
 		return sum;
 	}
-	
+
 	private BigDecimal averageCost(List<Purchase> purchases) {
 		BigDecimal average = BigDecimal.valueOf(0);
-		for(Purchase purchase : purchases)
+		for (Purchase purchase : purchases)
 			average = average.add(purchase.getCost());
 		average = average.divide(BigDecimal.valueOf(purchases.size()), BigDecimal.ROUND_HALF_EVEN);
 		return average;

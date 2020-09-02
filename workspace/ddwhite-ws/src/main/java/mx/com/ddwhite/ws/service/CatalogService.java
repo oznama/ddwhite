@@ -14,7 +14,7 @@ import mx.com.ddwhite.ws.model.Catalog;
 import mx.com.ddwhite.ws.repository.CatalogRepository;
 
 @Service
-public class CatalogService extends GenericService<CatalogReadDto> {
+public class CatalogService {
 
 	private final String MODULE = Catalog.class.getSimpleName();
 

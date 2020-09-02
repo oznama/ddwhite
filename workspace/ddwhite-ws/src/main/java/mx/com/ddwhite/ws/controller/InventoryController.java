@@ -1,8 +1,8 @@
 package mx.com.ddwhite.ws.controller;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,8 +22,8 @@ public class InventoryController {
 	private InventoryService service;
 	
 	@GetMapping("/find")
-	public List<InventoryDto> getAll() {
-		return service.getInventory();
+	public Page<InventoryDto> getAll(Pageable pageable) {
+		return service.getInventory(pageable);
 	}
 	
 	@GetMapping("/find/{productId}")
@@ -32,13 +32,13 @@ public class InventoryController {
 	}
 	
 	@GetMapping("/find/product")
-	public List<ProductInventory> findInventory() {
-		return service.findInventory();
+	public Page<ProductInventory> findInventory(Pageable pageable) {
+		return service.findInventory(pageable);
 	}
 	
 	@GetMapping("/find/sale")
-	public List<ProductInventory> findForSale() {
-		return service.findForSale();
+	public Page<ProductInventory> findForSale(Pageable pageable) {
+		return service.findForSale(pageable);
 	}
 
 	

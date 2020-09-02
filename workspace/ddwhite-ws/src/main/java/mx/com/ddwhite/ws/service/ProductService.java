@@ -20,7 +20,7 @@ import mx.com.ddwhite.ws.model.Product;
 import mx.com.ddwhite.ws.repository.ProductRepository;
 
 @Service
-public class ProductService extends GenericService<ProductDto> {
+public class ProductService {
 	
 	private final String MODULE = Product.class.getSimpleName();
 
@@ -28,17 +28,15 @@ public class ProductService extends GenericService<ProductDto> {
 	private ProductRepository repository;
 	
 	public Page<ProductDto> findAll(Pageable pageable) {
-		Page<ProductDto> result = null;
 		final List<ProductDto> productsDto = new ArrayList<>();
-		List<Product> products = repository.findAll();
+		Page<Product> products = repository.findAll(pageable);
 		products.forEach( product -> {
 			ProductDto productDto = new ProductDto();
 			BeanUtils.copyProperties(product, productDto);
 			productDto.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
 			productsDto.add(productDto);
 		});
-		result = new PageImpl<>(productsDto, pageable, productsDto.size());
-		return result;
+		return new PageImpl<>(productsDto, pageable, repository.count());
 	}
 	
 	public ProductDto findById(Long id) {

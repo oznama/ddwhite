@@ -20,7 +20,7 @@ import mx.com.ddwhite.ws.repository.SalePaymentRepository;
 import mx.com.ddwhite.ws.repository.SaleRepository;
 
 @Service
-public class SaleService extends GenericService<Sale> {
+public class SaleService {
 	
 	@Autowired
 	private SaleRepository saleRepository;
