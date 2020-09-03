@@ -6,5 +6,7 @@ public interface GeneralConstants {
 	String FORMAT_DATE_TIME = "yyyy-MM-dd HH:mm:ss.S";
 	
 	int BIG_DECIMAL_ROUND = 2;
+	
+	String USERNAME_ADMIN = "admin";
 
 }

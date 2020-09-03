@@ -1,9 +1,13 @@
 package mx.com.ddwhite.ws.controller;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +35,9 @@ public class UserController implements GenericController<User> {
 
 	@Override
 	public Page<User> findAll(Pageable pageable) {
-		return repository.findAll(pageable);
+		List<User> users = repository.findAll(pageable).getContent();
+		users = users.stream().filter( user -> !user.getUsername().equals(GeneralConstants.USERNAME_ADMIN) ).collect(Collectors.toList());
+		return new PageImpl<>(users, pageable, repository.count());
 	}
 
 	@Override
