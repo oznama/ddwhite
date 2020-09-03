@@ -9,6 +9,8 @@ drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
 drop table if exists usuarios;
+drop table if exists privilegios;
+drop table if exists roles;
 drop table if exists catalogos;
 
 create table if not exists catalogos(
@@ -19,14 +21,40 @@ create table if not exists catalogos(
 	primary key(id)
 );
 
+create table if not exists roles(
+	id bigint not null auto_increment,
+	nombre char(50) not null,
+	descripcion char(100),
+	primary key(id)
+);
+
+create table if not exists privilegios(
+	id bigint not null auto_increment,
+	nombre char(50) not null,
+	clave char(5) not null,
+	descripcion char(100),
+	primary key(id)
+);
+
+create table if not exists roles_privilegios(
+	id bigint not null auto_increment,
+	id_role bigint not null,
+	id_privilegio bigint not null,
+	primary key(id)
+);
+alter table roles_privilegios add constraint foreign key (id_role) references roles (id);
+alter table roles_privilegios add constraint foreign key (id_privilegio) references privilegios (id);
+
 create table if not exists usuarios(
 	id bigint not null auto_increment,
 	username char(10) not null,
 	password char(32) not null,
 	nombre_completo char(100) not null,
-	fecha_registro datetime default current_timestamp, 
+	fecha_registro datetime default current_timestamp,
+	id_role bigint not null,
 	primary key (id)
 );
+alter table usuarios add constraint foreign key (id_role) references roles (id);
 
 create table if not exists proveedores(
 	id bigint not null auto_increment,

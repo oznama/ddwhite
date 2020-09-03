@@ -1,34 +1,19 @@
-package mx.com.ddwhite.ws.model;
+package mx.com.ddwhite.ws.dto;
 
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-
-@Entity
-@Table(name = "usuarios")
-public class User implements Serializable {
+public class UserDto implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3554528062258053521L;
+	private static final long serialVersionUID = -2234781733221306029L;
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	@Column(name = "username", updatable = false)
 	private String username;
 	private String password;
-	@Column(name = "nombre_completo")
 	private String fullName;
-	@Column(name = "fecha_registro", insertable = false)
 	private String dateCreated;
-	@Column(name = "id_role")
 	private Long roleId;
 
 	public Long getId() {

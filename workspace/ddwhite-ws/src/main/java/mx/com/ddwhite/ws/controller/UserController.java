@@ -1,13 +1,8 @@
 package mx.com.ddwhite.ws.controller;
 
-import java.util.List;
-import java.util.stream.Collectors;
-
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,72 +12,68 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import mx.com.ddwhite.ws.constants.GeneralConstants;
-import mx.com.ddwhite.ws.constants.Utils;
-import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
-import mx.com.ddwhite.ws.model.User;
-import mx.com.ddwhite.ws.repository.UserRepository;
+import mx.com.ddwhite.ws.dto.UserDto;
+import mx.com.ddwhite.ws.service.UserService;
 
 @RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/user")
-public class UserController implements GenericController<User> {
+public class UserController implements GenericController<UserDto> {
 
-	private final String MODULE = User.class.getSimpleName();
-
+	
 	@Autowired
-	private UserRepository repository;
+	private UserService service;
 
 	@Override
-	public Page<User> findAll(Pageable pageable) {
-		List<User> users = repository.findAll(pageable).getContent();
-		users = users.stream().filter( user -> !user.getUsername().equals(GeneralConstants.USERNAME_ADMIN) ).collect(Collectors.toList());
-		return new PageImpl<>(users, pageable, repository.count());
+	public Page<UserDto> findAll(Pageable pageable) {
+		return service.findAll(pageable);
 	}
 
 	@Override
-	public User findById(Long id) {
-		return repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
+	public UserDto findById(Long id) {
+		return service.findById(id);
 	}
 
 	@Override
-	public ResponseEntity<?> create(User entity) {
+	public ResponseEntity<?> create(UserDto userDto) {
 		try {
-			return ResponseEntity.ok(repository.saveAndFlush(entity));
+			return ResponseEntity.ok(service.create(userDto));
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
 	@Override
-	public ResponseEntity<?> update(User entity) {
+	public ResponseEntity<?> update(UserDto userDto) {
 		try {
-			return ResponseEntity.ok(repository.findById(entity.getId()).map(t -> {
-				BeanUtils.copyProperties(entity, t, "id");
-				t.setDateCreated(Utils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
-				return repository.saveAndFlush(t);
-			}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId())));
+			service.update(userDto);
+			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
 	@Override
 	public ResponseEntity<?> delete(Long id) {
-		User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
-		repository.delete(user);
-		repository.flush();
-		return ResponseEntity.ok().build();
+		try {
+			service.delete(id);
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 
 	@PostMapping("/login")
-	public ResponseEntity<?> login(@RequestBody User user) {
-		User userFinded = repository.findByUsername(user.getUsername());
-		if (userFinded != null) {
-			if( user.getPassword().equals(userFinded.getPassword()) ) return ResponseEntity.ok(userFinded);
-			else return ResponseEntity.status(HttpStatus.FORBIDDEN).body("La contraseña es incorrecta");
+	public ResponseEntity<?> login(@RequestBody UserDto userDto) {
+		try {
+			return ResponseEntity.ok(service.login(userDto));
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
 		}
-		return ResponseEntity.status(HttpStatus.FORBIDDEN).body("El usuario no se encuentra registrado");
 	}
 
 }
