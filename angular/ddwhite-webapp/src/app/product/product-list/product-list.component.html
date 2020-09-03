@@ -9,10 +9,10 @@
       <mat-card-content>
         <form [formGroup]="searchForm">
           <mat-form-field style="width: 20%;">
-            <input matInput formControlName="sku" placeholder="SKU" maxlength="15">
+            <input matInput formControlName="sku" placeholder="SKU" autocomplete="off" maxlength="15">
           </mat-form-field>
           <mat-form-field style="width: 70%;">
-            <input matInput formControlName="name" placeholder="Nombre" maxlength="80">
+            <input matInput formControlName="name" placeholder="Nombre" autocomplete="off" maxlength="80">
           </mat-form-field>
           <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="doFilter()">search</mat-icon>
           <mat-icon aria-hidden="false" aria-label="Example clear icon" (click)="clearFilter()">clear</mat-icon>
@@ -59,4 +59,14 @@
       </table>
     </div>
   </div>
+
+  <!-- Pagination -->
+  <div class="wrapper">
+    <mat-icon aria-hidden="false" (click)="pagination(0)">first_page</mat-icon>
+    <mat-icon aria-hidden="false" (click)="pagination(page-1)">arrow_back</mat-icon>
+    page {{page+1}} of {{totalPage}}
+    <mat-icon aria-hidden="false" (click)="pagination(page+1)">arrow_forward</mat-icon>
+    <mat-icon aria-hidden="false" (click)="pagination(totalPage-1)">last_page</mat-icon>
+  </div>
+
 </div>

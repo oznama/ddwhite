@@ -10,8 +10,8 @@ export class ApiClientService {
   constructor(private http: HttpClient) { }
   context: string = baseUrl + '/client';
 
-  get() : Observable<ClientPageable> {
-    return this.http.get<ClientPageable>(this.context + '/find');
+  get(page: number, size: number, sort: string) : Observable<ClientPageable> {
+    return this.http.get<ClientPageable>(this.context + '/find?page='+page+'&size='+size+'&sort='+sort);
   }
 
   getById(id: number): Observable<Client> {

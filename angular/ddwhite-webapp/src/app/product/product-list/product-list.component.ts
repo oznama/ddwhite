@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Product} from "../../model/product.model";
-import { ApiProductService } from "../../service/module.service";
+import { ApiProductService, pageSize } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Observable, of, combineLatest } from 'rxjs/index';
 import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
@@ -18,6 +18,10 @@ export class ProductListComponent implements OnInit {
   products: Observable<Product[]>;
   productsFiltered$: Observable<Product[]>;
 
+  page: number = 0;
+  sort: string = 'sku,asc';
+  totalPage: number;
+
   constructor(
     private router:Router,
     private apiService:ApiProductService,
@@ -30,21 +34,29 @@ export class ProductListComponent implements OnInit {
       sku: [],
       name: [],
     });
-    this.loadProducts();
+    this.loadProducts(this.page);
   }
 
-  private loadProducts(): void {
-    this.apiService.getInventory().subscribe( data => {
-      this.products = of(data);
-      this.productsFiltered$ = of(data);
+  loadProducts(page: number): void {
+    this.apiService.getInventory(page, pageSize, this.sort).subscribe( data => {
+      this.totalPage = data.totalPages;
+      this.products = of(data.content);
+      this.productsFiltered$ = of(data.content);
     });
+  }
+
+  pagination(page:number): void {
+    if( page >= 0 && page < this.totalPage && page != this.page ) {
+      this.page = page;
+      this.loadProducts(this.page);
+    }
   }
 
   delete(product:Product): void{
   	this.apiService.delete(product.id)
   	  .subscribe( response => {
   	  	this.products = this.products.pipe(map( items => items.filter( p => p != product)));
-        this.loadProducts();
+        this.loadProducts(this.page);
         this.alertService.success('Producto eliminado', alertOptions);
   	  }, error => {
         console.error(error);

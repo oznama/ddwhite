@@ -36,8 +36,9 @@ export class ApiUserService {
     return this.http.post<any>(this.context +'/login', loginPayload, observeResponse);
   }
 
-  get() : Observable<UserPageable> {
-    return this.http.get<UserPageable>(this.context + '/find');
+  get(page: number, size: number, sort: string) : Observable<UserPageable> {
+    console.log('A egg');
+    return this.http.get<UserPageable>(this.context + '/find?page='+page+'&size='+size+'&sort='+sort);
   }
 
   getById(id: number): Observable<User> {

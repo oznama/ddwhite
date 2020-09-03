@@ -4,7 +4,7 @@ import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Product, ModeProductDialog } from './../../model/product.model';
-import { ApiProductService } from './../../service/api.service.product';
+import { ApiProductService, pageSize } from './../../service/module.service';
 
 @Component({
   selector: 'product-dialog-search',
@@ -14,6 +14,10 @@ export class ProductDialogSearchComponent implements OnInit {
   searchForm: FormGroup;
   products: Observable<Product[]>;
   productFiltred$: Observable<Product[]>;
+
+  page: number = 0;
+  sort: string = 'sku,asc';
+  totalPage: number;
 
   constructor(
     public dialogRef: MatDialogRef<ProductDialogSearchComponent>, 
@@ -27,20 +31,29 @@ export class ProductDialogSearchComponent implements OnInit {
       sku: [],
       name: [],
     });
-    this.loadProducts();
+    this.loadProducts(this.page);
   }
 
-  private loadProducts(): void{
+  loadProducts(page: number): void{
     if( this.data.mode === 'inventory' ){
-      this.apiService.getInventory().subscribe( data => {
-        this.products = of(data);
-        this.productFiltred$ = of(data);
+      this.apiService.getInventory(page, pageSize, this.sort).subscribe( data => {
+        this.totalPage = data.totalPages;
+        this.products = of(data.content);
+        this.productFiltred$ = of(data.content);
       });
     } else if( this.data.mode === 'sale' ){
-      this.apiService.getProductsForSale().subscribe( data => {
-        this.products = of(data);
-        this.productFiltred$ = of(data);
+      this.apiService.getProductsForSale(page, pageSize, this.sort).subscribe( data => {
+        this.totalPage = data.totalPages;
+        this.products = of(data.content);
+        this.productFiltred$ = of(data.content);
       });
+    }
+  }
+
+  pagination(page:number): void {
+    if( page >= 0 && page < this.totalPage && page != this.page ) {
+      this.page = page;
+      this.loadProducts(this.page);
     }
   }
 

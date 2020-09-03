@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {User} from "../../model/user.model";
-import { ApiUserService } from "../../service/module.service";
+import { ApiUserService, pageSize } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Observable, of, combineLatest } from 'rxjs/index';
 import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
@@ -18,6 +18,10 @@ export class UserListComponent implements OnInit {
   users: Observable<User[]>;
   usersFiltred$: Observable<User[]>;
 
+  page: number = 0;
+  sort: string = 'id,asc';
+  totalPage: number;
+
   constructor(
   	private router:Router, 
     private apiService:ApiUserService, 
@@ -29,22 +33,29 @@ export class UserListComponent implements OnInit {
       username: [],
       fullName: []
     });
-    this.loadUsers();
+    this.loadUsers(this.page);
   }
 
-  private loadUsers() {
-    this.apiService.get().subscribe( data => {
-        this.users = of(data.content);
-        this.usersFiltred$ = of(data.content);
-      }
-    )
+  private loadUsers(page: number) {
+    this.apiService.get(page, pageSize, this.sort).subscribe( data => {
+      this.totalPage = data.totalPages;
+      this.users = of(data.content);
+      this.usersFiltred$ = of(data.content);
+    })
+  }
+
+  pagination(page:number): void {
+    if( page >= 0 && page < this.totalPage && page != this.page ) {
+      this.page = page;
+      this.loadUsers(this.page);
+    }
   }
 
   delete(user:User): void{
   	this.apiService.delete(user.id)
   	  .subscribe( response => {
         this.users = this.users.pipe(map( items => items.filter( u => u != user)));
-        this.loadUsers();
+        this.loadUsers(this.page);
         this.alertService.success('Usuario eliminado', alertOptions);
   	  }, error => {
         this.alertService.error(error.error, alertOptions);

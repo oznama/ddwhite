@@ -11,9 +11,11 @@ export class ApiProductService {
   constructor(private http: HttpClient) { }
   context: string = baseUrl + '/product';
 
+  /*
   get() : Observable<ProductPageable> {
     return this.http.get<ProductPageable>(this.context + '/find');
   }
+  */
 
   getById(id: number): Observable<Product> {
     return this.http.get<Product>(this.context + '/find/' + id);
@@ -35,16 +37,18 @@ export class ApiProductService {
     return this.http.delete<any>(this.context + '/delete/' + id);
   }
 
-  getInventory() : Observable<Product[]> {
-    return this.http.get<Product[]>(baseUrl + '/inventory/find/product');
+  getInventory(page: number, size: number, sort: string) : Observable<ProductPageable> {
+    return this.http.get<ProductPageable>(baseUrl + '/inventory/find/product?page='+page+'&size='+size+'&sort='+sort);
   }
 
+  /*
   getInventoryByProduct(productId: number) : Observable<Inventory> {
     return this.http.get<Inventory>(baseUrl + '/inventory/find/' + productId);
   }
+  */
 
-  getProductsForSale() : Observable<Product[]> {
-    return this.http.get<Product[]>(baseUrl + '/inventory/find/sale');
+  getProductsForSale(page: number, size: number, sort: string) : Observable<ProductPageable> {
+    return this.http.get<ProductPageable>(baseUrl + '/inventory/find/sale?page='+page+'&size='+size+'&sort='+sort);
   }
 
 }

@@ -4,7 +4,7 @@ import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Client } from './../../model/client.model';
-import { ApiClientService } from './../../service/module.service';
+import { ApiClientService,pageSize } from './../../service/module.service';
 
 @Component({
   selector: 'client-dialog-search',
@@ -14,6 +14,10 @@ export class ClientDialogSearchComponent implements OnInit {
   searchForm: FormGroup;
   clients: Observable<Client[]>;
   clientsFiltred$: Observable<Client[]>;
+
+  page: number = 0;
+  sort: string = 'midleName,lastName,name,asc';
+  totalPage: number;
 
   constructor(
     public dialogRef: MatDialogRef<ClientDialogSearchComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public dClient: Client,
@@ -28,15 +32,22 @@ export class ClientDialogSearchComponent implements OnInit {
       lastName: [],
       rfc: [],
     });
-    this.loadClients();
+    this.loadClients(this.page);
   }
 
-  private loadClients() {
-    this.apiService.get().subscribe( data => {
-        this.clients = of(data.content);
-        this.clientsFiltred$ = of(data.content);
-      }
-    )
+  private loadClients(page: number) {
+    this.apiService.get(page, pageSize, this.sort).subscribe( data => {
+      this.totalPage = data.totalPages;
+      this.clients = of(data.content);
+      this.clientsFiltred$ = of(data.content);
+    })
+  }
+
+  pagination(page:number): void {
+    if( page >= 0 && page < this.totalPage && page != this.page ) {
+      this.page = page;
+      this.loadClients(this.page);
+    }
   }
 
   doFilter(): void{

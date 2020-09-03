@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Client} from "../../model/client.model";
-import { ApiClientService } from "../../service/module.service";
+import { ApiClientService, pageSize } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Observable, of, combineLatest } from 'rxjs/index';
 import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
@@ -18,6 +18,10 @@ export class ClientListComponent implements OnInit {
   clients: Observable<Client[]>;
   clientsFiltred$: Observable<Client[]>;
 
+  page: number = 0;
+  sort: string = 'midleName,lastName,name,asc';
+  totalPage: number;
+
   constructor(
   	private router:Router, 
     private apiService:ApiClientService, 
@@ -31,22 +35,29 @@ export class ClientListComponent implements OnInit {
       midleName: [],
       lastName: []
     });
-    this.loadClients();
+    this.loadClients(this.page);
   }
 
-  private loadClients() {
-    this.apiService.get().subscribe( data => {
-        this.clients = of(data.content);
-        this.clientsFiltred$ = of(data.content);
-      }
-    )
+  private loadClients(page: number) {
+    this.apiService.get(page, pageSize, this.sort).subscribe( data => {
+      this.totalPage = data.totalPages;
+      this.clients = of(data.content);
+      this.clientsFiltred$ = of(data.content);
+    })
+  }
+
+  pagination(page:number): void {
+    if( page >= 0 && page < this.totalPage && page != this.page ) {
+      this.page = page;
+      this.loadClients(this.page);
+    }
   }
 
   delete(client:Client): void{
   	this.apiService.delete(client.id)
   	  .subscribe( response => {
         this.clients = this.clients.pipe(map( items => items.filter( c => c != client)));
-        this.loadClients();
+        this.loadClients(this.page);
         this.alertService.success('Cliente eliminado', alertOptions);
   	  }, error => {
         this.alertService.error(error.error, alertOptions);

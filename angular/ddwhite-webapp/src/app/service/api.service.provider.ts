@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs/index";
 import { baseUrl, observeResponse } from './../../environments/environment';
-import {ApiResponse} from "../model/api.response";
 import {Provider, ProviderPageable} from "../model/provider.model";
 
 @Injectable()
@@ -11,8 +10,8 @@ export class ApiProviderService {
   constructor(private http: HttpClient) { }
   context: string = baseUrl + '/provider';
 
-  get() : Observable<ProviderPageable> {
-    return this.http.get<ProviderPageable>(this.context + '/find');
+  get(page: number, size: number, sort: string) : Observable<ProviderPageable> {
+    return this.http.get<ProviderPageable>(this.context + '/find?page='+page+'&size='+size+'&sort='+sort);
   }
 
   getById(id: number): Observable<Provider> {

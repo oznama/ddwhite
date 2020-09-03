@@ -4,7 +4,7 @@ import {Observable, of} from 'rxjs';
 import {map} from 'rxjs/operators';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Provider } from './../../model/provider.model';
-import { ApiProviderService } from './../../service/api.service.provider';
+import { ApiProviderService, pageSize } from './../../service/module.service';
 
 @Component({
   selector: 'provider-dialog-search',
@@ -14,6 +14,10 @@ export class ProviderDialogSearchComponent implements OnInit {
   searchForm: FormGroup;
   providers: Observable<Provider[]>;
   providersFiltred$: Observable<Provider[]>;
+
+  page: number = 0;
+  sort: string = 'bussinesName,asc';
+  totalPage: number;
 
   constructor(
     public dialogRef: MatDialogRef<ProviderDialogSearchComponent>, @Optional() @Inject(MAT_DIALOG_DATA) public dProvider: Provider,
@@ -25,15 +29,22 @@ export class ProviderDialogSearchComponent implements OnInit {
     this.searchForm = this.formBuilder.group({
       bussinesName: []
     });
-    this.loadProviders();
+    this.loadProviders(this.page);
   }
 
-  private loadProviders() {
-    this.apiService.get().subscribe( data => {
-        this.providers = of(data.content);
-        this.providersFiltred$ = of(data.content);
-      }
-    )
+  private loadProviders(page: number) {
+    this.apiService.get(page, pageSize, this.sort).subscribe( data => {
+      this.totalPage = data.totalPages;
+      this.providers = of(data.content);
+      this.providersFiltred$ = of(data.content);
+    })
+  }
+
+  pagination(page:number): void {
+    if( page >= 0 && page < this.totalPage && page != this.page ) {
+      this.page = page;
+      this.loadProviders(this.page);
+    }
   }
 
   doFilter(): void{

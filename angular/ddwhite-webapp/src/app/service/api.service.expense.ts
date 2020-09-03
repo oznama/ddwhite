@@ -10,8 +10,8 @@ export class ApiExpenseService {
   constructor(private http: HttpClient) { }
   context: string = baseUrl + '/expense';
 
-  get() : Observable<ExpensePageable> {
-    return this.http.get<ExpensePageable>(this.context + '/find');
+  get(page: number, size: number, sort: string) : Observable<ExpensePageable> {
+    return this.http.get<ExpensePageable>(this.context + '/find?page='+page+'&size='+size+'&sort='+sort);
   }
 
   getById(id: number): Observable<Expense> {

@@ -9,3 +9,5 @@ export * from './api.service.purchase';
 export * from './api.service.client';
 export * from './api.service.sale';
 export * from './api.service.expense';
+
+export const pageSize: number = 50;

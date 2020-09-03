@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Provider} from "../../model/provider.model";
-import { ApiProviderService } from "../../service/module.service";
+import { ApiProviderService, pageSize } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Observable, of, combineLatest } from 'rxjs/index';
 import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
@@ -19,6 +19,10 @@ export class ProviderListComponent implements OnInit {
   providers: Observable<Provider[]>;
   providersFiltred$: Observable<Provider[]>;
 
+  page: number = 0;
+  sort: string = 'bussinesName,asc';
+  totalPage: number;
+
   constructor(
     private router:Router, 
     private apiService:ApiProviderService, 
@@ -31,15 +35,23 @@ export class ProviderListComponent implements OnInit {
       bussinesName: [],
       contactName: [],
     });
-    this.loadProviders();
+    this.loadProviders(this.page);
   }
 
-  private loadProviders() {
-    this.apiService.get().subscribe( data => {
+  private loadProviders(page: number) {
+    this.apiService.get(page, pageSize, this.sort).subscribe( data => {
+        this.totalPage = data.totalPages;
         this.providers = of(data.content);
         this.providersFiltred$ = of(data.content);
       }
     )
+  }
+
+  pagination(page:number): void {
+    if( page >= 0 && page < this.totalPage && page != this.page ) {
+      this.page = page;
+      this.loadProviders(this.page);
+    }
   }
 
   delete(provider:Provider): void{
@@ -47,7 +59,7 @@ export class ProviderListComponent implements OnInit {
   	  .subscribe( response => {
   	  	//this.providers = this.providers.filter( p => p != provider);
         this.providers = this.providers.pipe(map( items => items.filter( p => p != provider)));
-        this.loadProviders();
+        this.loadProviders(0);
         this.alertService.success('Proveedor eliminado', alertOptions);
   	  }, error => {
         console.error(error);

@@ -5,7 +5,7 @@ import { Observable, of } from 'rxjs/index';
 import {Expense} from './../model/expense.model';
 import {User} from './../model/user.model';
 import { AlertService, alertOptions } from '../_alert';
-import { ApiExpenseService, ApiUserService } from './../service/module.service';
+import { ApiExpenseService, ApiUserService, pageSize } from './../service/module.service';
 import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
 
 @Component({
@@ -19,6 +19,10 @@ export class ExpenseComponent implements OnInit {
   searchForm: FormGroup;
   expenses: Observable<Expense[]>;
   expensesFiltred$: Observable<Expense[]>;
+
+  page: number = 0;
+  sort: string = 'amount,desc';
+  totalPage: number;
 
   constructor(
   	private formBuilder: FormBuilder,
@@ -37,16 +41,25 @@ export class ExpenseComponent implements OnInit {
       userFullName: [],
       description: [],
     });
-  	this.loadExpenses();
+  	this.loadExpenses(this.page);
   }
 
-  private loadExpenses(): void{
-  	this.apiService.get().subscribe( data => {
+  private loadExpenses(page: number): void{
+  	this.apiService.get(page, pageSize, this.sort).subscribe( data => {
   		if(data && data.content){
-	    	this.expenses = of(this.loadUserFullname(data.content));
-	    	this.expensesFiltred$ = of(this.loadUserFullname(data.content));
+        this.totalPage = data.totalPages;
+        const expensesWithUsername = this.loadUserFullname(data.content);
+	    	this.expenses = of(expensesWithUsername);
+	    	this.expensesFiltred$ = of(expensesWithUsername);
   		}
     });
+  }
+
+  pagination(page:number): void {
+    if( page >= 0 && page < this.totalPage && page != this.page ) {
+      this.page = page;
+      this.loadExpenses(this.page);
+    }
   }
 
   private loadUserFullname(expenses: Expense[]): Expense[]{
@@ -65,7 +78,7 @@ export class ExpenseComponent implements OnInit {
       .subscribe( data => {
         this.alertService.success('Gasto registrado', alertOptions);
         this.expenseForm.reset();
-        this.loadExpenses();
+        this.loadExpenses(this.page);
       }, error => {
         this.alertService.error('El gasto no ha sido guardado: ' + error.error, alertOptions);
       }
