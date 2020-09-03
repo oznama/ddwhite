@@ -1,7 +1,7 @@
 import { Pageable, Sort } from './api.response';
 
-export class UserPageable{
-	content: User[];
+export class RolePageable{
+	content: Role[];
 	pageable: Pageable;
 	totalElements: number;
 	totalPages: number;
@@ -13,21 +13,17 @@ export class UserPageable{
 	first: boolean;
 	empty: boolean;
 
-	constructor(init?:Partial<UserPageable>){
+	constructor(init?:Partial<RolePageable>){
 		Object.assign(this, init);
 	}
 }
 
-export class User {
+export class Role {
 	id: number;
-	username: string;
-	password: string;
-	fullName: string;
-	dateCreated: string;
-	roleId: number;
-	roleName: string;
+	name: string;
+	description: string;
 
-	constructor(init?:Partial<User>){
+	constructor(init?:Partial<Role>){
 		Object.assign(this, init);
 	}
 }

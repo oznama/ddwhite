@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Product} from "../../model/product.model";
-import { ApiProductService, pageSize } from "../../service/module.service";
+import { ApiProductService, pageSize, Privileges } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Observable, of, combineLatest } from 'rxjs/index';
 import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
@@ -26,6 +26,7 @@ export class ProductListComponent implements OnInit {
     private router:Router,
     private apiService:ApiProductService,
     public alertService:AlertService,
+    public privileges:Privileges,
     private formBuilder: FormBuilder) {
   }
 

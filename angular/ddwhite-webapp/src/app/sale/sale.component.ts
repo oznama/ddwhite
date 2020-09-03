@@ -4,7 +4,7 @@ import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {Sale, SaleDetail, SalePayment} from './../model/sale.model';
 import { AlertService, alertOptions } from '../_alert';
-import { ApiSaleService } from './../service/module.service';
+import { ApiSaleService,Privileges } from './../service/module.service';
 import { ProductDialogSearchComponent } from './../product/dialog-search/product-dialog-search.component';
 import { ClientAddComponent } from './../client/client-add/client-add.component';
 import { ClientDialogSearchComponent } from './../client/dialog-search/client-dialog-search.component';
@@ -35,6 +35,7 @@ export class SaleComponent implements OnInit {
   constructor(
   	private formBuilder: FormBuilder,
   	private apiService: ApiSaleService,
+    public privileges:Privileges,
     public alertService:AlertService,
   	public dialog: MatDialog) {
     setInterval(() => { this.date =  new Date()}, 1000)

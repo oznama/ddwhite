@@ -27,6 +27,15 @@
           <mat-error>Password invalido</mat-error>
         </mat-form-field>
 
+        <mat-form-field class='midle-width-input'>
+          <select matNativeControl formControlName="roleId" placeholder="Role" required>
+            <option *ngFor="let item of roles" [value]="item.id">
+              {{item.name.toUpperCase()}}: {{item.description}}
+            </option>
+          </select>
+          <mat-error>Campo obligatorio</mat-error>
+        </mat-form-field>
+
         <div class="wrapper">
           <button mat-raised-button color="warn" type="button" (click)="cancelar()">Cancelar</button>
           <span class="spacer"></span>

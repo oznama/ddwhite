@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiUserService } from './../service/module.service';
+import { ApiLoginService, Privileges } from './../service/module.service';
 
 @Component({
   selector: 'app-header',
@@ -12,7 +12,9 @@ export class HeaderComponent implements OnInit {
   isLoggedIn$: Observable<boolean>;
   userFullName$: Observable<string>;
 
-  constructor(private apiService: ApiUserService) { }
+  constructor(
+    private apiService: ApiLoginService, 
+    public privileges: Privileges) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.apiService.isLoggedIn;

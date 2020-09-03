@@ -39,11 +39,13 @@ export class ProductEditComponent implements OnInit {
       percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
       cost: [],
       group: ['', Validators.required],
+      price: [],
       userId: [],
       dateCreated: []
     });
     this.editForm.controls.userId.disable();
     this.editForm.controls.dateCreated.disable();
+    this.editForm.controls.price.disable();
     this.loadCatalogGroup();
     this.loadProduct(+editProductId);
   }

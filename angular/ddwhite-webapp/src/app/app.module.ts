@@ -14,14 +14,17 @@ import {
   AuthGuard,
   LoaderService,
   LoaderInterceptor,
-  ApiCatalogService, 
+  ApiCatalogService,
+  ApiLoginService, 
   ApiProviderService, 
   ApiUserService, 
   ApiProductService, 
   ApiPurchaseService,
   ApiClientService,
   ApiSaleService,
-  ApiExpenseService
+  ApiExpenseService,
+  ApiRoleService,
+  Privileges
 } from './service/module.service';
 import { AlertModule } from './_alert';
 
@@ -96,13 +99,16 @@ import { TicketComponent } from './sale/ticket-component/ticket.component';
     LoaderService,
     { provide: HTTP_INTERCEPTORS, useClass: LoaderInterceptor, multi: true},
     ApiCatalogService,
+    ApiLoginService,
     ApiUserService,
     ApiProviderService,
     ApiProductService,
     ApiPurchaseService,
     ApiClientService,
     ApiSaleService,
-    ApiExpenseService
+    ApiExpenseService,
+    ApiRoleService,
+    Privileges
   ],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]

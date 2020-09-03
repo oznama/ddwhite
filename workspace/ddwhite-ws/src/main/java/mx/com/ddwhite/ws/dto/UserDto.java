@@ -15,6 +15,7 @@ public class UserDto implements Serializable {
 	private String fullName;
 	private String dateCreated;
 	private Long roleId;
+	private String roleName;
 
 	public Long getId() {
 		return id;
@@ -62,6 +63,14 @@ public class UserDto implements Serializable {
 
 	public void setRoleId(Long roleId) {
 		this.roleId = roleId;
+	}
+
+	public String getRoleName() {
+		return roleName;
+	}
+
+	public void setRoleName(String roleName) {
+		this.roleName = roleName;
 	}
 
 }

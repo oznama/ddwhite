@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {first} from "rxjs/operators";
-import { ApiUserService } from "../../service/module.service";
+import { ApiUserService, ApiRoleService } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
+import {Role} from './../../model/role.model';
 
 @Component({
   selector: 'app-user-edit',
@@ -13,11 +14,13 @@ import { AlertService, alertOptions } from '../../_alert';
 export class UserEditComponent implements OnInit {
 
   editForm: FormGroup;
+  roles: Role[];
 
   constructor(
     private formBuilder: FormBuilder,
     private router: Router, 
     private apiService: ApiUserService, 
+    private roleService: ApiRoleService,
     public alertService:AlertService) {
   }
 
@@ -34,6 +37,7 @@ export class UserEditComponent implements OnInit {
       password: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{4,}")]],
       repetPassword: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{4,}")]],
       fullName: ['', [Validators.required, Validators.pattern("[a-zA-Z ]{1,}")]],
+      roleId: ['', Validators.required],
       //userId: [],
       dateCreated: []
     });
@@ -48,8 +52,18 @@ export class UserEditComponent implements OnInit {
         this.editForm.controls.repetPassword.setValue(data.password);
         this.editForm.controls.fullName.setValue(data.fullName);
         this.editForm.controls.dateCreated.setValue(data.dateCreated);
+        this.editForm.controls.roleId.setValue(data.roleId);
       }
     );
+    this.loadRoles();
+  }
+
+  private loadRoles(): void{
+    this.roleService.get().subscribe( response => {
+      this.roles = response.content;
+    }, error =>{
+      console.error(error);
+    });
   }
 
   isFormValid(): boolean {

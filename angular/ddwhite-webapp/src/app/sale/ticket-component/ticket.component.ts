@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Sale, SalePayment } from './../../model/sale.model';
 import {CatalogItem} from './../../model/catalog.model';
-import { ApiCatalogService, ApiUserService } from './../../service/module.service';
+import { ApiCatalogService, ApiLoginService } from './../../service/module.service';
 
 @Component({
   selector: 'sale-ticket',
@@ -25,10 +25,10 @@ export class TicketComponent implements OnInit {
 
   constructor(public dialogRef: MatDialogRef<TicketComponent>, @Inject(MAT_DIALOG_DATA) public data: Sale,
     private catalogService: ApiCatalogService,
-    private userService: ApiUserService ) { }
+    private loginService: ApiLoginService ) { }
 
   ngOnInit(): void {
-    this.userService.fullName.subscribe( value => this.userName = value.toUpperCase());
+    this.loginService.fullName.subscribe( value => this.userName = value.toUpperCase());
     this.loadCompanyData();
   }
 

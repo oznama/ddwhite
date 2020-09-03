@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {User} from "../../model/user.model";
-import { ApiUserService, pageSize } from "../../service/module.service";
+import { ApiUserService, pageSize, Privileges } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Observable, of, combineLatest } from 'rxjs/index';
 import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
@@ -18,6 +18,8 @@ export class UserListComponent implements OnInit {
   users: Observable<User[]>;
   usersFiltred$: Observable<User[]>;
 
+  userIdLogged: number;
+
   page: number = 0;
   sort: string = 'id,asc';
   totalPage: number;
@@ -26,14 +28,24 @@ export class UserListComponent implements OnInit {
   	private router:Router, 
     private apiService:ApiUserService, 
     public alertService:AlertService,
+    public privileges:Privileges,
     private formBuilder: FormBuilder) { }
 
   ngOnInit(): void {
+    this.userIdLogged = +window.localStorage.getItem("userId");
   	this.searchForm = this.formBuilder.group({
       username: [],
       fullName: []
     });
     this.loadUsers(this.page);
+  }
+
+  canRemove(userId: number){
+    return this.privileges.canRemove() && this.userIdLogged !== userId;
+  }
+
+  canEdit(userId: number){
+    return this.privileges.canEdit() && this.userIdLogged !== userId;
   }
 
   private loadUsers(page: number) {

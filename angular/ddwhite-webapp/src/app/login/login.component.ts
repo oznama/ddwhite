@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { Router } from '@angular/router';
 import { AlertService, alertOptions } from '../_alert';
-import { ApiUserService } from "../service/module.service";
+import { ApiLoginService } from "../service/module.service";
 
 @Component({
   selector: 'app-login',
@@ -16,7 +16,7 @@ export class LoginComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder, 
     private router:Router, 
-    private apiService:ApiUserService, 
+    private apiService:ApiLoginService, 
     public alertService:AlertService
    ){}
 
@@ -40,6 +40,8 @@ export class LoginComponent implements OnInit {
         window.localStorage.setItem('userId', response.body.id);
         this.apiService.LoggedIn = true;
         this.apiService.UserFullName = response.body.fullName;
+        this.apiService.Role = response.body.role;
+        this.apiService.Privileges = response.body.privileges;
         this.router.navigate(['home']);
       } else {
         this.alertService.warn(response.message, alertOptions);

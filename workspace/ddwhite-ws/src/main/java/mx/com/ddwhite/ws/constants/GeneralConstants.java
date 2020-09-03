@@ -8,5 +8,6 @@ public interface GeneralConstants {
 	int BIG_DECIMAL_ROUND = 2;
 	
 	String USERNAME_ADMIN = "admin";
+	String ROOT_ROLE = "root";
 
 }

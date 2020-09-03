@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Provider} from "../../model/provider.model";
-import { ApiProviderService, pageSize } from "../../service/module.service";
+import { ApiProviderService, pageSize, Privileges } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Observable, of, combineLatest } from 'rxjs/index';
 import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
@@ -15,7 +15,6 @@ import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
 export class ProviderListComponent implements OnInit {
 
   searchForm: FormGroup;
-  //providers: Provider[];
   providers: Observable<Provider[]>;
   providersFiltred$: Observable<Provider[]>;
 
@@ -27,6 +26,7 @@ export class ProviderListComponent implements OnInit {
     private router:Router, 
     private apiService:ApiProviderService, 
     public alertService:AlertService,
+    public privileges:Privileges,
     private formBuilder: FormBuilder) {
   }
 
@@ -57,7 +57,6 @@ export class ProviderListComponent implements OnInit {
   delete(provider:Provider): void{
   	this.apiService.delete(provider.id)
   	  .subscribe( response => {
-  	  	//this.providers = this.providers.filter( p => p != provider);
         this.providers = this.providers.pipe(map( items => items.filter( p => p != provider)));
         this.loadProviders(0);
         this.alertService.success('Proveedor eliminado', alertOptions);

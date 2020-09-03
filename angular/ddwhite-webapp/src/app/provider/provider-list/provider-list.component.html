@@ -14,8 +14,8 @@
           <mat-form-field style="width: 45%;">
             <input matInput formControlName="contactName" placeholder="Contacto" maxlength="100">
           </mat-form-field>
-          <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="doFilter()">search</mat-icon>
-          <mat-icon aria-hidden="false" aria-label="Example clear icon" (click)="clearFilter()">clear</mat-icon>
+          <mat-icon (click)="doFilter()">search</mat-icon>
+          <mat-icon (click)="clearFilter()">clear</mat-icon>
         </form>
       </mat-card-content>
     </mat-card>
@@ -33,7 +33,7 @@
           <th>
             <div class="wrapper">
               <span class="spacer"></span>
-              <button mat-raised-button color="primary" style="width:100px" (click)="add()">Nuevo</button>
+              <button mat-raised-button color="primary" style="width:100px" *ngIf="privileges.canCreate()" (click)="add()">Nuevo</button>
             </div>
           </th>
         </tr>
@@ -45,8 +45,8 @@
           <td>{{provider.address}}</td>
           <td>{{provider.phone}}</td>
           <td>
-          	<button mat-raised-button color="warn" (click)="delete(provider)">Borrar</button>
-            <button mat-raised-button color="primary" (click)="edit(provider)" style="margin-left: 20px;">Modificar</button>
+          	<button mat-raised-button color="warn" *ngIf="privileges.canRemove()" (click)="delete(provider)">Borrar</button>
+            <button mat-raised-button color="primary" *ngIf="privileges.canEdit()" (click)="edit(provider)" style="margin-left: 20px;">Modificar</button>
           </td>
         </tr>
         </tbody>

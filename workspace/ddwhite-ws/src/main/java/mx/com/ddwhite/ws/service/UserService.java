@@ -15,7 +15,6 @@ import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.constants.Utils;
 import mx.com.ddwhite.ws.dto.UserDto;
 import mx.com.ddwhite.ws.dto.UserGrantDto;
-import mx.com.ddwhite.ws.dto.UserPrivilegesDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.Privilege;
 import mx.com.ddwhite.ws.model.Role;
@@ -48,6 +47,7 @@ public class UserService {
 		users.forEach(user -> {
 			UserDto userDto = new UserDto();
 			BeanUtils.copyProperties(user, userDto);
+			userDto.setRoleName( findRole(user.getRoleId()).getName() );
 			usersDto.add(userDto);
 		});
 		return new PageImpl<>(usersDto, pageable, repository.count());
@@ -57,6 +57,7 @@ public class UserService {
 		User user = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
 		UserDto userDto = new UserDto();
 		BeanUtils.copyProperties(user, userDto);
+		userDto.setRoleName( findRole(user.getRoleId()).getName() );
 		return userDto;
 	}
 
@@ -98,16 +99,27 @@ public class UserService {
 	private UserGrantDto getUserGranted(User user) {
 		UserGrantDto userGrantedDto = new UserGrantDto();
 		BeanUtils.copyProperties(user, userGrantedDto);
-		Role role = roleRepository.findById(user.getRoleId()).orElseThrow(() -> new ResourceNotFoundException(Role.class.getSimpleName(), "id", user.getRoleId()));
+		Role role = findRole(user.getRoleId());
 		userGrantedDto.setRole( role.getName() );
-		List<RolePrivileges> rolePrivileges = rolePrivilegeRepository.findByRole(role.getId());
-		final List<UserPrivilegesDto> userPrivilegesDto = new ArrayList<>();
-		rolePrivileges.forEach( rp -> {
-			Privilege privilege = privilegeRepository.findById(rp.getPrivilegeId()).orElseThrow(() -> new ResourceNotFoundException(Privilege.class.getSimpleName(), "id", rp.getPrivilegeId()));
-			userPrivilegesDto.add(new UserPrivilegesDto(privilege.getName(), privilege.getKey()));
-		});
-		userGrantedDto.setPrivileges(userPrivilegesDto);
+		userGrantedDto.setPrivileges(getPrivileges(rolePrivilegeRepository.findByRole(role.getId())));
 		return userGrantedDto;
+	}
+	
+	private Role findRole(Long roleId) {
+		return roleRepository.findById(roleId).orElseThrow(() -> new ResourceNotFoundException(Role.class.getSimpleName(), "id", roleId));
+	}
+	
+	private Privilege findPrivilege(Long privilegeId) {
+		return privilegeRepository.findById(privilegeId).orElseThrow(() -> new ResourceNotFoundException(Privilege.class.getSimpleName(), "id", privilegeId));
+	}
+	
+	private List<String> getPrivileges(List<RolePrivileges> rolePrivileges){
+		final List<String> privileges = new ArrayList<>();
+		rolePrivileges.forEach( rp -> {
+			Privilege privilege = findPrivilege(rp.getPrivilegeId());
+			privileges.add(privilege.getKey());
+		});
+		return privileges;
 	}
 
 }

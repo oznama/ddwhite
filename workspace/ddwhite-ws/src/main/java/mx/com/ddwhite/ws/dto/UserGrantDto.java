@@ -10,10 +10,19 @@ public class UserGrantDto implements Serializable {
 	 */
 	private static final long serialVersionUID = -713452872799017588L;
 
+	private Long id;
 	private String username;
 	private String fullName;
 	private String role;
-	private List<UserPrivilegesDto> privileges;
+	private List<String> privileges;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
 
 	public String getUsername() {
 		return username;
@@ -39,11 +48,11 @@ public class UserGrantDto implements Serializable {
 		this.role = role;
 	}
 
-	public List<UserPrivilegesDto> getPrivileges() {
+	public List<String> getPrivileges() {
 		return privileges;
 	}
 
-	public void setPrivileges(List<UserPrivilegesDto> privileges) {
+	public void setPrivileges(List<String> privileges) {
 		this.privileges = privileges;
 	}
 
