@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
-import mx.com.ddwhite.ws.constants.Utils;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.Client;
 import mx.com.ddwhite.ws.repository.ClientRepository;
+import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
@@ -50,7 +50,7 @@ public class ClientController implements GenericController<Client> {
 		try {
 			return ResponseEntity.ok(repository.findById(entity.getId()).map(t -> {
 				BeanUtils.copyProperties(entity, t, "id");
-				t.setDateCreated(Utils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+				t.setDateCreated(GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 				return repository.saveAndFlush(t);
 			}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", entity.getId())));
 		} catch (DataAccessException e) {

@@ -10,21 +10,12 @@ public class Warehouse implements Serializable {
 	 */
 	private static final long serialVersionUID = 1L;
 
-	private Long id;
 	private String sku;
 	private String nameLarge;
 	private BigDecimal percentage;
 	private Integer quantity;
 	private BigDecimal averageCost;
 	private BigDecimal price;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public String getSku() {
 		return sku;

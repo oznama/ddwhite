@@ -12,7 +12,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
-import mx.com.ddwhite.ws.constants.Utils;
 import mx.com.ddwhite.ws.dto.UserDto;
 import mx.com.ddwhite.ws.dto.UserGrantDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
@@ -24,6 +23,7 @@ import mx.com.ddwhite.ws.repository.PrivilegeRepository;
 import mx.com.ddwhite.ws.repository.RolePrivilegesRepository;
 import mx.com.ddwhite.ws.repository.RoleRepository;
 import mx.com.ddwhite.ws.repository.UserRepository;
+import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class UserService {
@@ -74,7 +74,7 @@ public class UserService {
 		BeanUtils.copyProperties(userDto, user);
 		repository.findById(userDto.getId()).map(t -> {
 			BeanUtils.copyProperties(userDto, t);
-			t.setDateCreated(Utils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+			t.setDateCreated(GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 			return repository.saveAndFlush(t);
 		}).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", userDto.getId()));
 	}

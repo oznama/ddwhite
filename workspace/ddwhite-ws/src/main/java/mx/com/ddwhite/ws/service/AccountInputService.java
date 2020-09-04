@@ -1,4 +1,4 @@
-package mx.com.ddwhite.ws.reports;
+package mx.com.ddwhite.ws.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -13,10 +13,8 @@ import mx.com.ddwhite.ws.dto.SaleDetailDto;
 import mx.com.ddwhite.ws.dto.SaleDto;
 import mx.com.ddwhite.ws.dto.UserDto;
 import mx.com.ddwhite.ws.model.Client;
+import mx.com.ddwhite.ws.reports.AccountInput;
 import mx.com.ddwhite.ws.repository.ClientRepository;
-import mx.com.ddwhite.ws.service.ProductService;
-import mx.com.ddwhite.ws.service.SaleService;
-import mx.com.ddwhite.ws.service.UserService;
 
 @Service
 public class AccountInputService {
