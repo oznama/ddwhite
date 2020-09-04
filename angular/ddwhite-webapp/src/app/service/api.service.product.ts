@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs/index";
 import { baseUrl, observeResponse } from './../../environments/environment';
-import {ApiResponse} from "../model/api.response";
 import {Product, ProductPageable, Inventory} from "../model/product.model";
 
 @Injectable()

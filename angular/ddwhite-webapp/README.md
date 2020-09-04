@@ -46,3 +46,5 @@ https://www.positronx.io/create-login-ui-template-with-angular-8-material-design
 https://medium.com/@fbellod/como-integrar-el-framework-bootstrap-en-un-proyecto-angular-a5d53fa79e03
 ## The best CRUD example
 https://www.devglan.com/angular/angular-8-crud-example
+## File Saver
+https://www.npmjs.com/package/file-saver

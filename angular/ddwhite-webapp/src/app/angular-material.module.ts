@@ -9,7 +9,9 @@ MatFormFieldModule,
 MatInputModule,
 MatMenuModule,
 MatDialogModule,
-MatProgressSpinnerModule
+MatProgressSpinnerModule,
+MatDatepickerModule,
+MatNativeDateModule
 } from '@angular/material';
 
 @NgModule({
@@ -22,7 +24,9 @@ imports: [
    MatInputModule,
    MatMenuModule,
    MatDialogModule,
-   MatProgressSpinnerModule
+   MatProgressSpinnerModule,
+   MatDatepickerModule,
+   MatNativeDateModule
 ],
 exports: [
    MatButtonModule,
@@ -32,7 +36,9 @@ exports: [
    MatFormFieldModule,
    MatMenuModule,
    MatDialogModule,
-   MatProgressSpinnerModule
+   MatProgressSpinnerModule,
+   MatDatepickerModule,
+   MatNativeDateModule
 ],
 providers: []
 })

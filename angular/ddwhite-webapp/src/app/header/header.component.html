@@ -17,15 +17,25 @@
 
   <button mat-button [matMenuTriggerFor]="menuReport" *ngIf="privileges.isReporter | async">Reportes</button>
   <mat-menu #menuReport="matMenu" class="mat-menu-panel.my-class">
-    <button mat-menu-item class="toolbar-button" ><mat-icon>account_balance_wallet</mat-icon><span>General</span></button>
-    <button mat-menu-item ><mat-icon>account_balance</mat-icon><span>Almacen</span></button>
+    <button mat-menu-item class="toolbar-button" (click)="openDialogProductSearch()" >
+      <mat-icon>account_balance_wallet</mat-icon><span>General</span>
+    </button>
+    <button mat-menu-item (click)="getWarehouseCSV()">
+      <mat-icon>account_balance</mat-icon><span>Almacen</span>
+    </button>
   </mat-menu>
 
   <button mat-button [matMenuTriggerFor]="menuAdmin" *ngIf="privileges.isRoleAdmin | async">Administraci&oacute;n</button>
   <mat-menu #menuAdmin="matMenu" class="mat-menu-panel.my-class">
-    <button mat-menu-item class="toolbar-button" routerLink="/provider-list"><mat-icon>dialpad</mat-icon><span>Proveedores</span></button>
-    <button mat-menu-item routerLink="/client-list"><mat-icon>people</mat-icon><span>Clientes</span></button>
-    <button mat-menu-item routerLink="/user-list"><mat-icon>person</mat-icon><span>Usuarios</span></button>
+    <button mat-menu-item class="toolbar-button" routerLink="/provider-list">
+      <mat-icon>dialpad</mat-icon><span>Proveedores</span>
+    </button>
+    <button mat-menu-item routerLink="/client-list">
+      <mat-icon>people</mat-icon><span>Clientes</span>
+    </button>
+    <button mat-menu-item routerLink="/user-list">
+      <mat-icon>person</mat-icon><span>Usuarios</span>
+    </button>
   </mat-menu>
   
   <span class="spacer"></span>Bienvenido:

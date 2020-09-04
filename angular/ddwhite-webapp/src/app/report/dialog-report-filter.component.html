@@ -1,0 +1,35 @@
+<div mat-dialog-content>
+
+  <div>
+    <mat-card>
+
+      <mat-card-header>
+        <mat-card-title>Filtro de reporte</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="searchForm" (ngSubmit)="search()">
+
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha inicial</mat-label>
+            <input matInput formControlName="startDate" [matDatepicker]="startDate" required>
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha Final</mat-label>
+            <input matInput formControlName="endDate" [matDatepicker]="endDate" required="">
+            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+          <div class="wrapper">
+            <button mat-raised-button color="primary" [disabled]="searchForm.invalid">Filtrar</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+</div>
