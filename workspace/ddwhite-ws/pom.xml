@@ -71,7 +71,7 @@
 			<artifactId>jjwt</artifactId>
 			<version>${iojjwt.version}</version>
 		</dependency>
-
+	
 	</dependencies>
 
 	<build>

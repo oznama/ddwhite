@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.dto.InventoryDto;
@@ -58,13 +59,19 @@ public class InventoryService extends InventoryUtils {
 		return null;
 	}
 	
-	public Page<ProductInventory> findForSale(Pageable pageable) {
+	public List<ProductInventory> findWarehouse(Sort sort){
 		List<ProductInventory> list = findInventory();
 		list.forEach(product -> {
 			int quantity = product.getInventory().getQuantity();
 			product.getInventory()
 					.setQuantity(quantity - sumSaleQuantity(saleDetailRepository.findByProduct(product.getId())));
 		});
+		sorting(list, sort);
+		return list;
+	}
+	
+	public Page<ProductInventory> findForSale(Pageable pageable) {
+		List<ProductInventory> list = findWarehouse(pageable.getSort());
 		List<ProductInventory> listForSale = list.stream().filter(p -> p.getInventory().getQuantity() > 0)
 				.collect(Collectors.toList());
 		return pagging(listForSale, pageable);

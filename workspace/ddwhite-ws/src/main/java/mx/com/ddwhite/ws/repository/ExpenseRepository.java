@@ -1,5 +1,7 @@
 package mx.com.ddwhite.ws.repository;
 
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.data.domain.Page;
@@ -16,6 +18,9 @@ import mx.com.ddwhite.ws.model.Expense;
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
 	
 	@Query("SELECT e FROM Expense e WHERE e.dateCreated BETWEEN :startDate AND :endDate")
-	Page<Expense> findOnlyCurrentMonth(@Param("startDate") String startDate, @Param("endDate") String endDate, Pageable pageable);
+	Page<Expense> findByDatePageable(@Param("startDate") String startDate, @Param("endDate") String endDate, Pageable pageable);
+	
+	@Query("SELECT e FROM Expense e WHERE e.dateCreated BETWEEN :startDate AND :endDate")
+	List<Expense> findByDate(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 }

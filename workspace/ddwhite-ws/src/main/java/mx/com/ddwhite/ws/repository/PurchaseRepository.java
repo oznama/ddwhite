@@ -16,5 +16,8 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 	
 	@Query("SELECT p FROM Purchase p WHERE p.product.id = :productId")
 	List<Purchase> findByProduct(@Param("productId") Long productId);
+	
+	@Query("SELECT p FROM Purchase p WHERE p.dateCreated BETWEEN :startDate AND :endDate")
+	List<Purchase> findByDates(@Param("startDate") String startDate, @Param("endDate") String endDate);
 
 }

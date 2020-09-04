@@ -7,6 +7,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.InventoryDto;
@@ -26,13 +27,13 @@ public class InventoryUtils {
 		int size = list.size();
 		int end = Math.min(pageable.getPageSize(), size);
 		list.subList(end, size).clear();
-		sorting(list, pageable);
+		sorting(list, pageable.getSort());
 		return new PageImpl<>(list, pageable, originalSize);
 	}
 
-	protected void sorting(List<ProductInventory> list, final Pageable pageable) {
-		if(pageable.getSort().isSorted()) {
-			pageable.getSort().forEach(order -> {
+	protected void sorting(List<ProductInventory> list, final Sort sort) {
+		if(sort.isSorted()) {
+			sort.forEach(order -> {
 				if( order.getProperty().equals(KEY_EXTRACTOR_COMPARATOR_SKU)) {
 					list.sort(Comparator.comparing(ProductInventory::getSku));
 				}

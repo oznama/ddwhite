@@ -30,7 +30,7 @@ public class ExpenseController implements GenericController<Expense> {
 		LocalDateTime now = LocalDateTime.now();
 		String startDate = now.withDayOfMonth(1).toString();
 		String endDate = now.withDayOfMonth(now.getDayOfMonth()).toString();
-		return repository.findOnlyCurrentMonth(startDate, endDate, pageable);
+		return repository.findByDatePageable(startDate, endDate, pageable);
 	}
 
 	@Override
