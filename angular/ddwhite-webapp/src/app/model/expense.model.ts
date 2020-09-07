@@ -21,6 +21,8 @@ export class ExpensePageable{
 export class Expense {
 	description: string;
 	amount: number;
+	taxeable: boolean;
+	invoice: string;
 	userId: number;
 	userName: string;
 

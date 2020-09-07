@@ -11,7 +11,8 @@ MatMenuModule,
 MatDialogModule,
 MatProgressSpinnerModule,
 MatDatepickerModule,
-MatNativeDateModule
+MatNativeDateModule,
+MatCheckboxModule
 } from '@angular/material';
 
 @NgModule({
@@ -26,7 +27,8 @@ imports: [
    MatDialogModule,
    MatProgressSpinnerModule,
    MatDatepickerModule,
-   MatNativeDateModule
+   MatNativeDateModule,
+   MatCheckboxModule
 ],
 exports: [
    MatButtonModule,
@@ -38,7 +40,8 @@ exports: [
    MatDialogModule,
    MatProgressSpinnerModule,
    MatDatepickerModule,
-   MatNativeDateModule
+   MatNativeDateModule,
+   MatCheckboxModule
 ],
 providers: []
 })

@@ -8,6 +8,7 @@ export class Sale {
 	subTotal: number;
 	tax: number;
 	change: number;
+	invoice: string;
 
 	detail: SaleDetail[];
 	payments: SalePayment[];

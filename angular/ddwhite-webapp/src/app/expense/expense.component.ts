@@ -35,12 +35,15 @@ export class ExpenseComponent implements OnInit {
   ngOnInit(): void {
   	this.expenseForm = this.formBuilder.group({
   		description: ['', Validators.required],
-  		amount: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]]
+  		amount: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
+      invoice: [''],
+      taxeable: [false]
   	});
   	this.searchForm = this.formBuilder.group({
       userFullName: [],
       description: [],
     });
+    this.expenseForm.controls.invoice.disable();
   	this.loadExpenses(this.page);
   }
 
@@ -53,6 +56,15 @@ export class ExpenseComponent implements OnInit {
 	    	this.expensesFiltred$ = of(expensesWithUsername);
   		}
     });
+  }
+
+  clickTaxeable(){
+    if( this.expenseForm.controls.taxeable.value ){
+      this.expenseForm.controls.invoice.disable();
+      this.expenseForm.controls.invoice.setValue(null);
+    }
+    else
+      this.expenseForm.controls.invoice.enable();
   }
 
   pagination(page:number): void {
