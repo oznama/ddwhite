@@ -10,7 +10,7 @@ public class AccountInput implements Serializable {
 	 */
 	private static final long serialVersionUID = 532319354652026683L;
 
-	private Long saleId;
+	private String saleId;
 	private String user;
 	private String client;
 	private String product;
@@ -21,11 +21,11 @@ public class AccountInput implements Serializable {
 	private BigDecimal iva;
 	private String date;
 
-	public Long getSaleId() {
+	public String getSaleId() {
 		return saleId;
 	}
 
-	public void setSaleId(Long saleId) {
+	public void setSaleId(String saleId) {
 		this.saleId = saleId;
 	}
 

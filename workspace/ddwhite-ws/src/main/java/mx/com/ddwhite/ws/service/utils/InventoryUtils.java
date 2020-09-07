@@ -1,6 +1,7 @@
 package mx.com.ddwhite.ws.service.utils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Comparator;
 import java.util.List;
 
@@ -9,7 +10,6 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
-import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.InventoryDto;
 import mx.com.ddwhite.ws.dto.ProductInventory;
 import mx.com.ddwhite.ws.model.Product;
@@ -46,8 +46,9 @@ public class InventoryUtils {
 		inv.setProductId(product.getUserId());
 		inv.setQuantity(sumPurchaseQuantity(purchase));
 		inv.setAverageCost(averageCost(purchase));
-		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
-				BigDecimal.ROUND_HALF_EVEN));
+//		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
+//				BigDecimal.ROUND_HALF_EVEN));
+		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(0,RoundingMode.UP).intValue());
 		return inv;
 	}
 

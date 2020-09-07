@@ -53,7 +53,7 @@ public class AccountInputService {
 	private AccountInput getAccountInput(SaleDto saleDto, SaleDetailDto detailDto, Client client, UserDto userDto) {
 		ProductDto productDto = productService.findById(detailDto.getProductId());
 		AccountInput ai = new AccountInput();
-		ai.setSaleId(saleDto.getId());
+		ai.setSaleId(saleDto.getId().toString().concat(saleDto.getInvoice() != null ? " - " + saleDto.getInvoice() : ""));
 		ai.setUser(userDto.getFullName().toUpperCase());
 		if( client != null ) {
 			StringBuffer buffer = new StringBuffer();

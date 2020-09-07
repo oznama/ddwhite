@@ -19,6 +19,7 @@ public class SaleDto implements Serializable {
 	private BigDecimal tax;
 	private BigDecimal total;
 	private BigDecimal change;
+	private String invoice;
 	private String dateCreated;
 	private List<SaleDetailDto> detail;
 	private List<SalePaymentDto> payments;
@@ -81,6 +82,14 @@ public class SaleDto implements Serializable {
 
 	public void setChange(BigDecimal change) {
 		this.change = change;
+	}
+
+	public String getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(String invoice) {
+		this.invoice = invoice;
 	}
 
 	public String getDateCreated() {

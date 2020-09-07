@@ -28,6 +28,10 @@ public class Expense implements Serializable {
 	private String description;
 	@Column(name = "monto")
 	private BigDecimal amount;
+	@Column(name = "deducible")
+	private Boolean taxeable;
+	@Column(name = "folio_factura")
+	private String invoice;
 	@Column(name = "fecha_registro", insertable = false, updatable = false)
 	private String dateCreated;
 
@@ -61,6 +65,22 @@ public class Expense implements Serializable {
 
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	public Boolean getTaxeable() {
+		return taxeable;
+	}
+
+	public void setTaxeable(Boolean taxeable) {
+		this.taxeable = taxeable;
+	}
+
+	public String getInvoice() {
+		return invoice;
+	}
+
+	public void setInvoice(String invoice) {
+		this.invoice = invoice;
 	}
 
 	public String getDateCreated() {

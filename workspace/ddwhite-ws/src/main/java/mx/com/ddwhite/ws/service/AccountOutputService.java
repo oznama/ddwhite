@@ -70,12 +70,18 @@ public class AccountOutputService {
 		AccountOutput ao = new AccountOutput();
 		ao.setUser(userDto.getFullName().toUpperCase());
 		ao.setProduct(e.getDescription().toUpperCase());
+		ao.setProvider(e.getInvoice()); // Folio factura
 		ao.setGroup(GeneralConstants.GROUP_EXPENSE);
 		ao.setQuantity(1);
 		ao.setCost(e.getAmount());
 		ao.setTotal( e.getAmount() );
-		ao.setSubTotal( e.getAmount().divide(GeneralConstants.TAX, GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
-		ao.setIva(ao.getTotal().subtract(ao.getSubTotal()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
+		if( e.getTaxeable() ) {
+			ao.setSubTotal( e.getAmount().divide(GeneralConstants.TAX, GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
+			ao.setIva(ao.getTotal().subtract(ao.getSubTotal()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));	
+		} else {
+			ao.setSubTotal( BigDecimal.ZERO );
+			ao.setIva( BigDecimal.ZERO );	
+		}
 		ao.setDate(e.getDateCreated());
 		return ao;
 	}

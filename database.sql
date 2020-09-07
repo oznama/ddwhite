@@ -90,6 +90,8 @@ create table if not exists gastos(
 	descripcion char(255) not null,
 	monto decimal(20,2) not null,
 	fecha_registro datetime default current_timestamp,
+	deducible bit(1) not null,
+	folio_factura char(100),
 	primary key(id)
 );
 alter table gastos add constraint foreign key (id_usuario) references usuarios (id);
@@ -131,6 +133,7 @@ create table if not exists venta_total(
 	id bigint not null auto_increment,
 	id_usuario bigint not null,
 	id_cliente bigint,
+	folio_factura char(100),
 	sub_total decimal(20,2) not null,
 	iva decimal(10,2) not null,
 	total decimal(20,2) not null,
