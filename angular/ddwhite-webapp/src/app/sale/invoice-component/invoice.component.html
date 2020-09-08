@@ -1,0 +1,75 @@
+<div class="div-container">
+
+  <mat-card class="box-form">
+    <mat-card-header>
+      <mat-card-title>Busqueda por rango de fecha</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="searchForm" (ngSubmit)="search(0)">
+
+        <mat-form-field appearance="fill" class="midle-width-input">
+          <mat-label>Fecha inicial</mat-label>
+          <input matInput formControlName="startDate" [matDatepicker]="startDate" required>
+          <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+          <mat-datepicker #startDate disabled="false"></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="fill" class="midle-width-input">
+          <mat-label>Fecha Final</mat-label>
+          <input matInput formControlName="endDate" [matDatepicker]="endDate" required="">
+          <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+          <mat-datepicker #endDate disabled="false"></mat-datepicker>
+        </mat-form-field>
+        <div class="wrapper">
+          <span class="spacer"></span>
+          <button mat-raised-button color="primary" [disabled]="searchForm.invalid">Filtrar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <mat-card-header>
+    <mat-card-title>Ventas</mat-card-title>
+  </mat-card-header>
+
+  <div id="table-wrapper">
+    <div id="table-scroll">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th>Folio</th>
+          <th>Total</th>
+          <th>No Artic</th>
+          <th>Factura</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let sale of sales | async">
+          <td>{{sale.id}}</td>
+          <td>{{sale.total}}</td>
+          <td>{{sale.detail.length}}</td>
+          <td class="midle-width-input">
+            <input #invoiceCaptured maxlength="100" autocomplete="off" value="{{sale.invoice}}"> <!-- formControlName="invoice" -->
+          </td>
+          <td>
+            <button mat-raised-button color="primary" style="width:100px" type="button" 
+              [disabled]="!rowValid(sale.id, invoiceCaptured.value)" (click)="update(sale.id, invoiceCaptured.value)">Actualizar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="wrapper">
+    <mat-icon aria-hidden="false" (click)="pagination(0)">first_page</mat-icon>
+    <mat-icon aria-hidden="false" (click)="pagination(page-1)">arrow_back</mat-icon>
+    page {{page+1}} of {{totalPage}}
+    <mat-icon aria-hidden="false" (click)="pagination(page+1)">arrow_forward</mat-icon>
+    <mat-icon aria-hidden="false" (click)="pagination(totalPage-1)">last_page</mat-icon>
+  </div>
+
+</div>

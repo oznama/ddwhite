@@ -55,6 +55,7 @@ import { UserListComponent } from './user/user-list/user-list.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { TicketComponent } from './sale/ticket-component/ticket.component';
 import { ReportFilterDialogComponent } from './report/dialog-report-filter.component';
+import { InvoiceSaleComponent } from './sale/invoice-component/invoice.component';
 
 @NgModule({
   declarations: [
@@ -84,7 +85,8 @@ import { ReportFilterDialogComponent } from './report/dialog-report-filter.compo
     UserListComponent,
     ExpenseComponent,
     TicketComponent,
-    ReportFilterDialogComponent
+    ReportFilterDialogComponent,
+    InvoiceSaleComponent
   ],
   imports: [
     BrowserModule,
