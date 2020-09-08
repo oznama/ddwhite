@@ -1,10 +1,11 @@
 package mx.com.ddwhite.ws.controller;
 
-import java.util.List;
+import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,7 +46,12 @@ public class SaleController implements GenericController<SaleDto> {
 
 	@Override
 	public ResponseEntity<?> update(SaleDto entity) {
-		return null;
+		try {
+			service.updateInvoice(entity.getId(), entity.getInvoice());
+			return ResponseEntity.ok().build();
+		} catch (Exception e) {
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 
 	@Override
@@ -54,8 +60,8 @@ public class SaleController implements GenericController<SaleDto> {
 	}
 
 	@GetMapping("/find/bydates")
-	public List<SaleDto> findByRange(@RequestParam("start") String start, @RequestParam("end") String end) {
-		return service.findByRange(start, end);
+	public Page<SaleDto> findByRange(@RequestParam("start") Date start, @RequestParam("end") Date end,Pageable pageable) {
+		return service.findByRange(start, end, pageable);
 	}
 
 }
