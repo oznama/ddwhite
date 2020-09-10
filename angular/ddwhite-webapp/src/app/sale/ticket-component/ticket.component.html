@@ -1,8 +1,8 @@
 <div mat-dialog-content>
     <div class="ticket">
         <img src="/assets/img/logo-ticket-default.jpg" alt="Logotipo">
-        <p class="centrado">{{bussinesName}}
-            <br>{{address}}</p>
+        <p class="centrado">{{company.name}}
+            <br>{{company.address}}</p>
         <div *ngIf="data.clientId">
             <hr class="dashed">
             <span class="left">CLIENTE: {{data.clientName}}</span><br>
@@ -53,11 +53,11 @@
             <br>Le atendio: {{userName}}
             <br>{{date | date: "dd/MM/yyyy"}} {{date | date: "HH:mm:ss"}}
             <br>*** No Venta: {{data.id}} ***
-            <br><strong>{{message}}</strong><br>
-            <span *ngIf="phone"><br>Comentarios o sugerencias <strong>{{phone}}</strong></span>
-            <span *ngIf="email"><br>o en <strong>{{email}}</strong></span>
-            <span *ngIf="website"><br>visite <strong>{{website}}</strong></span>
-            <span *ngIf="rfc"><br>{{fiscalName}}<br>{{rfc}}</span>
+            <br><strong>{{company.messageTicket}}</strong><br>
+            <span *ngIf="company.phone"><br>Comentarios o sugerencias <strong>{{company.phone}}</strong></span>
+            <span *ngIf="company.email"><br>o en <strong>{{company.email}}</strong></span>
+            <span *ngIf="company.website"><br>visite <strong>{{company.website}}</strong></span>
+            <span *ngIf="company.rfc"><br>{{company.bussinessName}}<br>{{company.rfc}}</span>
         </p>
     </div>
     <div class="wrapper">

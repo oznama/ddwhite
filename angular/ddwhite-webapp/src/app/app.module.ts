@@ -25,6 +25,7 @@ import {
   ApiExpenseService,
   ApiRoleService,
   ApiReportService,
+  ApiCompanyService,
   Privileges
 } from './service/module.service';
 import { AlertModule } from './_alert';
@@ -56,6 +57,7 @@ import { ExpenseComponent } from './expense/expense.component';
 import { TicketComponent } from './sale/ticket-component/ticket.component';
 import { ReportFilterDialogComponent } from './report/dialog-report-filter.component';
 import { InvoiceSaleComponent } from './sale/invoice-component/invoice.component';
+import { MycompanyComponent } from './mycompany/mycompany.component';
 
 @NgModule({
   declarations: [
@@ -86,7 +88,8 @@ import { InvoiceSaleComponent } from './sale/invoice-component/invoice.component
     ExpenseComponent,
     TicketComponent,
     ReportFilterDialogComponent,
-    InvoiceSaleComponent
+    InvoiceSaleComponent,
+    MycompanyComponent
   ],
   imports: [
     BrowserModule,
@@ -114,6 +117,7 @@ import { InvoiceSaleComponent } from './sale/invoice-component/invoice.component
     ApiExpenseService,
     ApiRoleService,
     ApiReportService,
+    ApiCompanyService,
     Privileges
   ],
   bootstrap: [AppComponent],

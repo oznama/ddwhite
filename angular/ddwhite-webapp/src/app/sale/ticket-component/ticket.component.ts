@@ -1,8 +1,9 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { Sale, SalePayment } from './../../model/sale.model';
-import {CatalogItem} from './../../model/catalog.model';
-import { ApiCatalogService, ApiLoginService } from './../../service/module.service';
+import { Sale, SalePayment } from '../../model/sale.model';
+import {CatalogItem} from '../../model/catalog.model';
+import { Company } from '../../model/company.model';
+import { ApiCatalogService, ApiLoginService } from '../../service/module.service';
 
 @Component({
   selector: 'sale-ticket',
@@ -12,15 +13,7 @@ import { ApiCatalogService, ApiLoginService } from './../../service/module.servi
 export class TicketComponent implements OnInit {
 
   date: Date = new Date();
-
-  bussinesName: string;
-  address: string;
-  phone: string;
-  website: string;
-  email: string
-  message: string;
-  fiscalName: string;
-  rfc: string;
+  company: Company = new Company();
   userName: string;
 
   constructor(public dialogRef: MatDialogRef<TicketComponent>, @Inject(MAT_DIALOG_DATA) public data: Sale,
@@ -42,28 +35,28 @@ export class TicketComponent implements OnInit {
         response.items.forEach( (value, index) => {
           switch(value.name){
             case 'NOMBRE':
-              this.bussinesName = value.description;
+              this.company.name = value.description;
               break;
             case 'DIRECCION':
-              this.address = value.description;
+              this.company.address = value.description;
               break;
             case 'TELEFONO':
-              this.phone = value.description;
+              this.company.phone = value.description;
               break;
             case 'PAGINA':
-              this.website = value.description;
+              this.company.website = value.description;
               break;
             case 'EMAIL':
-              this.email = value.description;
+              this.company.email = value.description;
               break;
             case 'NOMBRE_FISCAL':
-              this.fiscalName = value.description;
+              this.company.bussinessName = value.description;
               break;
             case 'RFC':
-              this.rfc = value.description;
+              this.company.rfc = value.description;
               break;
             case 'MESSAGE_TICKET':
-              this.message = value.description;
+              this.company.messageTicket = value.description;
               break;
             default:
           }

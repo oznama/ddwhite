@@ -27,6 +27,9 @@
 
   <button mat-button [matMenuTriggerFor]="menuAdmin" *ngIf="privileges.isRoleAdmin | async">Administraci&oacute;n</button>
   <mat-menu #menuAdmin="matMenu" class="mat-menu-panel.my-class">
+    <button mat-menu-item class="toolbar-button" routerLink="/my-company-data">
+      <mat-icon>domain</mat-icon><span>Mi empresa</span>
+    </button>
     <button mat-menu-item class="toolbar-button" routerLink="/sale-invoice">
       <mat-icon>article</mat-icon><span>Facturaci&oacute;n</span>
     </button>

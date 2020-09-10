@@ -41,8 +41,7 @@ export class ClientAddComponent implements OnInit {
   save() {
   	var body = this.addForm.value;
   	body.userId = window.localStorage.getItem("userId");
-    this.apiService.create(body)
-      .subscribe( data => {
+    this.apiService.create(body).subscribe( data => {
         this.alertService.success('Cliente guardado', alertOptions);
         this.dialogRef.close({ event: 'close', data: data });
       }, error => {
