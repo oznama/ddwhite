@@ -35,9 +35,8 @@ public class CatalogService {
 	}
 
 	public CatalogReadDto findById(Long id) {
-		Catalog catalog = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
 		try {
-			return buildCatalog(catalog);
+			return buildCatalog(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id)));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -45,19 +44,37 @@ public class CatalogService {
 	}
 
 	public CatalogReadDto findByName(String name) {
-		Catalog catalog = repository.findByName(name.toUpperCase());
 		try {
-			return buildCatalog(catalog);
+			return buildCatalog(repository.findByName(name.toUpperCase()));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	private CatalogReadDto buildCatalog(Catalog catalog) throws Exception {
-		List<Catalog> items = repository.findByParent(catalog.getId());
+	public CatalogReadDto findByNameAndCatalogParent(Long catalogParentId, String name) {
+		Catalog catalog = repository.findByNameAndCatalogParent(catalogParentId, name);
+		return mapCatalog(catalog);
+	}
+
+	public Catalog create(Catalog catalog) {
+		return repository.saveAndFlush(catalog);
+	}
+
+	public void updateDescription(Long id, String description) {
+		repository.updateDescription(description, id);
+	}
+
+	private CatalogReadDto mapCatalog(Catalog catalog) {
+		if( catalog == null ) return null;
 		CatalogReadDto catalogReadDto = new CatalogReadDto();
 		BeanUtils.copyProperties(catalog, catalogReadDto);
+		return catalogReadDto;
+	}
+
+	private CatalogReadDto buildCatalog(Catalog catalog) throws Exception {
+		List<Catalog> items = repository.findByParent(catalog.getId());
+		CatalogReadDto catalogReadDto = mapCatalog(catalog);
 		for (Catalog item : items) {
 			CatalogItemReadDto catalogReadItemDto = new CatalogItemReadDto();
 			BeanUtils.copyProperties(item, catalogReadItemDto);
