@@ -1,0 +1,63 @@
+<div class="div-container">
+
+  <mat-card class="box-form">
+    <mat-card-header>
+      <mat-card-title>Catalogos</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+        <mat-form-field class='full-width-input'>
+          <select matNativeControl placeholder="Catalogo" (change)=onChange(+$event.target.value)>
+            <option *ngFor="let item of catalogs" [value]="item.id">
+              {{item.description}}
+            </option>
+          </select>
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput #ciName placeholder="Nombre" autocomplete="off" maxlength="20" required>
+          <mat-error>Campo obligatorio</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput #ciDescription placeholder="Descripci&oacute;n" autocomplete="off" maxlength="50" required>
+          <mat-error>Campo obligatorio</mat-error>
+        </mat-form-field>
+
+        <div class="wrapper">
+          <span class="spacer"></span>
+          <button mat-raised-button type="button" type="button" (click)="add(ciName.value, ciDescription.value)">Agregar</button>
+          <button mat-raised-button color="primary" style="width:100px" type="button" [disabled]="!tableValid()" (click)="builkSave()">Guardar</button>
+        </div>
+    </mat-card-content>
+  </mat-card>
+
+  <div id="table-wrapper">
+    <div id="table-scroll">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th class="hidden">Id</th>
+          <th>Nombre</th>
+          <th>Descripci&oacute;n</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let item of catalogItems">
+          <td class="hidden">{{item.id}}</td>
+          <td class="midle-width-input"><input #ciNameU maxlength="20" autocomplete="off" value="{{item.name}}"></td>
+          <td class="midle-width-input"><input #ciDescU maxlength="50" autocomplete="off" value="{{item.description}}"></td>
+          <td>
+          	<button *ngIf="item.id" mat-raised-button 
+          		[disabled]="!isUpdatable(item.id, ciNameU.value, ciDescU.value)" 
+          		(click)="update(item.id, ciNameU.value, ciDescU.value)">Modificar</button>
+            <button *ngIf="!item.id" mat-raised-button color="warn" (click)="remove(ciNameU.value, ciDescU.value)">Borrar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

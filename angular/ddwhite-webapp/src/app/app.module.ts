@@ -58,6 +58,8 @@ import { TicketComponent } from './sale/ticket-component/ticket.component';
 import { ReportFilterDialogComponent } from './report/dialog-report-filter.component';
 import { InvoiceSaleComponent } from './sale/invoice-component/invoice.component';
 import { MycompanyComponent } from './mycompany/mycompany.component';
+import { CashoutComponent } from './report/cashout-component/cashout.component';
+import { CatalogComponent } from './catalog/catalog.component';
 
 @NgModule({
   declarations: [
@@ -89,7 +91,9 @@ import { MycompanyComponent } from './mycompany/mycompany.component';
     TicketComponent,
     ReportFilterDialogComponent,
     InvoiceSaleComponent,
-    MycompanyComponent
+    MycompanyComponent,
+    CashoutComponent,
+    CatalogComponent
   ],
   imports: [
     BrowserModule,

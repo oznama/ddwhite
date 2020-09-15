@@ -26,6 +26,7 @@ public class SaleDto implements Serializable {
 
 	public SaleDto() {
 		this.detail = new ArrayList<>();
+		this.payments = new ArrayList<>();
 	}
 
 	public Long getId() {

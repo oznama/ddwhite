@@ -1,0 +1,48 @@
+* {
+    font-size: 10px;
+    font-family: 'Arial';
+    text-transform: uppercase;
+    -webkit-font-smoothing : none;
+}
+h1 { font-size: 24px; }
+h2 { font-size: 16px; }
+hr.dashed {
+  border-top: 1px dashed black;
+  width: 100%;
+}
+td.pago-dec,th.pago-dec {
+    width: 50mm;
+    max-width: 50mm;
+    text-align: left;
+    word-break: break-all;
+}
+td.pago-monto,th.pago-monto {
+    width: 25mm;
+    max-width: 25mm;
+    text-align: right;
+    word-break: break-all;
+}
+.centrado {
+    text-align: center;
+    align-content: center;
+}
+.left {
+    float:left;
+}
+.right {
+    float:right;
+}
+.ticket {
+    width: 58mm;
+    max-width: 58mm;
+}
+@media print {
+    body.receipt { width: 58mm };
+    .oculto-impresion,
+    .oculto-impresion * {
+        display: none !important;
+    };
+    @page {
+        margin: 0cm;
+    }
+}

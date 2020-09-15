@@ -10,6 +10,7 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
+import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.InventoryDto;
 import mx.com.ddwhite.ws.dto.ProductInventory;
 import mx.com.ddwhite.ws.model.Product;
@@ -48,7 +49,7 @@ public class InventoryUtils {
 		inv.setAverageCost(averageCost(purchase));
 //		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
 //				BigDecimal.ROUND_HALF_EVEN));
-		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(0,RoundingMode.UP).intValue());
+		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
 		return inv;
 	}
 

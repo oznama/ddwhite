@@ -16,8 +16,7 @@ public class Warehouse implements Serializable {
 	private Integer quantity;
 	private BigDecimal averageCost;
 	private BigDecimal currentCost;
-//	private BigDecimal price;
-	private Integer price;
+	private BigDecimal price;
 
 	public String getSku() {
 		return sku;
@@ -67,11 +66,11 @@ public class Warehouse implements Serializable {
 		this.currentCost = currentCost;
 	}
 
-	public Integer getPrice() {
+	public BigDecimal getPrice() {
 		return price;
 	}
 
-	public void setPrice(Integer price) {
+	public void setPrice(BigDecimal price) {
 		this.price = price;
 	}
 

@@ -64,6 +64,21 @@ public class CatalogService {
 	public void updateDescription(Long id, String description) {
 		repository.updateDescription(description, id);
 	}
+	
+	public void updateItems(Long catalogId, List<Catalog> items) {
+		items.forEach(item -> {
+			if( item.getId() != null ) {
+				Catalog cToUp = repository.getOne(item.getId());
+				cToUp.setName(item.getName());
+				cToUp.setDescription(item.getDescription());
+				repository.save(cToUp);
+			} else {
+				item.setCatalogParentId(catalogId);
+				repository.save(item);
+			}
+		});
+		repository.flush();
+	}
 
 	private CatalogReadDto mapCatalog(Catalog catalog) {
 		if( catalog == null ) return null;

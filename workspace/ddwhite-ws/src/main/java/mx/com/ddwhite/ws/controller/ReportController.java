@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import mx.com.ddwhite.ws.reports.Cashout;
 import mx.com.ddwhite.ws.service.ReportService;
 
 @RestController
@@ -30,30 +31,11 @@ public class ReportController {
 	public String getWarehouseCSV(Sort sort) {
 		return service.getWarehouseInCSV(sort);
 	}
-
-//	@GetMapping("/account/out")
-//	public List<AccountOutput> getOutputs(
-//			@RequestParam(value = "startDate", required = true) String startDate, 
-//			@RequestParam(value = "endDate", required = true) String endDate) {
-//		return service.getOutputs(startDate, endDate);
-//	}
-//
-//	@GetMapping("/account/in")
-//	public List<AccountInput> getInputs(
-//			@RequestParam(value = "startDate", required = true) String startDate, 
-//			@RequestParam(value = "endDate", required = true) String endDate) {
-//		return service.getInputs(startDate, endDate);
-//	}
-//	
-//	@GetMapping("/general")
-//	public ReportGeneral getGeneral(@RequestParam(value = "startDate", required = true) String startDate, 
-//			@RequestParam(value = "endDate", required = true) String endDate) {
-//		return service.getReportGeneral(startDate, endDate);
-//	}
 	
-//	@GetMapping("/warehouse")
-//	public List<Warehouse> getWarehouse(Sort sort) {
-//		return service.getWarehouse(sort);
-//	}
+	@GetMapping("/cashout")
+	public Cashout getCashout(@RequestParam(value = "startDate", required = true) Date startDate, 
+			@RequestParam(value = "endDate", required = true) Date endDate) {
+		return service.getCashout(startDate, endDate);
+	}
 
 }

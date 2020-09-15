@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs/index";
 import { baseUrl, observeResponse } from './../../environments/environment';
 import {ApiResponse} from "../model/api.response";
-import {Catalog} from "../model/catalog.model";
+import {Catalog, CatalogItem} from "../model/catalog.model";
 
 @Injectable()
 export class ApiCatalogService {
@@ -21,6 +21,10 @@ export class ApiCatalogService {
 
   getByName(name: string): Observable<Catalog> {
     return this.http.get<Catalog>(this.context + '/findByName/' + name);
+  }
+
+  updateItems(catalogId: number, items: CatalogItem[]): Observable<any> {
+    return this.http.put<any>(this.context + '/updateItems/' + catalogId, items, observeResponse);
   }
 
 }

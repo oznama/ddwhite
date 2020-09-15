@@ -19,6 +19,7 @@ import { UserEditComponent } from './user/user-edit/user-edit.component';
 import { ExpenseComponent } from './expense/expense.component';
 import { InvoiceSaleComponent } from './sale/invoice-component/invoice.component';
 import { MycompanyComponent } from './mycompany/mycompany.component';
+import { CatalogComponent } from './catalog/catalog.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
@@ -40,6 +41,7 @@ const routes: Routes = [
 	{ path: 'expenses', component: ExpenseComponent, canActivate: [AuthGuard] },
 	{ path: 'sale-invoice', component: InvoiceSaleComponent, canActivate: [AuthGuard] },
 	{ path: 'my-company-data', component: MycompanyComponent, canActivate: [AuthGuard] },
+	{ path: 'catalogs', component: CatalogComponent, canActivate: [AuthGuard] },
 ];
 
 @NgModule({

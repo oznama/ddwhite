@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { ApiLoginService, ApiReportService, Privileges } from './../service/module.service';
 import {MatDialog} from '@angular/material/dialog';
 import { ReportFilterDialogComponent } from '../report/dialog-report-filter.component';
+import { CashoutComponent } from '../report/cashout-component/cashout.component';
 import { saveAs } from 'file-saver';
 
 const CSV_EXTENSION = '.csv';
@@ -44,6 +45,14 @@ export class HeaderComponent implements OnInit {
         const endDate = result.data.endDate;
         this.reportService.getGeneralCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'general_'));
       }
+    });
+  }
+
+  makeCashout() {
+    const dialogRef = this.dialog.open(CashoutComponent);
+    dialogRef.afterClosed().subscribe(result =>{
+      window.localStorage.removeItem('sessionStart');
+      window.localStorage.setItem('sessionStart', (new Date()).toString());
     });
   }
 

@@ -1,8 +1,25 @@
 <mat-toolbar color="primary" *ngIf="isLoggedIn$ | async">
 
   <mat-icon aria-hidden="false" aria-label="Example home icon" routerLink="/home">home</mat-icon>
+
+  <button mat-button [matMenuTriggerFor]="menuReport">
+    <mat-icon>filter_1</mat-icon> Reportes
+  </button>
+  <mat-menu #menuReport="matMenu" class="mat-menu-panel.my-class">
+    <button mat-menu-item class="toolbar-button" (click)="makeCashout()" *ngIf="privileges.showCashout | async">
+      <mat-icon>receipt</mat-icon><span>Corte de caja</span>
+    </button>
+    <button mat-menu-item class="toolbar-button" (click)="openDialogProductSearch()" *ngIf="privileges.isReporter | async">
+      <mat-icon>account_balance_wallet</mat-icon><span>General</span>
+    </button>
+    <button mat-menu-item (click)="getWarehouseCSV()" *ngIf="privileges.isReporter | async">
+      <mat-icon>account_balance</mat-icon><span>Almacen</span>
+    </button>
+  </mat-menu>
   
-  <button mat-button [matMenuTriggerFor]="menuInven" *ngIf="privileges.showInventory | async">Inventario</button>
+  <button mat-button [matMenuTriggerFor]="menuInven" *ngIf="privileges.isRoleAdmin | async">
+    <mat-icon>filter_2</mat-icon> Inventario
+  </button>
   <mat-menu #menuInven="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item routerLink="/product-list" *ngIf="privileges.isRoleAdmin | async">
       <mat-icon>article</mat-icon><span>Productos</span>
@@ -10,25 +27,20 @@
     <button mat-menu-item routerLink="/purchases" *ngIf="privileges.isPurchaser | async">
       <mat-icon>point_of_sale</mat-icon><span>Compras</span>
     </button>
-    <button mat-menu-item routerLink="/expenses">
-      <mat-icon>point_of_sale</mat-icon><span>Otros Gastos</span>
+    <button mat-menu-item routerLink="/expenses" *ngIf="privileges.isRoleAdmin | async">
+      <mat-icon>attach_money</mat-icon><span>Otros Gastos</span>
     </button>
   </mat-menu>
 
-  <button mat-button [matMenuTriggerFor]="menuReport" *ngIf="privileges.isReporter | async">Reportes</button>
-  <mat-menu #menuReport="matMenu" class="mat-menu-panel.my-class">
-    <button mat-menu-item class="toolbar-button" (click)="openDialogProductSearch()" >
-      <mat-icon>account_balance_wallet</mat-icon><span>General</span>
-    </button>
-    <button mat-menu-item (click)="getWarehouseCSV()">
-      <mat-icon>account_balance</mat-icon><span>Almacen</span>
-    </button>
-  </mat-menu>
-
-  <button mat-button [matMenuTriggerFor]="menuAdmin" *ngIf="privileges.isRoleAdmin | async">Administraci&oacute;n</button>
+  <button mat-button [matMenuTriggerFor]="menuAdmin" *ngIf="privileges.isRoleAdmin | async">
+    <mat-icon>filter_3</mat-icon> Administraci&oacute;n
+  </button>
   <mat-menu #menuAdmin="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item class="toolbar-button" routerLink="/my-company-data">
       <mat-icon>domain</mat-icon><span>Mi empresa</span>
+    </button>
+    <button mat-menu-item class="toolbar-button" routerLink="/catalogs">
+      <mat-icon>account_tree</mat-icon><span>Catalogos</span>
     </button>
     <button mat-menu-item class="toolbar-button" routerLink="/sale-invoice">
       <mat-icon>article</mat-icon><span>Facturaci&oacute;n</span>

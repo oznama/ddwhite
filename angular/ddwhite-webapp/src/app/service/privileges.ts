@@ -53,7 +53,7 @@ export class Privileges {
 		return this.menuReport.asObservable();
 	}
 
-	get showInventory(){
+	get showCashout(){
 		this.menuInventory.next( this.isAdmin() || this.canSale() )
 		return this.menuInventory.asObservable();
 	}

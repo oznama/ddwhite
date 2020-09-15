@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs/index";
-import { baseUrl, observeResponse } from './../../environments/environment';
+import { baseUrl, observeResponse } from '../../environments/environment';
+import { Cashout } from '../model/cashout.model';
 
 const responseTypeArrayBuffer: any = {responseType: 'arraybuffer'};
 
@@ -17,6 +18,10 @@ export class ApiReportService {
 
   getWarehouseCSV(sort: string) : Observable<ArrayBuffer> {
     return this.http.get(this.context + '/warehouse/csv?sort='+sort, responseTypeArrayBuffer);
+  }
+
+  getCashout(startDate: Date, endDate: Date) : Observable<Cashout> {
+  	return this.http.get<Cashout>(this.context + '/cashout?startDate='+ startDate +'&endDate='+ endDate);
   }
 
 }

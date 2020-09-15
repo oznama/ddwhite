@@ -32,9 +32,7 @@ public class AccountInputService {
 		final List<AccountInput> lstAccIn = new ArrayList<>();
 		// Loading sales
 		List<SaleDto> salesDto = saleService.findByRange(startDate, endDate);
-		salesDto.forEach(saleDto -> {
-			lstAccIn.addAll(getAccountInput(saleDto));
-		});
+		salesDto.forEach(saleDto -> lstAccIn.addAll(getAccountInput(saleDto)));
 		return lstAccIn;
 	}
 
@@ -44,9 +42,7 @@ public class AccountInputService {
 		if( saleDto.getClientId() != null ) client = clientRep.findById(saleDto.getClientId()).get();
 		else client = null;
 		final UserDto userDto = userService.findById(saleDto.getUserId());
-		saleDto.getDetail().forEach(detailDto -> {
-			lstAccIn.add( getAccountInput(saleDto, detailDto, client, userDto) );
-		});
+		saleDto.getDetail().forEach(detailDto -> lstAccIn.add( getAccountInput(saleDto, detailDto, client, userDto) ));
 		return lstAccIn;
 	}
 
@@ -62,7 +58,7 @@ public class AccountInputService {
 			buffer.append(client.getName().toUpperCase()).append(" ");
 			buffer.append(client.getMidleName().toUpperCase()).append(" ");
 			buffer.append(client.getLastName().toUpperCase());
-			ai.setClient(buffer.toString());	
+			ai.setClient(buffer.toString());
 		}
 		ai.setProduct(productDto.getNameLarge());
 		ai.setQuantity(detailDto.getQuantity());

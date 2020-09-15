@@ -13,6 +13,7 @@ import mx.com.ddwhite.ws.dto.ProductInventory;
 import mx.com.ddwhite.ws.reports.AccountInput;
 import mx.com.ddwhite.ws.reports.AccountOutput;
 import mx.com.ddwhite.ws.reports.AccountTotal;
+import mx.com.ddwhite.ws.reports.Cashout;
 import mx.com.ddwhite.ws.reports.ReportGeneral;
 import mx.com.ddwhite.ws.reports.Totals;
 import mx.com.ddwhite.ws.reports.Warehouse;
@@ -29,7 +30,10 @@ public class ReportService {
 	private AccountInputService inService;
 	
 	@Autowired
-	private InventoryService invetory;
+	private InventoryService invetoryService;
+	
+	@Autowired
+	private CashoutService cashoutService;
 	
 	public ReportGeneral getReportGeneral(String startDate, String endDate){
 		ReportGeneral general = new ReportGeneral();
@@ -78,7 +82,7 @@ public class ReportService {
 	}
 	
 	public List<Warehouse> getWarehouse(Sort sort) {
-		List<ProductInventory> productsInventory = invetory.findWarehouse(sort);
+		List<ProductInventory> productsInventory = invetoryService.findWarehouse(sort);
 		final List<Warehouse> warehouses = new ArrayList<>();
 		productsInventory.forEach(pi -> {
 			Warehouse wh = new Warehouse();
@@ -96,6 +100,16 @@ public class ReportService {
 	
 	public String getWarehouseInCSV(Sort sort) {
 		return ReportUtils.ExportListToCSV(true, getWarehouse(sort), Warehouse.class);
+	}
+	
+	public Cashout getCashout(String startDate, String endDate) {
+		return cashoutService.getCashout(startDate, endDate);
+	}
+	
+	public Cashout getCashout(Date startDate, Date endDate) {
+		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
+		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
+		return getCashout(strStartDate, strEndDate);
 	}
 
 }

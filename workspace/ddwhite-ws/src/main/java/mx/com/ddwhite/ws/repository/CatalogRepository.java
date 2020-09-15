@@ -25,7 +25,7 @@ public interface CatalogRepository extends JpaRepository<Catalog, Long> {
 	@Query("SELECT c FROM Catalog c WHERE c.catalogParentId = :catalogParentId")
 	List<Catalog> findByParent(@Param("catalogParentId") Long catalogParentId);
 	
-	@Query("SELECT c FROM Catalog c WHERE c.catalogParentId = null")
+	@Query("SELECT c FROM Catalog c WHERE c.catalogParentId = null AND c.name != 'COMPANY'")
 	List<Catalog> findOnlyParents();
 	
 	@Modifying

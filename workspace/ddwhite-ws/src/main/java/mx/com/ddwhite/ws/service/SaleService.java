@@ -96,7 +96,7 @@ public class SaleService {
 	}
 	
 	public List<SaleDto> findByRange(String startDate, String endDate) {
-		final List<Sale> sales = saleRepository.findByRange(startDate, endDate);
+		List<Sale> sales = saleRepository.findByRange(startDate, endDate);
 		return buildSalesDto(sales);
 	}
 
@@ -104,18 +104,8 @@ public class SaleService {
 		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
 		endDate = GenericUtils.plusDay(endDate, 1);
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
-		final List<Sale> sales = saleRepository.findByRange(strStartDate, strEndDate, pageable);
+		List<Sale> sales = saleRepository.findByRange(strStartDate, strEndDate, pageable);
 		return new PageImpl<>(buildSalesDto(sales), pageable, saleRepository.findByRange(strStartDate, strEndDate).size());
-	}
-
-	private void bindSale(Sale sale, final SaleDto saleDto) {
-		BeanUtils.copyProperties(sale, saleDto);
-		List<SaleDetail> saleDetails = saleDetailRepository.findBySale(saleDto.getId());
-		saleDetails.forEach( saleDetail -> {
-			SaleDetailDto saleDetailDto = new SaleDetailDto();
-			BeanUtils.copyProperties(saleDetail, saleDetailDto);
-			saleDto.getDetail().add(saleDetailDto);
-		});
 	}
 	
 	private List<SaleDto> buildSalesDto(final List<Sale> sales) {
@@ -126,6 +116,30 @@ public class SaleService {
 			salesDto.add(saleDto);
 		} );
 		return salesDto;
+	}
+	
+	private void bindSale(Sale sale, final SaleDto saleDto) {
+		BeanUtils.copyProperties(sale, saleDto);
+		bindDetail(saleDto);
+		bindPayment(saleDto);
+	}
+
+	private void bindPayment(final SaleDto saleDto) {
+		List<SalePayment> salePayments = salePaymentRepository.findBySale(saleDto.getId());
+		salePayments.forEach( salePayment -> {
+			SalePaymentDto salePaymentDto = new SalePaymentDto();
+			BeanUtils.copyProperties(salePayment, salePaymentDto);
+			saleDto.getPayments().add(salePaymentDto);
+		});
+	}
+
+	private void bindDetail(final SaleDto saleDto) {
+		List<SaleDetail> saleDetails = saleDetailRepository.findBySale(saleDto.getId());
+		saleDetails.forEach( saleDetail -> {
+			SaleDetailDto saleDetailDto = new SaleDetailDto();
+			BeanUtils.copyProperties(saleDetail, saleDetailDto);
+			saleDto.getDetail().add(saleDetailDto);
+		});
 	}
 
 }
