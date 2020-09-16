@@ -49,7 +49,7 @@ public class InventoryUtils {
 		inv.setAverageCost(averageCost(purchase));
 //		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
 //				BigDecimal.ROUND_HALF_EVEN));
-		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
+		inv.setPrice(product.getCost().multiply(product.getPercentage()).multiply(GeneralConstants.TAX).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
 		return inv;
 	}
 
