@@ -19,4 +19,10 @@ public interface SaleDetailRepository extends JpaRepository<SaleDetail, Long> {
 	
 	@Query("SELECT sd FROM SaleDetail sd WHERE sd.productId = :productId")
 	List<SaleDetail> findByProduct(@Param("productId") Long productId);
+	
+	@Query("SELECT sd FROM SaleDetail sd WHERE sd.productId = :productId AND sd.unity = :unity AND sd.numPiece = :numPiece")
+	List<SaleDetail> findByProductAndUnityWithPieces(@Param("productId") Long productId, @Param("unity") Long unity, @Param("numPiece") Integer numPiece );
+	
+	@Query("SELECT sd FROM SaleDetail sd WHERE sd.productId = :productId AND sd.unity = :unity AND sd.numPiece IS NULL")
+	List<SaleDetail> findByProductAndUnityWithoutPieces(@Param("productId") Long productId, @Param("unity") Long unity);
 }

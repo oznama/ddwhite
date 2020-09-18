@@ -25,9 +25,8 @@ export class Product {
 	sku: string;
 	description: string;
 	percentage: number;
-	cost: number;
-	price: number;
 	group: number;
+	groupDesc: string;
 	dateCreated: string;
 	userId: number;
 
@@ -43,7 +42,11 @@ export class Inventory{
 	productId: number;
 	quantity: number;
 	averageCost: number;
+	currentCost: number;
 	price: number;
+	unityDesc: string;
+	unity: number;
+	numPiece: number;
 
 	constructor(init?:Partial<Inventory>){
 		Object.assign(this, init);
@@ -51,5 +54,5 @@ export class Inventory{
 }
 
 export interface ModeProductDialog {
-  mode: 'inventory' | 'sale';
+  mode: 'inventory' | 'sale' | 'all';
 }

@@ -89,12 +89,12 @@ public class CatalogService {
 
 	private CatalogReadDto buildCatalog(Catalog catalog) throws Exception {
 		List<Catalog> items = repository.findByParent(catalog.getId());
-		CatalogReadDto catalogReadDto = mapCatalog(catalog);
-		for (Catalog item : items) {
+		final CatalogReadDto catalogReadDto = mapCatalog(catalog);
+		items.forEach( item -> {
 			CatalogItemReadDto catalogReadItemDto = new CatalogItemReadDto();
 			BeanUtils.copyProperties(item, catalogReadItemDto);
-			catalogReadDto.getItems().add(catalogReadItemDto);
-		}
+			catalogReadDto.getItems().add(catalogReadItemDto);	
+		});
 		return catalogReadDto;
 	}
 

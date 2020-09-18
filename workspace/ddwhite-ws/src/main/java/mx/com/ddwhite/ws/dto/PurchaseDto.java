@@ -2,8 +2,6 @@ package mx.com.ddwhite.ws.dto;
 
 import java.math.BigDecimal;
 
-import mx.com.ddwhite.ws.model.Product;
-
 public class PurchaseDto implements java.io.Serializable {
 
 	/**
@@ -14,11 +12,14 @@ public class PurchaseDto implements java.io.Serializable {
 	private Long id;
 	private Long userId;
 	private Long providerId;
+	private Long productId;
 	private Integer quantity;
 	private BigDecimal cost;
 	private Long unity;
+	private String unityDesc;
+	private Integer numPiece;
 	private String dateCreated;
-	private Product product;
+	private ProductDto product;
 
 	public Long getId() {
 		return id;
@@ -42,6 +43,14 @@ public class PurchaseDto implements java.io.Serializable {
 
 	public void setProviderId(Long providerId) {
 		this.providerId = providerId;
+	}
+
+	public Long getProductId() {
+		return productId;
+	}
+
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
 
 	public Integer getQuantity() {
@@ -68,6 +77,22 @@ public class PurchaseDto implements java.io.Serializable {
 		this.unity = unity;
 	}
 
+	public String getUnityDesc() {
+		return unityDesc;
+	}
+
+	public void setUnityDesc(String unityDesc) {
+		this.unityDesc = unityDesc;
+	}
+
+	public Integer getNumPiece() {
+		return numPiece;
+	}
+
+	public void setNumPiece(Integer numPiece) {
+		this.numPiece = numPiece;
+	}
+
 	public String getDateCreated() {
 		return dateCreated;
 	}
@@ -76,11 +101,13 @@ public class PurchaseDto implements java.io.Serializable {
 		this.dateCreated = dateCreated;
 	}
 
-	public Product getProduct() {
+	public ProductDto getProduct() {
+		if(product == null)
+			product = new ProductDto();
 		return product;
 	}
 
-	public void setProduct(Product product) {
+	public void setProduct(ProductDto product) {
 		this.product = product;
 	}
 

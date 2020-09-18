@@ -12,8 +12,10 @@ public class Warehouse implements Serializable {
 
 	private String sku;
 	private String nameLarge;
-	private BigDecimal percentage;
+	private String unityDesc;
+	private Integer numPiece;
 	private Integer quantity;
+	private BigDecimal percentage;
 	private BigDecimal averageCost;
 	private BigDecimal currentCost;
 	private BigDecimal price;
@@ -72,6 +74,22 @@ public class Warehouse implements Serializable {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public String getUnityDesc() {
+		return unityDesc;
+	}
+
+	public void setUnityDesc(String unityDesc) {
+		this.unityDesc = unityDesc;
+	}
+
+	public Integer getNumPiece() {
+		return numPiece;
+	}
+
+	public void setNumPiece(Integer numPiece) {
+		this.numPiece = numPiece;
 	}
 
 }

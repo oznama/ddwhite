@@ -60,6 +60,7 @@ import { InvoiceSaleComponent } from './sale/invoice-component/invoice.component
 import { MycompanyComponent } from './mycompany/mycompany.component';
 import { CashoutComponent } from './report/cashout-component/cashout.component';
 import { CatalogComponent } from './catalog/catalog.component';
+import { PurchaseReasignComponent } from './purchase/reasign/reasign.component';
 
 @NgModule({
   declarations: [
@@ -93,7 +94,8 @@ import { CatalogComponent } from './catalog/catalog.component';
     InvoiceSaleComponent,
     MycompanyComponent,
     CashoutComponent,
-    CatalogComponent
+    CatalogComponent,
+    PurchaseReasignComponent
   ],
   imports: [
     BrowserModule,

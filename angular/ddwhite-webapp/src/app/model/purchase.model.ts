@@ -1,11 +1,13 @@
-import { Product } from './product.model';
-
 export class Purchase {
-	product: PurchaseProduct;
+	productId: number;
+	productName: string;
 	providerId: number;
+	providerName: string;
 	quantity: number;
 	cost: number;
 	unity: number;
+	unityDesc: string;
+	numPiece: number;
 	userId: number;
 
 	constructor(init?:Partial<Purchase>){
@@ -13,11 +15,12 @@ export class Purchase {
 	}
 }
 
-export class PurchaseProduct{
-	id: number;
-	cost: number;
+export class PurchaseReasign{
+	purchasesOrigin: number;
+	purchaseDestity: number;
+	quantity: number;
 
-	constructor(init?:Partial<PurchaseProduct>){
+	constructor(init?:Partial<PurchaseReasign>){
 		Object.assign(this, init);
 	}
 }

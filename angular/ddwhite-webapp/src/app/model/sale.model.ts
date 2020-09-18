@@ -47,6 +47,9 @@ export class SaleDetail{
 	quantity: number;
 	price: number;
 	total: number;
+	unity: number;
+	unityDesc: string;
+	numPiece: number;
 
 	constructor(init?:Partial<SaleDetail>){
 		Object.assign(this, init);

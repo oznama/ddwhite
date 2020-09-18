@@ -10,11 +10,9 @@ export class ApiProductService {
   constructor(private http: HttpClient) { }
   context: string = baseUrl + '/product';
 
-  /*
-  get() : Observable<ProductPageable> {
-    return this.http.get<ProductPageable>(this.context + '/find');
+  get(page: number, size: number, sort: string) : Observable<ProductPageable> {
+    return this.http.get<ProductPageable>(this.context + '/find?page='+page+'&size='+size+'&sort='+sort);
   }
-  */
 
   getById(id: number): Observable<Product> {
     return this.http.get<Product>(this.context + '/find/' + id);

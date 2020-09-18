@@ -54,6 +54,8 @@ public class AccountOutputService {
 		AccountOutput ao = new AccountOutput();
 		ao.setUser(userDto.getFullName().toUpperCase());
 		ao.setProduct(p.getProduct().getNameLarge().toUpperCase());
+		ao.setUnityDesc(catalogService.findById(p.getUnity()).getName());
+		ao.setNumPiece(p.getNumPiece());
 		ao.setProvider(provider.getBussinesName().toUpperCase());
 		ao.setGroup(catGroup.getName().toUpperCase());
 		ao.setQuantity(p.getQuantity());

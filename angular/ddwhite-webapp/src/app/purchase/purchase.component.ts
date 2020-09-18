@@ -24,6 +24,7 @@ export class PurchaseComponent implements OnInit {
   purchases: Purchase[] = [];
   provider: Provider = new Provider();
   product: Product = new Product();
+  boxId: number;
 
   constructor(
   	private formBuilder: FormBuilder,
@@ -37,8 +38,9 @@ export class PurchaseComponent implements OnInit {
   ngOnInit(): void {
   	this.purchaseForm = this.formBuilder.group({
   		quantity: ['', [Validators.required,Validators.pattern("[0-9]{1,5}")]],
-  		cost: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
-  		unity: []
+  		cost: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,4})?")]],
+  		unity: [],
+      numPiece: []
   	})
   	this.loadCatalogUnity();
   }
@@ -48,12 +50,17 @@ export class PurchaseComponent implements OnInit {
   }
 
   private setPurchase(): Purchase {
+    const np = +this.purchaseForm.controls.numPiece.value;
     return <Purchase> {
-      product: this.product,
+      productId: this.product.id,
+      productName: this.product.nameLarge,
       providerId: this.provider.id,
+      providerName: this.provider.bussinesName,
       quantity: +this.purchaseForm.controls.quantity.value,
       cost: +this.purchaseForm.controls.cost.value,
       unity: +this.purchaseForm.controls.unity.value,
+      unityDesc: this.catalogUnity.find(c => c.id === +this.purchaseForm.controls.unity.value).name,
+      numPiece: np === 0 ? null : np,
       userId: +window.localStorage.getItem("userId")
     };
   }
@@ -73,6 +80,7 @@ export class PurchaseComponent implements OnInit {
   private loadCatalogUnity(): void{
   	this.catalogService.getByName('UNIDADES').subscribe( response => {
     	this.catalogUnity = response.items;
+      this.boxId = this.catalogUnity.find( ci => ci.name.toUpperCase() === 'CAJA' ).id;
     }, error =>{
     	console.error(error);
     });
@@ -87,7 +95,8 @@ export class PurchaseComponent implements OnInit {
 
   agregar(){
     const purch = this.setPurchase();
-    let isAddeable = true;
+    
+    /*let isAddeable = true;
     if(this.product.cost === 0)
       this.product.cost = purch.cost;
     else if(purch.cost !== this.product.cost){
@@ -95,22 +104,17 @@ export class PurchaseComponent implements OnInit {
       isAddeable = false;
     }
 
-    if(isAddeable){
+    if(isAddeable){*/
       this.addPurchaseToList(purch);
-    }
+    //}
     
   }
 
   private addPurchaseToList(purch: Purchase): void {
-    purch.product = {
-      id: this.product.id,
-      cost: this.product.cost
-    }
-
     let finded = false;
     this.purchases.forEach( item => {
       if(item.providerId === purch.providerId && 
-          item.product.id === purch.product.id && 
+          item.productId === purch.productId && 
           item.cost === purch.cost){
         finded = true;
         item.quantity += purch.quantity;
@@ -124,12 +128,17 @@ export class PurchaseComponent implements OnInit {
 
   remove(purch: Purchase){
     this.purchases = this.purchases.filter(item => !(item.providerId === purch.providerId && 
-                                                  item.product.id === purch.product.id && 
+                                                  item.productId === purch.productId && 
                                                   item.cost === purch.cost));
   }
 
   tableValid(){
     return Array.isArray(this.purchases) && this.purchases.length;
+  }
+
+  showNumPiece(){
+    const unity = +this.purchaseForm.controls.unity.value;
+    return unity !== 0 && unity === this.boxId;
   }
 
   builkSave(){
@@ -167,17 +176,19 @@ export class PurchaseComponent implements OnInit {
   }
 
   openDialogProductSearch() {
-    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'inventory'} });
+    //const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'inventory'} });
+    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'all'} });
     dialogRef.afterClosed().subscribe( result =>{
       if( result && result.data ){
         this.product.id = result.data.id;
         this.product.sku = result.data.sku;
         this.product.nameLarge = result.data.nameLarge;
-        this.product.cost = result.data.cost;
+        this.product.inventory.currentCost = result.data.cost;
       }
     });
   }
 
+/*
   openDialogCost(purch: Purchase): void {
     const dialogRef = this.dialog.open(PurchaseDialogCostComponent, {
       width: '600px',
@@ -191,5 +202,6 @@ export class PurchaseComponent implements OnInit {
       this.addPurchaseToList(purch);
     });
   }
+  */
 
 }

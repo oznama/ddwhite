@@ -2,6 +2,7 @@ package mx.com.ddwhite.ws.service.utils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
@@ -42,37 +43,41 @@ public class InventoryUtils {
 		}
 	}
 
-	protected InventoryDto getPurchase(Product product, List<Purchase> purchase) {
+	protected InventoryDto getPurchase(Product product, List<Purchase> purchase, Integer numPiece) {
 		InventoryDto inv = new InventoryDto();
-		inv.setProductId(product.getUserId());
-		inv.setQuantity(sumPurchaseQuantity(purchase));
-		inv.setAverageCost(averageCost(purchase));
-//		inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
-//				BigDecimal.ROUND_HALF_EVEN));
-		inv.setPrice(product.getCost().multiply(product.getPercentage()).multiply(GeneralConstants.TAX).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
+		if( !purchase.isEmpty() ) {
+			inv.setProductId(product.getUserId());
+			inv.setQuantity(sumPurchaseQuantity(purchase));
+			inv.setAverageCost(averageCost(purchase));
+			inv.setCurrentCost(maxCost(purchase));
+			inv.setNumPiece(numPiece);
+//			inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
+//					BigDecimal.ROUND_HALF_EVEN));
+//			inv.setPrice(product.getCost().multiply(product.getPercentage()).multiply(GeneralConstants.TAX).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
+			inv.setPrice(
+					inv.getCurrentCost()
+					.multiply(product.getPercentage().divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE))
+					.multiply(GeneralConstants.TAX)
+					.setScale(0,RoundingMode.UP)
+					.subtract(GeneralConstants.FIXED_PRICE));
+		}
 		return inv;
 	}
 
 	protected int sumPurchaseQuantity(List<Purchase> purchases) {
-		int sum = 0;
-		for (Purchase purchase : purchases)
-			sum += purchase.getQuantity();
-		return sum;
+		return purchases.stream().map( p -> p.getQuantity()).reduce(0, Integer::sum);
 	}
-
+	
 	protected int sumSaleQuantity(List<SaleDetail> salesDetail) {
-		int sum = 0;
-		for (SaleDetail saleDetail : salesDetail)
-			sum += saleDetail.getQuantity();
-		return sum;
+		return salesDetail.stream().map( sd -> sd.getQuantity()).reduce(0, Integer::sum);
 	}
 
 	protected BigDecimal averageCost(List<Purchase> purchases) {
-		BigDecimal average = BigDecimal.valueOf(0);
-		for (Purchase purchase : purchases)
-			average = average.add(purchase.getCost());
-		average = average.divide(BigDecimal.valueOf(purchases.size()), BigDecimal.ROUND_HALF_EVEN);
-		return average;
+		return BigDecimal.valueOf(purchases.stream().mapToDouble( c -> c.getCost().doubleValue()).average().orElse(0.0)).setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN);
+	}
+	
+	protected BigDecimal maxCost(List<Purchase> purchases) {
+		return Collections.max( purchases, Comparator.comparing( p -> p.getCost() ) ).getCost();
 	}
 
 }

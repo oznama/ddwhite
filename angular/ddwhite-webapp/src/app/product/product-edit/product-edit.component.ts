@@ -36,7 +36,7 @@ export class ProductEditComponent implements OnInit {
       nameShort: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{1,10}")]],
       sku: ['', Validators.required],
       description: ['', Validators.required],
-      percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
+      percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}")]],
       cost: [],
       group: ['', Validators.required],
       price: [],

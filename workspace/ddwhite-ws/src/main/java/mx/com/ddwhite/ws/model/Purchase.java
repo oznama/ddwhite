@@ -34,6 +34,8 @@ public class Purchase implements Serializable {
 	private BigDecimal cost;
 	@Column(name = "unidad")
 	private Long unity;
+	@Column(name = "num_piezas")
+	private Integer numPiece;
 	@Column(name = "fecha_registro", insertable = false, updatable = false)
 	private String dateCreated;
 	@JoinColumn(name = "id_producto", referencedColumnName = "id", updatable = false)
@@ -86,6 +88,14 @@ public class Purchase implements Serializable {
 
 	public void setUnity(Long unity) {
 		this.unity = unity;
+	}
+
+	public Integer getNumPiece() {
+		return numPiece;
+	}
+
+	public void setNumPiece(Integer numPiece) {
+		this.numPiece = numPiece;
 	}
 
 	public String getDateCreated() {

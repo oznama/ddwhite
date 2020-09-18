@@ -13,6 +13,8 @@ public class AccountOutput implements Serializable {
 	private String user;
 	private String provider;
 	private String product;
+	private String unityDesc;
+	private Integer numPiece;
 	private String group;
 	private Integer quantity;
 	private BigDecimal cost;
@@ -43,6 +45,22 @@ public class AccountOutput implements Serializable {
 
 	public void setProduct(String product) {
 		this.product = product;
+	}
+
+	public String getUnityDesc() {
+		return unityDesc;
+	}
+
+	public void setUnityDesc(String unityDesc) {
+		this.unityDesc = unityDesc;
+	}
+
+	public Integer getNumPiece() {
+		return numPiece;
+	}
+
+	public void setNumPiece(Integer numPiece) {
+		this.numPiece = numPiece;
 	}
 
 	public String getGroup() {

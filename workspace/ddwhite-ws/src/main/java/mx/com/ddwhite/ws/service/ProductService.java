@@ -1,6 +1,5 @@
 package mx.com.ddwhite.ws.service;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,13 +26,16 @@ public class ProductService {
 	@Autowired
 	private ProductRepository repository;
 	
+	@Autowired
+	private CatalogService catalogService;
+	
 	public Page<ProductDto> findAll(Pageable pageable) {
 		final List<ProductDto> productsDto = new ArrayList<>();
 		Page<Product> products = repository.findAll(pageable);
 		products.forEach( product -> {
 			ProductDto productDto = new ProductDto();
 			BeanUtils.copyProperties(product, productDto);
-			productDto.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
+			productDto.setGroupDesc(catalogService.findById(productDto.getGroup()).getName());
 			productsDto.add(productDto);
 		});
 		return new PageImpl<>(productsDto, pageable, repository.count());
@@ -43,7 +45,6 @@ public class ProductService {
 		Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
 		ProductDto productDto = new ProductDto();
 		BeanUtils.copyProperties(product, productDto);
-		productDto.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
 		return productDto;
 	}
 	

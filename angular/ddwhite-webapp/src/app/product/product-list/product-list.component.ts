@@ -39,7 +39,7 @@ export class ProductListComponent implements OnInit {
   }
 
   loadProducts(page: number): void {
-    this.apiService.getInventory(page, pageSize, this.sort).subscribe( data => {
+    this.apiService.get(page, pageSize, this.sort).subscribe( data => {
       this.totalPage = data.totalPages;
       this.products = of(data.content);
       this.productsFiltered$ = of(data.content);

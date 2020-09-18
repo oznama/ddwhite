@@ -89,10 +89,12 @@ public class ReportService {
 			wh.setNameLarge(pi.getNameLarge());
 			wh.setPercentage(pi.getPercentage());
 			wh.setAverageCost(pi.getInventory().getAverageCost());
-			wh.setCurrentCost(pi.getCost());
+			wh.setCurrentCost(pi.getInventory().getCurrentCost());
 			wh.setPrice(pi.getInventory().getPrice());
 			wh.setQuantity(pi.getInventory().getQuantity());
 			wh.setSku(pi.getSku());
+			wh.setUnityDesc( pi.getInventory().getUnityDesc() );
+			wh.setNumPiece(pi.getInventory().getNumPiece());
 			warehouses.add(wh);
 		});
 		return warehouses;

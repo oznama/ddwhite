@@ -47,6 +47,12 @@ export class ProductDialogSearchComponent implements OnInit {
         this.products = of(data.content);
         this.productFiltred$ = of(data.content);
       });
+    } else if( this.data.mode == 'all' ){
+      this.apiService.get(page, pageSize, this.sort).subscribe( data => {
+        this.totalPage = data.totalPages;
+        this.products = of(data.content);
+        this.productFiltred$ = of(data.content);
+      });
     }
   }
 

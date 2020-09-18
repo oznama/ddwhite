@@ -10,12 +10,13 @@ public interface GeneralConstants {
 	int BIG_DECIMAL_ROUND = 1;
 	BigDecimal TAX = BigDecimal.valueOf(1.16);
 	BigDecimal FIXED_PRICE = BigDecimal.valueOf(0.01);
+	BigDecimal ONE_HUNDER = BigDecimal.valueOf(100);
 	String GROUP_EXPENSE = "GASTO";
 	
 	String CSV_SEPARATOR = ",";
 	String CSV_EOF = "\n";
 	
-	String USERNAME_ADMIN = "admin";
+	String USERNAME_ADMIN = "root";
 	String ROOT_ROLE = "root";
 	
 	String CATALOG_NAME_COMPANY = "COMPANY";

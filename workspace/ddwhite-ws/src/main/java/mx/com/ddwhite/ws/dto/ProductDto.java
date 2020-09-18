@@ -15,9 +15,8 @@ public class ProductDto implements java.io.Serializable {
 	private String sku;
 	private String description;
 	private BigDecimal percentage;
-	private BigDecimal cost;
-	private BigDecimal price;
 	private Long group;
+	private String groupDesc;
 	private String dateCreated;
 	private Long userId;
 
@@ -69,28 +68,20 @@ public class ProductDto implements java.io.Serializable {
 		this.percentage = percentage;
 	}
 
-	public BigDecimal getCost() {
-		return cost;
-	}
-
-	public void setCost(BigDecimal cost) {
-		this.cost = cost;
-	}
-
-	public BigDecimal getPrice() {
-		return price;
-	}
-
-	public void setPrice(BigDecimal price) {
-		this.price = price;
-	}
-
 	public Long getGroup() {
 		return group;
 	}
 
 	public void setGroup(Long group) {
 		this.group = group;
+	}
+
+	public String getGroupDesc() {
+		return groupDesc;
+	}
+
+	public void setGroupDesc(String groupDesc) {
+		this.groupDesc = groupDesc;
 	}
 
 	public String getDateCreated() {

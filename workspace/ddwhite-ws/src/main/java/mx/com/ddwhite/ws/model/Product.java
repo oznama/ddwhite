@@ -31,8 +31,6 @@ public class Product implements Serializable {
 	private String description;
 	@Column(name = "porcentaje_ganancia")
 	private BigDecimal percentage;
-	@Column(name = "costo", insertable = false)
-	private BigDecimal cost;
 	@Column(name = "grupo")
 	private Long group;
 	@Column(name = "fecha_registro", insertable = false)
@@ -86,14 +84,6 @@ public class Product implements Serializable {
 
 	public void setPercentage(BigDecimal percentage) {
 		this.percentage = percentage;
-	}
-
-	public BigDecimal getCost() {
-		return cost;
-	}
-
-	public void setCost(BigDecimal cost) {
-		this.cost = cost;
 	}
 
 	public Long getGroup() {

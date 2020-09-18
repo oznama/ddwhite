@@ -15,7 +15,6 @@ public class ProductInventory implements java.io.Serializable {
 	private String sku;
 	private String description;
 	private BigDecimal percentage;
-	private BigDecimal cost;
 	private Long group;
 	private String dateCreated;
 	private Long userId;
@@ -68,14 +67,6 @@ public class ProductInventory implements java.io.Serializable {
 
 	public void setPercentage(BigDecimal percentage) {
 		this.percentage = percentage;
-	}
-
-	public BigDecimal getCost() {
-		return cost;
-	}
-
-	public void setCost(BigDecimal cost) {
-		this.cost = cost;
 	}
 
 	public Long getGroup() {

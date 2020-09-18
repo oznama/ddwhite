@@ -44,8 +44,6 @@ public class MsProductApplicationTests {
 			productDto.setSku("0000000" + num);
 			productDto.setDescription("Descripcion del producto " + productDto.getNameLarge());
 			productDto.setPercentage(BigDecimal.valueOf(1 + (i * 2 / 100)));
-			productDto.setCost(BigDecimal.valueOf(Math.random() * 100));
-			productDto.setPrice(productDto.getCost().multiply(productDto.getPercentage()));
 			productDto.setGroup(Long.valueOf(i % 5 == 0 ? 6 : (i % 3 == 0 ? 5 : 4)));
 			productDto.setUserId(1L);
 			productsDto.add(productDto);

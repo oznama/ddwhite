@@ -27,8 +27,12 @@
           <th class="hidden">Id</th>
           <th>SKU</th>
           <th>Nombre completo</th>
-          <th>Cantidad</th>
-          <th>Precio</th>
+          <th *ngIf="data.mode!=='all'">Cantidad</th>
+          <th *ngIf="data.mode!=='all'">Presentaci&oacute;n</th>
+          <th *ngIf="data.mode!=='all'">Piezas</th>
+          <!--th>Costo promed&iacute;o</th>
+          <th>Costo actual</th-->
+          <th *ngIf="data.mode!=='all'">Precio</th>
           <th></th>
         </tr>
         </thead>
@@ -37,8 +41,12 @@
           <td class="hidden">{{product.id}}</td>
           <td>{{product.sku}}</td>
           <td>{{product.nameLarge}}</td>
-          <td>{{product.inventory.quantity}}</td>
-          <td>$ {{product.inventory.price}}</td>
+          <td *ngIf="data.mode!=='all'">{{product.inventory.quantity}}</td>
+          <td *ngIf="data.mode!=='all'">{{product.inventory.unityDesc}}</td>
+          <td *ngIf="data.mode!=='all'">{{product.inventory.numPiece ? product.inventory.numPiece : 'N/A'}}</td>
+          <!--td>$ {{product.inventory.averageCost}}</td>
+          <td>$ {{product.inventory.currentCost}}</td-->
+          <td *ngIf="data.mode!=='all'">$ {{product.inventory.price}}</td>
           <td>
             <button mat-raised-button color="primary" (click)="select(product)" style="margin-left: 20px;">Seleccionar</button>
           </td>

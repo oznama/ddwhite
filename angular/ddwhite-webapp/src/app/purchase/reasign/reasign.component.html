@@ -1,0 +1,97 @@
+<div class="div-container">
+
+  <mat-card class="box-form">
+    <mat-card-header>
+      <mat-card-title>Reasignar compra</mat-card-title>
+    </mat-card-header>
+  </mat-card>
+
+  <div *ngIf="purchaseNotSelected()">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="hidden">Id</th>
+        <th>Producto</th>
+        <th>Unidad</th>
+        <th>Cantidad</th>
+        <th>Num Piezas x cant</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let purchase of purchases">
+        <td class="hidden">{{purchase.id}}</td>
+        <td>{{purchase.product.nameLarge}}</td>
+        <td>{{purchase.unityDesc}}</td>
+        <td>{{purchase.quantity}}</td>
+        <td>{{purchase.numPiece}}</td>
+        <td>
+          <button mat-raised-button color="primary" (click)="seleccionar(purchase.id,purchase.product.id, purchase)">Seleccionar</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div *ngIf="showQuantityInput()">
+
+    <div class="box-form">
+
+      <button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button>
+
+      <table style="width:100%">
+        <tr>
+          <td>
+            <label>Producto: </label>
+            <span class="text-blue">{{purchaseSelected.product.nameLarge}}</span><br>
+          </td>
+          <td>
+            <label>Unidad: </label>
+            <span class="text-blue">{{purchaseSelected.unityDesc}}</span><br>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <label>Cantidad: </label>
+            <span class="text-blue">{{purchaseSelected.quantity}}</span><br>
+          </td>
+          <td>
+            <label>N&uacute;mero de piezas por cantidad: </label>
+            <span class="text-blue">{{purchaseSelected.quantity}}</span><br>
+          </td>
+        </tr>
+      </table>
+      <div class="wrapper">
+        <mat-form-field class="third-width-input">
+          <input class="" matInput type="number" #quantity placeholder="Cantidad a reasignar" autocomplete="off"><br>
+        </mat-form-field>
+      </div>
+    </div>
+    
+
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th class="hidden">Id</th>
+        <th>Producto</th>
+        <th>Unidad</th>
+        <th>Cantidad</th>
+        <th></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let purchase of purchasesByProduct">
+        <td class="hidden">{{purchase.id}}</td>
+        <td>{{purchase.product.nameLarge}}</td>
+        <td>{{purchase.unityDesc}}</td>
+        <td>{{purchase.quantity}}</td>
+        <td>
+          <button mat-raised-button color="primary" (click)="reasign(purchase.id, +quantity.value)">Reasingar</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+  </div>
+
+</div>

@@ -29,10 +29,8 @@
           <th class="hidden">Id</th>
           <th>SKU</th>
           <th>Nombre completo</th>
-          <th>Cant. Almacen</th>
-          <th>Costo promedio</th>
-          <th>Costo</th>
-          <th>Precio</th>
+          <th>Grupo</th>
+          <th>% ganancia</th>
           <th>
             <div class="wrapper">
               <span class="spacer"></span>
@@ -46,10 +44,8 @@
           <td class="hidden">{{product.id}}</td>
           <td>{{product.sku}}</td>
           <td>{{product.nameLarge}}</td>
-          <td>{{product.inventory.quantity}}</td>
-          <td>$ {{product.inventory.averageCost}}</td>
-          <td>$ {{product.cost}}</td>
-          <td>$ {{product.inventory.price}}</td>
+          <td>{{product.groupDesc}}</td>
+          <td>{{product.percentage}}%</td>
           <td>
           	<button mat-raised-button color="warn" *ngIf="privileges.canRemove()" (click)="delete(product)">Borrar</button>
             <button mat-raised-button color="primary" *ngIf="privileges.canEdit()" (click)="edit(product)" style="margin-left: 20px;">Modificar</button>

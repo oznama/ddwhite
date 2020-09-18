@@ -2,6 +2,7 @@ package mx.com.ddwhite.ws.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,8 @@ public class InventoryService extends InventoryUtils {
 	private PurchaseRepository purchaseRepository;
 	@Autowired
 	private SaleDetailRepository saleDetailRepository;
+	@Autowired
+	private CatalogService catalogService;
 
 	public Page<ProductInventory> findInventory(Pageable pageable) {
 		Page<Product> products = productRepository.findAll(pageable);
@@ -43,7 +46,7 @@ public class InventoryService extends InventoryUtils {
 		products.forEach(product -> {
 			List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
 			if (!purchase.isEmpty()) {
-				inventory.add(getPurchase(product, purchase));
+				inventory.add(getPurchase(product, purchase, null));
 			}
 		});
 		return new PageImpl<>(inventory, pageable, inventory.size());
@@ -54,7 +57,7 @@ public class InventoryService extends InventoryUtils {
 				.orElseThrow(() -> new ResourceNotFoundException(Product.class.getSimpleName(), "id", productId));
 		List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
 		if (!purchase.isEmpty()) {
-			return getPurchase(product, purchase);
+			return getPurchase(product, purchase, null);
 		}
 		return null;
 	}
@@ -63,8 +66,12 @@ public class InventoryService extends InventoryUtils {
 		List<ProductInventory> list = findInventory();
 		list.forEach(product -> {
 			int quantity = product.getInventory().getQuantity();
-			product.getInventory()
-					.setQuantity(quantity - sumSaleQuantity(saleDetailRepository.findByProduct(product.getId())));
+			int saled = sumSaleQuantity(
+					product.getInventory().getNumPiece() != null 
+					? saleDetailRepository.findByProductAndUnityWithPieces(product.getId(), product.getInventory().getUnity(), product.getInventory().getNumPiece())
+					: saleDetailRepository.findByProductAndUnityWithoutPieces(product.getId(), product.getInventory().getUnity())
+					);
+			product.getInventory().setQuantity(quantity - saled);
 		});
 		sorting(list, sort);
 		return list;
@@ -85,14 +92,46 @@ public class InventoryService extends InventoryUtils {
 	private List<ProductInventory> setPurchasesToProducts(List<Product> products) {
 		List<ProductInventory> list = new ArrayList<>();
 		products.forEach(product -> {
-			ProductInventory pi = new ProductInventory();
-			BeanUtils.copyProperties(product, pi);
-			List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
-			if (!purchase.isEmpty()) {
-				pi.setInventory(getPurchase(product, purchase));
+			List<Long> unityTypes = purchaseRepository.findTypesProduct(product.getId());
+			if( !unityTypes.isEmpty() ) {
+				unityTypes.forEach( unity -> {
+					Map<Integer, List<Purchase>> groupByPieces = groupPurchasesByPieces(product.getId(), unity);
+					if( groupByPieces != null && !groupByPieces.isEmpty() ) {
+						groupByPieces.forEach( (numPiece, listPurchase) -> list.add(getProductInventory(product, listPurchase, unity, numPiece)));
+					} else {
+						list.add(getProductInventory(product, purchaseRepository.findByProductAndUnity(product.getId(), unity), unity, null));
+					}
+				});
+			} else {
+				list.add(getProductInventory(product, purchaseRepository.findByProduct(product.getId()), null));
 			}
-			list.add(pi);
 		});
 		return list;
 	}
+	
+	private ProductInventory getProductInventory(Product product, List<Purchase> purchases, Integer numPieces) {
+		ProductInventory pi = new ProductInventory();
+		BeanUtils.copyProperties(product, pi);
+		pi.setInventory(getPurchase(product, purchases, numPieces));
+		return pi;
+	}
+	
+	private ProductInventory getProductInventory(Product product, List<Purchase> purchases, Long unity, Integer numPieces) {
+		ProductInventory pi = getProductInventory(product, purchases, numPieces);
+		pi.setSku(pi.getSku().concat(String.valueOf(unity)));
+		pi.getInventory().setUnity(unity);
+		pi.getInventory().setUnityDesc( catalogService.findById(unity).getName() );
+		return pi;
+	}
+	
+	
+	private Map<Integer, List<Purchase>> groupPurchasesByPieces(Long productId, Long unity){
+		List<Purchase> findeds = purchaseRepository.findByProductAndUnityAndNumPieceNotNull(productId, unity);
+		try {
+			return findeds.stream().collect(Collectors.groupingBy(Purchase::getNumPiece));	
+		} catch (NullPointerException e) {
+			return null;
+		}
+	}
+	
 }

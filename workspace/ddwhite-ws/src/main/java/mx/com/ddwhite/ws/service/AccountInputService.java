@@ -27,6 +27,8 @@ public class AccountInputService {
 	private ClientRepository clientRep;
 	@Autowired
 	private UserService userService;
+	@Autowired
+	private CatalogService catalogService;
 	
 	public List<AccountInput> getInputs(String startDate, String endDate){
 		final List<AccountInput> lstAccIn = new ArrayList<>();
@@ -61,6 +63,8 @@ public class AccountInputService {
 			ai.setClient(buffer.toString());
 		}
 		ai.setProduct(productDto.getNameLarge());
+		ai.setUnityDesc(catalogService.findById(detailDto.getUnity()).getName());
+		ai.setNumPiece(detailDto.getNumPiece());
 		ai.setQuantity(detailDto.getQuantity());
 		ai.setPrice(detailDto.getPrice());
 		ai.setTotal( ai.getPrice().multiply(BigDecimal.valueOf(ai.getQuantity())).setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN) );

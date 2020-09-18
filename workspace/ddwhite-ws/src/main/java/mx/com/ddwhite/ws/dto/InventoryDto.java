@@ -12,7 +12,11 @@ public class InventoryDto implements java.io.Serializable {
 	private Long productId;
 	private Integer quantity;
 	private BigDecimal averageCost;
+	private BigDecimal currentCost;
 	private BigDecimal price;
+	private Long unity;
+	private String unityDesc;
+	private Integer numPiece;
 
 	public Long getProductId() {
 		return productId;
@@ -23,7 +27,8 @@ public class InventoryDto implements java.io.Serializable {
 	}
 
 	public Integer getQuantity() {
-		if(quantity == null) return 0;
+		if (quantity == null)
+			return 0;
 		return quantity;
 	}
 
@@ -40,7 +45,8 @@ public class InventoryDto implements java.io.Serializable {
 	}
 
 	public BigDecimal getAverageCost() {
-		if(averageCost == null) return BigDecimal.ZERO;
+		if (averageCost == null)
+			return BigDecimal.ZERO;
 		return averageCost;
 	}
 
@@ -48,21 +54,38 @@ public class InventoryDto implements java.io.Serializable {
 		this.averageCost = averageCost;
 	}
 
-	@Override
-	public String toString() {
-		StringBuilder builder = new StringBuilder();
-		builder.append("InventoryDto [productId=");
-		builder.append(productId);
-		builder.append(", quantity=");
-		builder.append(quantity);
-		builder.append(", averageCost=");
-		builder.append(averageCost);
-		builder.append(", price=");
-		builder.append(price);
-		builder.append("]");
-		return builder.toString();
+	public BigDecimal getCurrentCost() {
+		if(currentCost == null)
+			return BigDecimal.ZERO;
+		return currentCost;
 	}
-	
-	
+
+	public void setCurrentCost(BigDecimal currentCost) {
+		this.currentCost = currentCost;
+	}
+
+	public Long getUnity() {
+		return unity;
+	}
+
+	public void setUnity(Long unity) {
+		this.unity = unity;
+	}
+
+	public String getUnityDesc() {
+		return unityDesc;
+	}
+
+	public void setUnityDesc(String unityDesc) {
+		this.unityDesc = unityDesc;
+	}
+
+	public Integer getNumPiece() {
+		return numPiece;
+	}
+
+	public void setNumPiece(Integer numPiece) {
+		this.numPiece = numPiece;
+	}
 
 }

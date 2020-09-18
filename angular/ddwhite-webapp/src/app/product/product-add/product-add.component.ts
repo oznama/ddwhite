@@ -30,7 +30,7 @@ export class ProductAddComponent implements OnInit {
       nameShort: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{1,10}")]],
       sku: ['', [Validators.required,Validators.pattern("[a-zA-Z0-9]{1,}")]],
       description: [],
-      percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
+      percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}")]],
       group: ['', Validators.required]
     });
     this.loadCatalogGroup();

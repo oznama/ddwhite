@@ -76,7 +76,6 @@ create table if not exists productos(
 	sku char(15) unique not null,
 	descripcion char(255),
 	porcentaje_ganancia decimal(5,2) not null,
-	costo decimal(10,2) default 0,
 	grupo bigint not null,
 	fecha_registro datetime default current_timestamp,
 	id_usuario bigint not null,
@@ -88,7 +87,7 @@ create table if not exists gastos(
 	id bigint not null auto_increment,
 	id_usuario bigint not null,
 	descripcion char(255) not null,
-	monto decimal(20,2) not null,
+	monto decimal(20,4) not null,
 	fecha_registro datetime default current_timestamp,
 	deducible bit(1) not null,
 	folio_factura char(100),
@@ -102,8 +101,9 @@ create table if not exists compras(
 	id_proveedor bigint not null,
 	id_producto bigint not null,
 	cantidad int not null,
-	costo decimal(10,2) not null,
+	costo decimal(10,4) not null,
 	unidad bigint,
+	num_piezas int,
 	fecha_registro datetime default current_timestamp,
 	primary key(id)
 );
@@ -149,7 +149,9 @@ create table if not exists venta_detalle(
 	id_venta bigint not null,
 	id_producto bigint not null,
 	cantidad int not null,
-	precio decimal(10,2),
+	precio decimal(10,2) not null,
+	unidad bigint not null,
+	num_piezas int,
 	primary key(id)
 );
 alter table venta_detalle add constraint foreign key (id_venta) references venta_total (id);
@@ -159,7 +161,7 @@ create table if not exists venta_pago(
 	id bigint not null auto_increment,
 	id_venta bigint not null,
 	forma_pago bigint not null,
-	monto decimal(20,2),
+	monto decimal(20,2) not null,
 	primary key(id)
 );
 alter table venta_pago add constraint foreign key (id_venta) references venta_total (id);

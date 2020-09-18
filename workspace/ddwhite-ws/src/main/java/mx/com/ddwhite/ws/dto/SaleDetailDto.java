@@ -14,6 +14,8 @@ public class SaleDetailDto implements Serializable {
 	private Long productId;
 	private Integer quantity;
 	private BigDecimal price;
+	private Long unity;
+	private Integer numPiece;
 
 	public Long getId() {
 		return id;
@@ -53,6 +55,22 @@ public class SaleDetailDto implements Serializable {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public Long getUnity() {
+		return unity;
+	}
+
+	public void setUnity(Long unity) {
+		this.unity = unity;
+	}
+
+	public Integer getNumPiece() {
+		return numPiece;
+	}
+
+	public void setNumPiece(Integer numPiece) {
+		this.numPiece = numPiece;
 	}
 
 }

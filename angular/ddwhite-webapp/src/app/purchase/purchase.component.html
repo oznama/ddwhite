@@ -29,16 +29,16 @@
         </div>
 
 
-        <mat-form-field class='third-width-input'>
+        <mat-form-field class='midle-width-input'>
   	    	<input matInput formControlName="quantity" placeholder="Cantidad" maxlength="3" type="number" autocomplete="off" required>
   	    	<mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
   	    </mat-form-field>
-  	    <mat-form-field class="third-width-input">
+  	    <mat-form-field class="midle-width-input">
   	    	<input matInput formControlName="cost" style="text-align:right; padding: 0 10px" placeholder="Costo" maxlength="15" autocomplete="off" required>
-  	    	<mat-error>Campo incorrecto, solo monto con maximo 2 decimales opcionales</mat-error>
+  	    	<mat-error>Campo incorrecto, solo monto con maximo 4 decimales opcionales</mat-error>
   	    </mat-form-field>
 	    
-    	  <mat-form-field class='third-width-input'>
+    	  <mat-form-field class='midle-width-input'>
     		  <select matNativeControl formControlName="unity" placeholder="Unidad" required>
     		    <option *ngFor="let item of catalogUnity" [value]="item.id">
     		      {{item.name}}
@@ -46,6 +46,11 @@
     		  </select>
     		  <mat-error>Campo obligatorio</mat-error>
     		</mat-form-field>
+
+        <mat-form-field class='midle-width-input' *ngIf="showNumPiece()">
+          <input matInput formControlName="numPiece" placeholder="Numero de piezas" maxlength="5" type="number" autocomplete="off" required>
+          <mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
+        </mat-form-field>
 
 		    <div class="wrapper">
           <span class="spacer"></span>
@@ -69,14 +74,16 @@
           <th>Proveedor</th>
           <th>Producto</th>
           <th>Cantidad</th>
+          <th>Presetaci&oacute;n</th>
           <th>Precio</th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let purchase of purchases">
-          <td>{{purchase.providerId}}</td>
-          <td>{{purchase.product.id}}</td>
+          <td>{{purchase.providerName}}</td>
+          <td>{{purchase.productName}}</td>
           <td>{{purchase.quantity}}</td>
+          <td>{{purchase.unityDesc}}</td>
           <td>{{purchase.cost}}</td>
           <td>
             <button mat-raised-button color="warn" (click)="remove(purchase)">Borrar</button>

@@ -14,6 +14,8 @@ public class AccountInput implements Serializable {
 	private String user;
 	private String client;
 	private String product;
+	private String unityDesc;
+	private Integer numPiece;
 	private Integer quantity;
 	private BigDecimal price;
 	private BigDecimal total;
@@ -51,6 +53,22 @@ public class AccountInput implements Serializable {
 
 	public void setProduct(String product) {
 		this.product = product;
+	}
+
+	public String getUnityDesc() {
+		return unityDesc;
+	}
+
+	public void setUnityDesc(String unityDesc) {
+		this.unityDesc = unityDesc;
+	}
+
+	public Integer getNumPiece() {
+		return numPiece;
+	}
+
+	public void setNumPiece(Integer numPiece) {
+		this.numPiece = numPiece;
 	}
 
 	public Integer getQuantity() {

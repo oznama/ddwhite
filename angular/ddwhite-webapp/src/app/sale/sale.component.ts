@@ -57,7 +57,10 @@ export class SaleComponent implements OnInit {
       productName: this.product.nameLarge,
       productShortName: this.product.nameShort,
       quantity: +this.saleForm.controls.quantity.value,
-      price: this.product.price
+      price: this.product.inventory.price,
+      unity: this.product.inventory.unity,
+      unityDesc: this.product.inventory.unityDesc,
+      numPiece: this.product.inventory.numPiece
     };
   }
 
@@ -93,7 +96,7 @@ export class SaleComponent implements OnInit {
   private addProductToList(saleDetail: SaleDetail): void {
   	let finded = false;
     this.saleDetail.forEach( item => {
-      if(item.productId === saleDetail.productId){
+      if(item.productId === saleDetail.productId && item.unity === saleDetail.unity){
         finded = true;
         const quantity = item.quantity + saleDetail.quantity;
         if(this.checkQuantity(quantity)){
@@ -145,9 +148,9 @@ export class SaleComponent implements OnInit {
   	}*/
   }
 
-  remove(productId: number){
-    this.unTotalize(this.saleDetail.find(item => item.productId === productId));
-    this.saleDetail = this.saleDetail.filter(item => item.productId !== productId);
+  remove(saleDetail: SaleDetail){
+    this.unTotalize(this.saleDetail.find(item => item.productId === saleDetail.productId && item.unity === saleDetail.unity));
+    this.saleDetail = this.saleDetail.filter(item => !(item.productId === saleDetail.productId && item.unity === saleDetail.unity));
   }
 
   tableValid(){
@@ -162,9 +165,12 @@ export class SaleComponent implements OnInit {
         this.product.sku = result.data.sku;
         this.product.nameLarge = result.data.nameLarge;
         this.product.nameShort = result.data.nameShort;
-        this.product.cost = result.data.cost;
-        this.product.price = result.data.inventory.price;
+        //this.product.inventory.currentCost = result.inventory.currentCost;
+        this.product.inventory.price = result.data.inventory.price;
         this.product.inventory.quantity = result.data.inventory.quantity;
+        this.product.inventory.unity = result.data.inventory.unity;
+        this.product.inventory.unityDesc = result.data.inventory.unityDesc;
+        this.product.inventory.numPiece = result.data.inventory.numPiece;
       }
     });
   }

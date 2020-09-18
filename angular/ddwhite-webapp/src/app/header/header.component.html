@@ -27,6 +27,9 @@
     <button mat-menu-item routerLink="/purchases" *ngIf="privileges.isPurchaser | async">
       <mat-icon>point_of_sale</mat-icon><span>Compras</span>
     </button>
+    <button mat-menu-item routerLink="/purchases-reasign" *ngIf="privileges.isPurchaser | async">
+      <mat-icon>autorenew</mat-icon><span>Reasignar compra</span>
+    </button>
     <button mat-menu-item routerLink="/expenses" *ngIf="privileges.isRoleAdmin | async">
       <mat-icon>attach_money</mat-icon><span>Otros Gastos</span>
     </button>

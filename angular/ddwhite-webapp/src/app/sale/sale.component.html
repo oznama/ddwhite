@@ -96,6 +96,7 @@
 			        <tr>
 			          <th>Cantidad</th>
 			          <th>Producto</th>
+			          <th>Presentaci&oacute;n</th>
 			          <th>Precio</th>
 			          <th>Total</th>
 			          <th></th>
@@ -105,10 +106,11 @@
 			        <tr *ngFor="let product of saleDetail">
 			          <td>{{product.quantity}}</td>
 			          <td>{{product.productName}}</td>
+			          <td>{{product.unityDesc}}</td>
 			          <td>{{product.price}}</td>
 			          <td>{{product.total}}</td>
 			          <td>
-			            <button mat-raised-button color="warn" (click)="remove(product.productId)">Borrar</button>
+			            <button mat-raised-button color="warn" (click)="remove(product)">Borrar</button>
 			          </td>
 			        </tr>
 			        </tbody>

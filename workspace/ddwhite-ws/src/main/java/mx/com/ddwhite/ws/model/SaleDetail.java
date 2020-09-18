@@ -26,6 +26,10 @@ public class SaleDetail implements Serializable {
 	private Integer quantity;
 	@Column(name = "precio")
 	private BigDecimal price;
+	@Column(name = "unidad")
+	private Long unity;
+	@Column(name = "num_piezas")
+	private Integer numPiece;
 	@Column(name = "id_venta", updatable = false)
 	private Long saleId;
 	@Column(name = "id_producto", updatable = false)
@@ -53,6 +57,22 @@ public class SaleDetail implements Serializable {
 
 	public void setPrice(BigDecimal price) {
 		this.price = price;
+	}
+
+	public Long getUnity() {
+		return unity;
+	}
+
+	public void setUnity(Long unity) {
+		this.unity = unity;
+	}
+
+	public Integer getNumPiece() {
+		return numPiece;
+	}
+
+	public void setNumPiece(Integer numPiece) {
+		this.numPiece = numPiece;
 	}
 
 	public Long getSaleId() {

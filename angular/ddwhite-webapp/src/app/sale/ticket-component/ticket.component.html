@@ -20,7 +20,7 @@
             </thead>
             <tbody>
                 <tr *ngFor="let art of data.detail">
-                    <td class="cantidad">{{art.quantity}}</td>
+                    <td class="cantidad">{{art.quantity}} {{art.unityDesc}}</td>
                     <td class="producto">{{art.productShortName}}</td>
                     <td class="precio">${{art.price}}</td>
                     <td class="precio">${{art.total}}</td>
