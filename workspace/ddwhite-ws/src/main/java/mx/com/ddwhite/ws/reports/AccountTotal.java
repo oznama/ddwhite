@@ -10,25 +10,25 @@ public class AccountTotal implements Serializable {
 	 */
 	private static final long serialVersionUID = -2407528164821172595L;
 
-	private Integer quantityTotal;
+	private Double quantityTotal;
 	private BigDecimal amountTotal;
 	private BigDecimal tTotal;
 	private BigDecimal sbTotal;
 	private BigDecimal ivaTotal;
 
 	public AccountTotal() {
-		this.quantityTotal = 0;
+		this.quantityTotal = 0.0;
 		this.amountTotal = BigDecimal.valueOf(0);
 		this.tTotal = BigDecimal.valueOf(0);
 		this.sbTotal = BigDecimal.valueOf(0);
 		this.ivaTotal = BigDecimal.valueOf(0);
 	}
 
-	public Integer getQuantityTotal() {
+	public Double getQuantityTotal() {
 		return quantityTotal;
 	}
 
-	public void setQuantityTotal(Integer quantityTotal) {
+	public void setQuantityTotal(Double quantityTotal) {
 		this.quantityTotal = quantityTotal;
 	}
 

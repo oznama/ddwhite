@@ -14,7 +14,7 @@ public class Warehouse implements Serializable {
 	private String nameLarge;
 	private String unityDesc;
 	private Integer numPiece;
-	private Integer quantity;
+	private Double quantity;
 	private BigDecimal percentage;
 	private BigDecimal averageCost;
 	private BigDecimal currentCost;
@@ -44,11 +44,11 @@ public class Warehouse implements Serializable {
 		this.percentage = percentage;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

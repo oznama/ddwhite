@@ -65,7 +65,6 @@ public class PurchaseController implements GenericController<PurchaseDto> {
 	
 	@PostMapping("/saveBulk")
 	public ResponseEntity<?> createBuilk(@RequestBody List<PurchaseDto> purchasesDto) {
-		System.out.println(purchasesDto.toString());
 		try {
 			service.createBuilk(purchasesDto);
 			return ResponseEntity.ok().build();
@@ -87,7 +86,7 @@ public class PurchaseController implements GenericController<PurchaseDto> {
 	@PutMapping("/reasign")
 	public ResponseEntity<?> reasign(@RequestBody PurchaseReasignDto purchaseReasingDto) {
 		try {
-			service.updateReasign(purchaseReasingDto);
+			service.saveReasign(purchaseReasingDto);
 			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());

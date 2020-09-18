@@ -29,7 +29,7 @@ public class Purchase implements Serializable {
 	@Column(name = "id_proveedor")
 	private Long providerId;
 	@Column(name = "cantidad")
-	private Integer quantity;
+	private Double quantity;
 	@Column(name = "costo")
 	private BigDecimal cost;
 	@Column(name = "unidad")
@@ -66,11 +66,11 @@ public class Purchase implements Serializable {
 		this.providerId = providerId;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

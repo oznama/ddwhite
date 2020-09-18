@@ -11,7 +11,7 @@ public class PurchaseReasignDto implements Serializable {
 
 	private Long purchasesOrigin;
 	private Long purchaseDestity;
-	private Integer quantity;
+	private Double quantity;
 
 	public Long getPurchasesOrigin() {
 		return purchasesOrigin;
@@ -29,11 +29,11 @@ public class PurchaseReasignDto implements Serializable {
 		this.purchaseDestity = purchaseDestity;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

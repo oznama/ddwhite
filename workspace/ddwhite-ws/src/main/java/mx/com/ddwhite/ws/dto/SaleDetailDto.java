@@ -12,7 +12,7 @@ public class SaleDetailDto implements Serializable {
 	private Long id;
 	private Long saleId;
 	private Long productId;
-	private Integer quantity;
+	private Double quantity;
 	private BigDecimal price;
 	private Long unity;
 	private Integer numPiece;
@@ -41,11 +41,11 @@ public class SaleDetailDto implements Serializable {
 		this.productId = productId;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

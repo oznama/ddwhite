@@ -37,7 +37,7 @@ export class PurchaseComponent implements OnInit {
 
   ngOnInit(): void {
   	this.purchaseForm = this.formBuilder.group({
-  		quantity: ['', [Validators.required,Validators.pattern("[0-9]{1,5}")]],
+  		quantity: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,3})?")]],
   		cost: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,4})?")]],
   		unity: [],
       numPiece: []

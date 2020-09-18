@@ -5,6 +5,7 @@ drop table if exists venta_detalle;
 drop table if exists venta_total;
 drop table if exists clientes;
 drop table if exists gastos;
+drop table if exists compras_reasingadas;
 drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
@@ -100,7 +101,7 @@ create table if not exists compras(
 	id_usuario bigint not null,
 	id_proveedor bigint not null,
 	id_producto bigint not null,
-	cantidad int not null,
+	cantidad decimal(10,4) not null,
 	costo decimal(10,4) not null,
 	unidad bigint,
 	num_piezas int,
@@ -148,7 +149,7 @@ create table if not exists venta_detalle(
 	id bigint not null auto_increment,
 	id_venta bigint not null,
 	id_producto bigint not null,
-	cantidad int not null,
+	cantidad decimal(10,4) not null,
 	precio decimal(10,2) not null,
 	unidad bigint not null,
 	num_piezas int,
@@ -166,3 +167,13 @@ create table if not exists venta_pago(
 );
 alter table venta_pago add constraint foreign key (id_venta) references venta_total (id);
 alter table venta_pago add constraint foreign key (forma_pago) references catalogos (id);
+
+create table if not exists compras_reasingadas(
+	id bigint not null auto_increment,
+	id_compra_origen bigint not null,
+	id_compra_destino bigint not null,
+	cantidad decimal(10,4) not null,
+	primary key(id)
+);
+alter table compras_reasingadas add constraint foreign key (id_compra_origen) references compras (id);
+alter table compras_reasingadas add constraint foreign key (id_compra_destino) references compras (id);

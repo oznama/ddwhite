@@ -12,11 +12,11 @@ public class AccountOutput implements Serializable {
 
 	private String user;
 	private String provider;
+	private String group;
 	private String product;
 	private String unityDesc;
 	private Integer numPiece;
-	private String group;
-	private Integer quantity;
+	private Double quantity;
 	private BigDecimal cost;
 	private BigDecimal total;
 	private BigDecimal subTotal;
@@ -71,11 +71,11 @@ public class AccountOutput implements Serializable {
 		this.group = group;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

@@ -13,7 +13,7 @@ public class PurchaseDto implements java.io.Serializable {
 	private Long userId;
 	private Long providerId;
 	private Long productId;
-	private Integer quantity;
+	private Double quantity;
 	private BigDecimal cost;
 	private Long unity;
 	private String unityDesc;
@@ -53,11 +53,11 @@ public class PurchaseDto implements java.io.Serializable {
 		this.productId = productId;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

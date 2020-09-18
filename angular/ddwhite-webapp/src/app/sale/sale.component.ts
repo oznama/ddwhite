@@ -43,7 +43,7 @@ export class SaleComponent implements OnInit {
 
   ngOnInit(): void {
     this.saleForm = this.formBuilder.group({
-  		quantity: [this.quantityDefault, [Validators.required,Validators.pattern("[0-9]{1,5}")]]
+  		quantity: [this.quantityDefault, [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,3})?")]]
   	})
   }
 

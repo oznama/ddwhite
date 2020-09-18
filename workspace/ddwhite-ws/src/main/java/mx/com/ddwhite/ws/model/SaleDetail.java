@@ -23,7 +23,7 @@ public class SaleDetail implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	@Column(name = "cantidad")
-	private Integer quantity;
+	private Double quantity;
 	@Column(name = "precio")
 	private BigDecimal price;
 	@Column(name = "unidad")
@@ -43,11 +43,11 @@ public class SaleDetail implements Serializable {
 		this.id = id;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 

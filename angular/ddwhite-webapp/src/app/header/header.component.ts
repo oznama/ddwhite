@@ -58,7 +58,11 @@ export class HeaderComponent implements OnInit {
 
   private exportFile(data: ArrayBuffer, name: string){
     const blob = new Blob([data], { type: 'application/octet-stream' });
-    const fileName = name + new Date().getTime()  + CSV_EXTENSION;
+    const now = new Date();
+    const month = (now.getMonth()+1);
+    var strMonth = (month < 10 ? '0' : '') + month;
+    const strNow = now.getDate()+ strMonth +now.getFullYear()+'_'+now.getHours()+''+now.getMinutes()+''+now.getSeconds();
+    const fileName = name + strNow + CSV_EXTENSION;
     saveAs(blob, fileName);
   }
 }

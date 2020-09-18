@@ -3,7 +3,6 @@ package mx.com.ddwhite.ws.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -24,7 +23,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 	@Query("SELECT p FROM Purchase p WHERE p.product.id = :productId AND p.unity = :unity AND p.numPiece IS NOT NULL")
 	List<Purchase> findByProductAndUnityAndNumPieceNotNull(@Param("productId") Long productId, @Param("unity") Long unity);
 	
-	@Query("SELECT p FROM Purchase p WHERE p.product.id = :productId AND p.id != :id")
+	@Query("SELECT p FROM Purchase p WHERE p.product.id = :productId AND p.id != :id AND p.numPiece IS NULL")
 	List<Purchase> findByProductExceptCurrent(@Param("id") Long id, @Param("productId") Long productId);
 	
 	@Query("SELECT p FROM Purchase p WHERE p.dateCreated BETWEEN :startDate AND :endDate")
@@ -35,15 +34,5 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 	
 	@Query("SELECT DISTINCT p.unity FROM Purchase p WHERE p.product.id = :productId")
 	List<Long> findTypesProduct(@Param("productId") Long productId);
-	
-	@Modifying
-	@Transactional
-	@Query("UPDATE Purchase p SET p.quantity=p.quantity+:quantity WHERE p.id = :id")
-	void updateReasign(@Param("quantity") Integer quantity, @Param("id") Long id);
-	
-	@Modifying
-	@Transactional
-	@Query("UPDATE Purchase p SET p.quantity=p.quantity-:quantity WHERE p.id = :id")
-	void upgradeReasign(@Param("quantity") Integer quantity, @Param("id") Long id);
 
 }

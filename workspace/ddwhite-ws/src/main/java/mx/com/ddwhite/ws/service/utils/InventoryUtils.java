@@ -1,7 +1,6 @@
 package mx.com.ddwhite.ws.service.utils;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -12,9 +11,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
-import mx.com.ddwhite.ws.dto.InventoryDto;
 import mx.com.ddwhite.ws.dto.ProductInventory;
-import mx.com.ddwhite.ws.model.Product;
 import mx.com.ddwhite.ws.model.Purchase;
 import mx.com.ddwhite.ws.model.SaleDetail;
 
@@ -43,33 +40,12 @@ public class InventoryUtils {
 		}
 	}
 
-	protected InventoryDto getPurchase(Product product, List<Purchase> purchase, Integer numPiece) {
-		InventoryDto inv = new InventoryDto();
-		if( !purchase.isEmpty() ) {
-			inv.setProductId(product.getUserId());
-			inv.setQuantity(sumPurchaseQuantity(purchase));
-			inv.setAverageCost(averageCost(purchase));
-			inv.setCurrentCost(maxCost(purchase));
-			inv.setNumPiece(numPiece);
-//			inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
-//					BigDecimal.ROUND_HALF_EVEN));
-//			inv.setPrice(product.getCost().multiply(product.getPercentage()).multiply(GeneralConstants.TAX).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
-			inv.setPrice(
-					inv.getCurrentCost()
-					.multiply(product.getPercentage().divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE))
-					.multiply(GeneralConstants.TAX)
-					.setScale(0,RoundingMode.UP)
-					.subtract(GeneralConstants.FIXED_PRICE));
-		}
-		return inv;
-	}
-
-	protected int sumPurchaseQuantity(List<Purchase> purchases) {
-		return purchases.stream().map( p -> p.getQuantity()).reduce(0, Integer::sum);
+	protected Double sumPurchaseQuantity(List<Purchase> purchases) {
+		return purchases.stream().mapToDouble( p -> p.getQuantity().doubleValue()).sum();
 	}
 	
-	protected int sumSaleQuantity(List<SaleDetail> salesDetail) {
-		return salesDetail.stream().map( sd -> sd.getQuantity()).reduce(0, Integer::sum);
+	protected Double sumSaleQuantity(List<SaleDetail> salesDetail) {
+		return salesDetail.stream().mapToDouble( sd -> sd.getQuantity().doubleValue()).sum();
 	}
 
 	protected BigDecimal averageCost(List<Purchase> purchases) {

@@ -73,8 +73,8 @@
 			          <span style="font-size: 20px; text-transform: uppercase;">Precio:</span>
 			  	      <span class="text-blue"> $ {{product.price}}</span>
 			          <mat-form-field style="width: 10%;">
-			  	    	<input matInput formControlName="quantity" placeholder="Cantidad" maxlength="3" type="number" autocomplete="off" required>
-			  	    	<mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
+			  	    	<input matInput formControlName="quantity" style="text-align:right; padding: 0 10px;" placeholder="Cantidad" maxlength="10" autocomplete="off" required>
+			  	    	<mat-error>Campo incorrecto, solo numeros con maximo 3 decimales opcionales</mat-error>
 			  	      </mat-form-field>
 			  	      <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogProductSearch()">search</mat-icon>
 			          <span class="spacer"></span>

@@ -30,8 +30,8 @@
 
 
         <mat-form-field class='midle-width-input'>
-  	    	<input matInput formControlName="quantity" placeholder="Cantidad" maxlength="3" type="number" autocomplete="off" required>
-  	    	<mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
+  	    	<input matInput formControlName="quantity" style="text-align:right; padding: 0 10px;" placeholder="Cantidad" maxlength="10" autocomplete="off" required>
+  	    	<mat-error>Campo incorrecto, solo numeros con maximo 3 decimales opcionales</mat-error>
   	    </mat-form-field>
   	    <mat-form-field class="midle-width-input">
   	    	<input matInput formControlName="cost" style="text-align:right; padding: 0 10px" placeholder="Costo" maxlength="15" autocomplete="off" required>

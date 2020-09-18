@@ -74,7 +74,7 @@ public class AccountOutputService {
 		ao.setProduct(e.getDescription().toUpperCase());
 		ao.setProvider(e.getInvoice()); // Folio factura
 		ao.setGroup(GeneralConstants.GROUP_EXPENSE);
-		ao.setQuantity(1);
+		ao.setQuantity(1.0);
 		ao.setCost(e.getAmount());
 		ao.setTotal( e.getAmount() );
 		if( e.getTaxeable() ) {

@@ -1,5 +1,7 @@
 package mx.com.ddwhite.ws.service;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -13,8 +15,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.InventoryDto;
 import mx.com.ddwhite.ws.dto.ProductInventory;
+import mx.com.ddwhite.ws.dto.PurchaseReasignDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.Product;
 import mx.com.ddwhite.ws.model.Purchase;
@@ -34,6 +38,8 @@ public class InventoryService extends InventoryUtils {
 	private SaleDetailRepository saleDetailRepository;
 	@Autowired
 	private CatalogService catalogService;
+	@Autowired
+	private PurchaseReasingService purchaseReasignService;
 
 	public Page<ProductInventory> findInventory(Pageable pageable) {
 		Page<Product> products = productRepository.findAll(pageable);
@@ -46,7 +52,7 @@ public class InventoryService extends InventoryUtils {
 		products.forEach(product -> {
 			List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
 			if (!purchase.isEmpty()) {
-				inventory.add(getPurchase(product, purchase, null));
+				inventory.add(getPurchase(product, purchase, null, false));
 			}
 		});
 		return new PageImpl<>(inventory, pageable, inventory.size());
@@ -57,7 +63,7 @@ public class InventoryService extends InventoryUtils {
 				.orElseThrow(() -> new ResourceNotFoundException(Product.class.getSimpleName(), "id", productId));
 		List<Purchase> purchase = purchaseRepository.findByProduct(product.getId());
 		if (!purchase.isEmpty()) {
-			return getPurchase(product, purchase, null);
+			return getPurchase(product, purchase, null, false);
 		}
 		return null;
 	}
@@ -65,12 +71,12 @@ public class InventoryService extends InventoryUtils {
 	public List<ProductInventory> findWarehouse(Sort sort){
 		List<ProductInventory> list = findInventory();
 		list.forEach(product -> {
-			int quantity = product.getInventory().getQuantity();
-			int saled = sumSaleQuantity(
-					product.getInventory().getNumPiece() != null 
-					? saleDetailRepository.findByProductAndUnityWithPieces(product.getId(), product.getInventory().getUnity(), product.getInventory().getNumPiece())
-					: saleDetailRepository.findByProductAndUnityWithoutPieces(product.getId(), product.getInventory().getUnity())
-					);
+			Double quantity = product.getInventory().getQuantity();
+			Double saled = sumSaleQuantity(
+				product.getInventory().getNumPiece() != null 
+				? saleDetailRepository.findByProductAndUnityWithPieces(product.getId(), product.getInventory().getUnity(), product.getInventory().getNumPiece())
+				: saleDetailRepository.findByProductAndUnityWithoutPieces(product.getId(), product.getInventory().getUnity())
+			);
 			product.getInventory().setQuantity(quantity - saled);
 		});
 		sorting(list, sort);
@@ -112,7 +118,7 @@ public class InventoryService extends InventoryUtils {
 	private ProductInventory getProductInventory(Product product, List<Purchase> purchases, Integer numPieces) {
 		ProductInventory pi = new ProductInventory();
 		BeanUtils.copyProperties(product, pi);
-		pi.setInventory(getPurchase(product, purchases, numPieces));
+		pi.setInventory(getPurchase(product, purchases, numPieces, true));
 		return pi;
 	}
 	
@@ -124,7 +130,6 @@ public class InventoryService extends InventoryUtils {
 		return pi;
 	}
 	
-	
 	private Map<Integer, List<Purchase>> groupPurchasesByPieces(Long productId, Long unity){
 		List<Purchase> findeds = purchaseRepository.findByProductAndUnityAndNumPieceNotNull(productId, unity);
 		try {
@@ -132,6 +137,53 @@ public class InventoryService extends InventoryUtils {
 		} catch (NullPointerException e) {
 			return null;
 		}
+	}
+	
+	private InventoryDto getPurchase(Product product, List<Purchase> purchases, Integer numPiece, boolean addReasigned) {
+		InventoryDto inv = new InventoryDto();
+		if( !purchases.isEmpty() ) {
+			inv.setProductId(product.getUserId());
+			inv.setQuantity(sumPurchaseQuantity(purchases));
+			if(addReasigned && numPiece == null) {
+				inv.setQuantity(inv.getQuantity() + getQuantityReasignedToAdd(purchases));
+			} else if( addReasigned && numPiece != null ) {
+				inv.setQuantity( inv.getQuantity() - getQuantityReasignedToSubstract(purchases, numPiece) );
+			}
+			inv.setAverageCost(averageCost(purchases));
+			inv.setCurrentCost(maxCost(purchases));
+			inv.setNumPiece(numPiece);
+//			inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
+//					BigDecimal.ROUND_HALF_EVEN));
+//			inv.setPrice(product.getCost().multiply(product.getPercentage()).multiply(GeneralConstants.TAX).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
+			inv.setPrice(
+					inv.getCurrentCost()
+					.multiply(product.getPercentage().divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE))
+					.multiply(GeneralConstants.TAX)
+					.setScale(0,RoundingMode.UP)
+					.subtract(GeneralConstants.FIXED_PRICE));
+		}
+		return inv;
+	}
+	
+	private Double getQuantityReasignedToAdd(List<Purchase> purchases) {
+		Double quantityReasigned = Double.valueOf(0);
+		for(Purchase p : purchases) {
+			List<PurchaseReasignDto> purchasesReasigned = purchaseReasignService.findByDestiny(p.getId());
+			for(PurchaseReasignDto pReasigned: purchasesReasigned) {
+				Purchase purchaseOrigin = purchaseRepository.getOne(pReasigned.getPurchasesOrigin());
+				quantityReasigned += (pReasigned.getQuantity() * purchaseOrigin.getNumPiece());
+			}
+		}
+		return quantityReasigned;
+	}
+	
+	private Double getQuantityReasignedToSubstract(List<Purchase> purchases, Integer numPieces) {
+		Double quantityReasigned = Double.valueOf(0);
+		for(Purchase p : purchases) {
+			if( p.getNumPiece().equals(numPieces) )
+				quantityReasigned += purchaseReasignService.findByOrigin(p.getId()).stream().mapToDouble(sd -> sd.getQuantity().doubleValue()).sum();
+		}
+		return quantityReasigned;
 	}
 	
 }

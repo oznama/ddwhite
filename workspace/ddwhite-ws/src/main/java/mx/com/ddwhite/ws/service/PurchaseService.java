@@ -2,6 +2,7 @@ package mx.com.ddwhite.ws.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +35,9 @@ public class PurchaseService {
 	
 	@Autowired
 	private CatalogService catalogService;
+	
+	@Autowired
+	private PurchaseReasingService purchaseReasignService;
 	
 	public Page<PurchaseDto> findAll(Pageable pageable) {
 		final List<PurchaseDto> purchasesDto = new ArrayList<>();
@@ -85,7 +89,12 @@ public class PurchaseService {
 	public List<PurchaseDto> findByProductExceptCurrent(Long id, Long productId) {
 		final List<PurchaseDto> purchasesDto = new ArrayList<>();
 		List<Purchase> purchases = repository.findByProductExceptCurrent(id, productId);
-		purchases.forEach( purchase -> purchasesDto.add(setPurchaseDto(purchase)));
+		purchases.forEach( purchase -> {
+			PurchaseDto purchaseDto = setPurchaseDto(purchase);
+			Double saled = sumSaleQuantity(saleDetailRepository.findByProductAndUnityWithoutPieces(purchaseDto.getProduct().getId(), purchaseDto.getUnity()));
+			purchaseDto.setQuantity(purchaseDto.getQuantity() - saled);
+			purchasesDto.add(purchaseDto);
+		});
 		return purchasesDto;
 	}
 	
@@ -101,27 +110,23 @@ public class PurchaseService {
 				purchaseDto.setQuantity( purchaseDto.getQuantity() + purchaseAlreadyInList.getQuantity() );
 				purchasesDto.remove(purchaseAlreadyInList);
 			} else {
-				int saled = sumSaleQuantity(
+				Double saled = sumSaleQuantity(
 						purchaseDto.getNumPiece() != null 
 						? saleDetailRepository.findByProductAndUnityWithPieces(purchaseDto.getProduct().getId(), purchaseDto.getUnity(), purchaseDto.getNumPiece())
 						: saleDetailRepository.findByProductAndUnityWithoutPieces(purchaseDto.getProduct().getId(), purchaseDto.getUnity())
 						);
-				System.out.printf("Numero de ventas realizadas %d para producto %d, con unidad %d y num piezas: %d\n", saled, purchaseDto.getProduct().getId(), purchaseDto.getUnity(), purchaseDto.getNumPiece());
-				purchaseDto.setQuantity(purchaseDto.getQuantity() - saled);
+				Double reasigned = sumPurchasesReasign( purchaseReasignService.findByOrigin(purchase.getId()) );
+				purchaseDto.setQuantity(purchaseDto.getQuantity() - saled - reasigned);
 			}
 			purchasesDto.add(purchaseDto);
 //			}
 		});
-		return purchasesDto;
+		List<PurchaseDto> purchasesDtoDepured = purchasesDto.stream().filter(p -> p.getQuantity() > 0).collect(Collectors.toList());
+		return purchasesDtoDepured;
 	}
 	
-	public void updateReasign(PurchaseReasignDto purchaseReasignDto) {
-		PurchaseDto purchaseDto = findById(purchaseReasignDto.getPurchasesOrigin());
-		if(purchaseDto.getQuantity() == purchaseReasignDto.getQuantity())
-			repository.deleteById(purchaseReasignDto.getPurchasesOrigin());
-		else
-			repository.upgradeReasign(purchaseReasignDto.getQuantity(), purchaseReasignDto.getPurchasesOrigin());
-		repository.updateReasign((purchaseReasignDto.getQuantity() * purchaseDto.getNumPiece()), purchaseReasignDto.getPurchaseDestity());
+	public void saveReasign(PurchaseReasignDto purchaseReasignDto) {
+		purchaseReasignService.create(purchaseReasignDto);
 	}
 	
 	private PurchaseDto setPurchaseDto(Purchase purchase) {
@@ -139,8 +144,12 @@ public class PurchaseService {
 			.findAny().orElse(null);
 	}
 	
-	protected int sumSaleQuantity(List<SaleDetail> salesDetail) {
-		return salesDetail.stream().map( sd -> sd.getQuantity()).reduce(0, Integer::sum);
+	private Double sumSaleQuantity(List<SaleDetail> salesDetail) {
+		return salesDetail.stream().mapToDouble(sd -> sd.getQuantity().doubleValue()).sum();
+	}
+	
+	private Double sumPurchasesReasign(List<PurchaseReasignDto> purchasesReasigned) {
+		return purchasesReasigned.stream().mapToDouble(sd -> sd.getQuantity().doubleValue()).sum();
 	}
 
 }

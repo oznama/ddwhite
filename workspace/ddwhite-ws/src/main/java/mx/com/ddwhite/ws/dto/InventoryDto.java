@@ -10,7 +10,7 @@ public class InventoryDto implements java.io.Serializable {
 	private static final long serialVersionUID = -1543703129956091814L;
 
 	private Long productId;
-	private Integer quantity;
+	private Double quantity;
 	private BigDecimal averageCost;
 	private BigDecimal currentCost;
 	private BigDecimal price;
@@ -26,13 +26,13 @@ public class InventoryDto implements java.io.Serializable {
 		this.productId = productId;
 	}
 
-	public Integer getQuantity() {
+	public Double getQuantity() {
 		if (quantity == null)
-			return 0;
+			return 0.0;
 		return quantity;
 	}
 
-	public void setQuantity(Integer quantity) {
+	public void setQuantity(Double quantity) {
 		this.quantity = quantity;
 	}
 
