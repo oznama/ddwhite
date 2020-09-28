@@ -37,6 +37,9 @@ public class SaleService {
 	@Autowired
 	private SalePaymentRepository salePaymentRepository;
 	
+	@Autowired
+	private CustomPrintService printService;
+	
 	public SaleDto save(SaleDto saleDto) throws Throwable {
 		Sale sale = new Sale();
 		BeanUtils.copyProperties(saleDto, sale);
@@ -45,6 +48,8 @@ public class SaleService {
 			persistDetail(saleDto.getDetail(), sale.getId());
 			persistPayment(saleDto.getPayments(), sale.getId());
 			saleDto.setId(sale.getId());
+			// Manda a imprimir el ticket
+			printService.ticket(saleDto);
 			return saleDto;
 		} catch (DataAccessException e) {
 			throw e.getRootCause();

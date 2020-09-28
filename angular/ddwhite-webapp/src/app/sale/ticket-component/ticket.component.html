@@ -1,4 +1,4 @@
-<div mat-dialog-content>
+<!--div mat-dialog-content-->
     <div class="ticket">
         <img src="/assets/img/logo-ticket-default.jpg" alt="Logotipo">
         <p class="centrado">{{company.name}}
@@ -59,8 +59,8 @@
             <span *ngIf="company.website"><br>visite <strong>{{company.website}}</strong></span>
             <span *ngIf="company.rfc"><br>{{company.bussinessName}}<br>{{company.rfc}}</span>
         </p>
+        <div class="wrapper">
+            <button mat-raised-button color="primary" class="oculto-impresion" (click)="imprimir()">Imprimir</button>
+        <div>
     </div>
-    <div class="wrapper">
-        <button mat-raised-button color="primary" class="oculto-impresion" (click)="imprimir()">Imprimir</button>
-    <div>
-</div>
+<!--/div-->

@@ -155,12 +155,17 @@ public class InventoryService extends InventoryUtils {
 //			inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
 //					BigDecimal.ROUND_HALF_EVEN));
 //			inv.setPrice(product.getCost().multiply(product.getPercentage()).multiply(GeneralConstants.TAX).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
+//			inv.setPrice(
+//					inv.getCurrentCost()
+//					.multiply(product.getPercentage().divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE))
+//					.multiply(GeneralConstants.TAX)
+//					.setScale(0,RoundingMode.UP)
+//					.subtract(GeneralConstants.FIXED_PRICE));
 			inv.setPrice(
 					inv.getCurrentCost()
 					.multiply(product.getPercentage().divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE))
 					.multiply(GeneralConstants.TAX)
-					.setScale(0,RoundingMode.UP)
-					.subtract(GeneralConstants.FIXED_PRICE));
+					.setScale(0,RoundingMode.UP));
 		}
 		return inv;
 	}

@@ -28,5 +28,9 @@ public interface GeneralConstants {
 	String CATALOG_NAME_COMPANY_MAIL = "EMAIL";
 	String CATALOG_NAME_COMPANY_BUSSINES_NAME = "NOMBRE_FISCAL";
 	String CATALOG_NAME_COMPANY_RFC = "RFC";
+	
+	
+	String THERMICAL_PRINTER = "5830 Series";
+	int NUM_BY_ROW = 32;
 
 }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {Router} from "@angular/router";
 import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {Sale, SaleDetail, SalePayment} from './../model/sale.model';
@@ -37,7 +38,8 @@ export class SaleComponent implements OnInit {
   	private apiService: ApiSaleService,
     public privileges:Privileges,
     public alertService:AlertService,
-  	public dialog: MatDialog) {
+  	public dialog: MatDialog,
+    private router: Router) {
     setInterval(() => { this.date =  new Date()}, 1000)
   }
 
@@ -69,7 +71,10 @@ export class SaleComponent implements OnInit {
   }
 
   isToPay(){
-    return this.sale && this.sale.total && this.sale && this.sale.change >= 0;
+    let totalPayment = this.salePayment ? 
+      this.salePayment.reduce(function(total, currentItem){return total + currentItem.amount;}, 0) : 0;
+    return this.sale && this.sale.total && this.sale 
+      && this.sale.change >= 0 && totalPayment >= this.sale.total;
   }
 
   isToPayments(){
@@ -205,6 +210,11 @@ export class SaleComponent implements OnInit {
     });
   }
 
+  private newTagTicket(){
+    window.localStorage.setItem('currentSale', JSON.stringify(this.sale));
+    this.router.navigate([]).then(result => { window.open( window.location.origin + '/ticket-tag', '_blank'); });
+  }
+
   private setClient(result: any): void {
     if( result && result.data ){
       this.client.id = result.data.id;
@@ -226,11 +236,13 @@ export class SaleComponent implements OnInit {
     this.sale.payments = this.salePayment;
     this.apiService.create(this.sale).subscribe( data => {
       this.sale.id = data;
-        this.openPrintTicket();
-      }, error => {
-        this.alertService.error('La venta no ha sido registrada: ' + error.error, alertOptions);
-      }
-    );
+        //this.openPrintTicket();
+        //this.newTagTicket();
+      this.reset();
+      this.alertService.success('Venta completada', alertOptions);
+    }, error => {
+      this.alertService.error('La venta no ha sido registrada: ' + error.error, alertOptions);
+    });
   }
 
   private reset(): void{

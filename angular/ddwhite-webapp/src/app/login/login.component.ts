@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
       if(response.status === 200){
         window.localStorage.setItem('userId', response.body.id);
         window.localStorage.setItem('sessionStart', (new Date()).toString());
+        window.localStorage.setItem('userFullName', response.body.fullName);
         this.apiService.LoggedIn = true;
         this.apiService.UserFullName = response.body.fullName;
         this.apiService.Role = response.body.role;

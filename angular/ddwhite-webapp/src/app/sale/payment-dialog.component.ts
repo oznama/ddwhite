@@ -65,16 +65,27 @@ export class PaymentDialogComponent implements OnInit {
       paymentDesc: catPayment.name,
       amount: +$amount
     };
-    this.remove(this.payments.find(item => item.payment === payment.payment));
-    this.payments.push(payment);
+    if( this.payments.filter( item => item.payment === payment.payment).length > 0 ){
+      this.payments.find( item => {
+        if(item => item.payment === payment.payment){
+          item.amount = item.amount += $amount;
+        }
+      } )
+    } else {
+      //this.remove(this.payments.find(item => item.payment === payment.payment));
+      this.payments.push(payment);
+    }
+
     this.totalAmount = this.round(this.totalAmount+payment.amount);
-    this.paymentForm.reset();
+    //this.paymentForm.reset();
     this.paymentForm.controls.payment.setValue(this.catalogPayment[0].id);
+    this.paymentForm.controls.amount.setValue(this.data - this.totalAmount);
   }
 
   remove(payment: SalePayment){
     if(payment && this.payments.length > 0){
       this.totalAmount = this.round(this.totalAmount-payment.amount);
+      this.paymentForm.controls.amount.setValue(this.paymentForm.controls.amount.value+payment.amount);
       this.payments = this.payments.filter(item => !(item.payment === payment.payment));
     }
   }

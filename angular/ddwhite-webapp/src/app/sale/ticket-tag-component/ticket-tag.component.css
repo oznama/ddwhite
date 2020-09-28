@@ -1,46 +1,34 @@
 * {
+    background-color: white;
     font-size: 10px;
     font-family: 'Arial';
     text-transform: uppercase;
     -webkit-font-smoothing : none;
+    margin: 1mm;
+    padding: 1mm;
 }
-/*td,th,tr,table {
-    border-top: 1px dashed black;
-    border-collapse: collapse;
-}*/
+
 hr.dashed {
   border-top: 1px dashed black;
-  width: 100%;
+  width: 95%;
 }
 td.producto,th.producto {
-    /*width: 75px;
-    max-width: 75px;*/
-    width: 30mm;
-    max-width: 30mm;
+    width: 27mm;
+    max-width: 27mm;
 }
 td.cantidad,th.cantidad {
-    /*width: 40px;
-    max-width: 40px;*/
     width: 13mm;
     max-width: 13mm;
     word-break: break-all;
 }
 td.precio,th.precio {
-    /*width: 40px;
-    max-width: 40px;*/
     width: 13mm;
     max-width: 13mm;
     word-break: break-all;
 }
-td.pago-dec,th.pago-dec {
-    width: 57mm;
-    max-width: 57mm;
-    text-align: left;
-    word-break: break-all;
-}
-td.pago-monto,th.pago-monto {
-    width: 13mm;
-    max-width: 13mm;
+td.formapago,th.formapago {
+    width: 60mm;
+    max-width: 60mm;
     text-align: right;
     word-break: break-all;
 }
@@ -55,15 +43,14 @@ td.pago-monto,th.pago-monto {
     float:right;
 }
 .ticket {
-    /*width: 155px;
-    max-width: 155px;*/
-    width: 70mm;
-    max-width: 70mm;
+    width: 66mm;
+    max-width: 66mm;
 }
 img {
-    max-width: inherit;
-    width: inherit;
+    max-width: 50%;
+    width: 50%;
 }
+
 @media print {
     .oculto-impresion,
     .oculto-impresion * {

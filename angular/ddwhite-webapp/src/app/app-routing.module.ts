@@ -21,6 +21,7 @@ import { InvoiceSaleComponent } from './sale/invoice-component/invoice.component
 import { MycompanyComponent } from './mycompany/mycompany.component';
 import { CatalogComponent } from './catalog/catalog.component';
 import { PurchaseReasignComponent } from './purchase/reasign/reasign.component';
+import { TicketTagComponent } from './sale/ticket-tag-component/ticket-tag.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
@@ -44,6 +45,7 @@ const routes: Routes = [
 	{ path: 'my-company-data', component: MycompanyComponent, canActivate: [AuthGuard] },
 	{ path: 'catalogs', component: CatalogComponent, canActivate: [AuthGuard] },
 	{ path: 'purchases-reasign', component: PurchaseReasignComponent, canActivate: [AuthGuard] },
+	{ path: 'ticket-tag', component: TicketTagComponent },
 ];
 
 @NgModule({

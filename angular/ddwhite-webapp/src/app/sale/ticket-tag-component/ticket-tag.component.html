@@ -1,0 +1,64 @@
+<div class="ticket">
+    <div class="centrado">
+        <img src="/assets/img/logo-ticket-default.jpg" alt="Logotipo">
+    </div>
+    <p class="centrado">{{company.name}}
+        <br>{{company.address}}</p>
+    <div *ngIf="data.clientId">
+        <hr class="dashed">
+        <span class="left">CLIENTE: {{data.clientName}}</span><br>
+        <span class="left" *ngIf="data.clientRfc">RFC: {{data.clientRfc}}</span>
+    </div>
+    <hr class="dashed">
+    <table>
+        <thead>
+            <tr>
+                <th class="cantidad">CANT</th>
+                <th class="producto">ARTICULO</th>
+                <th class="precio">$$</th>
+                <th class="precio">TOTAL</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let art of data.detail">
+                <td class="cantidad">{{art.quantity}} {{art.unityDesc}}</td>
+                <td class="producto">{{art.productShortName}}</td>
+                <td class="precio">${{art.price}}</td>
+                <td class="precio">${{art.total}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <hr class="dashed">
+    <div *ngIf="data.clientRfc">
+        <span class="right">SUBTOTAL $: {{data.subTotal}}</span><br>
+        <span class="right">IVA: $ {{data.tax}}</span><br>
+    </div>
+    <span class="right">TOTAL M.N. $ {{data.total}}</span>
+    <br>
+    <table>
+        <thead>
+            <tr>
+                <th class="formapago"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let pay of data.payments">
+                <td class="formapago">{{pay.paymentDesc}}: $ {{pay.amount}}</td>
+            </tr>
+        </tbody>
+    </table>
+    <span class="right">CAMBIO $ {{data.change}}</span>
+    <p class="centrado">
+        <br>Le atendio: {{userName}}
+        <br>{{date | date: "dd/MM/yyyy"}} {{date | date: "HH:mm:ss"}}
+        <br>*** No Venta: {{data.id}} ***
+        <br><strong>{{company.messageTicket}}</strong><br>
+        <span *ngIf="company.phone"><br>Comentarios o sugerencias <strong>{{company.phone}}</strong></span>
+        <span *ngIf="company.email"><br>o en <strong>{{company.email}}</strong></span>
+        <span *ngIf="company.website"><br>visite <strong>{{company.website}}</strong></span>
+        <span *ngIf="company.rfc"><br>{{company.bussinessName}}<br>{{company.rfc}}</span>
+    </p>
+    <div class="wrapper">
+        <button mat-raised-button color="primary" class="oculto-impresion" (click)="imprimir()">Imprimir</button>
+    <div>
+</div>

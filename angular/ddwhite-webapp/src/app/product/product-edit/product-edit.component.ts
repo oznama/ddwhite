@@ -37,15 +37,13 @@ export class ProductEditComponent implements OnInit {
       sku: ['', Validators.required],
       description: ['', Validators.required],
       percentage: ['', [Validators.required,Validators.pattern("[0-9]{0,6}")]],
-      cost: [],
       group: ['', Validators.required],
-      price: [],
+      groupDesc: [],
       userId: [],
       dateCreated: []
     });
     this.editForm.controls.userId.disable();
     this.editForm.controls.dateCreated.disable();
-    this.editForm.controls.price.disable();
     this.loadCatalogGroup();
     this.loadProduct(+editProductId);
   }
@@ -84,7 +82,7 @@ export class ProductEditComponent implements OnInit {
     );
   }
 
-   cancelar(){
+  cancelar(){
     this.router.navigate(['product-list']);
   }
 
