@@ -124,7 +124,7 @@ public class InventoryService extends InventoryUtils {
 	
 	private ProductInventory getProductInventory(Product product, List<Purchase> purchases, Long unity, Integer numPieces) {
 		ProductInventory pi = getProductInventory(product, purchases, numPieces);
-		pi.setSku(pi.getSku().concat(String.valueOf(unity)));
+		pi.setSku(pi.getSku()/*.concat(String.valueOf(unity))*/);
 		pi.getInventory().setUnity(unity);
 		pi.getInventory().setUnityDesc( catalogService.findById(unity).getName() );
 		return pi;

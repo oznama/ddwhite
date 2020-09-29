@@ -56,19 +56,19 @@ public class ReportService {
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
 		ReportGeneral general = getReportGeneral(strStartDate, strEndDate);
 		StringBuilder builder = new StringBuilder();
-		builder.append("COMPRAS-GASTOS").append(GeneralConstants.CSV_EOF);
+		builder.append("COMPRAS-GASTOS").append(GeneralConstants.LINE_BREAK);
 		builder.append( ReportUtils.ExportListToCSV(true, general.getOutputs(), AccountOutput.class) );
-		builder.append(GeneralConstants.CSV_EOF);
-		builder.append("VENTAS").append(GeneralConstants.CSV_EOF);
+		builder.append(GeneralConstants.LINE_BREAK);
+		builder.append("VENTAS").append(GeneralConstants.LINE_BREAK);
 		builder.append( ReportUtils.ExportListToCSV(true, general.getInputs(), AccountInput.class) );
-		builder.append(GeneralConstants.CSV_EOF);
-		builder.append("TOTAL COMPRAS-GASTOS").append(GeneralConstants.CSV_EOF);
+		builder.append(GeneralConstants.LINE_BREAK);
+		builder.append("TOTAL COMPRAS-GASTOS").append(GeneralConstants.LINE_BREAK);
 		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotalOut(), AccountTotal.class) );
-		builder.append(GeneralConstants.CSV_EOF);
-		builder.append("TOTAL VENTAS").append(GeneralConstants.CSV_EOF);
+		builder.append(GeneralConstants.LINE_BREAK);
+		builder.append("TOTAL VENTAS").append(GeneralConstants.LINE_BREAK);
 		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotalIn(), AccountTotal.class) );
-		builder.append(GeneralConstants.CSV_EOF);
-		builder.append("DIFERENCIA").append(GeneralConstants.CSV_EOF);
+		builder.append(GeneralConstants.LINE_BREAK);
+		builder.append("DIFERENCIA").append(GeneralConstants.LINE_BREAK);
 		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotals(), Totals.class) );
 		return builder.toString();
 	}

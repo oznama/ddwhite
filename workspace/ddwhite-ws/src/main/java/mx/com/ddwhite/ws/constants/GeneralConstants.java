@@ -14,7 +14,7 @@ public interface GeneralConstants {
 	String GROUP_EXPENSE = "GASTO";
 	
 	String CSV_SEPARATOR = ",";
-	String CSV_EOF = "\n";
+	String LINE_BREAK = "\n";
 	
 	String USERNAME_ADMIN = "root";
 	String ROOT_ROLE = "root";
@@ -28,9 +28,5 @@ public interface GeneralConstants {
 	String CATALOG_NAME_COMPANY_MAIL = "EMAIL";
 	String CATALOG_NAME_COMPANY_BUSSINES_NAME = "NOMBRE_FISCAL";
 	String CATALOG_NAME_COMPANY_RFC = "RFC";
-	
-	
-	String THERMICAL_PRINTER = "5830 Series";
-	int NUM_BY_ROW = 32;
 
 }

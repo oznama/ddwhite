@@ -90,7 +90,7 @@ public class ReportUtils {
 				if( f.getName().contains(UID) ) continue;
 				builder.append(f.getName().toUpperCase()).append(GeneralConstants.CSV_SEPARATOR);
 			}
-			builder.append(GeneralConstants.CSV_EOF);
+			builder.append(GeneralConstants.LINE_BREAK);
 		}
 	}
 
@@ -108,7 +108,7 @@ public class ReportUtils {
 				}
 			}
 		}
-		builder.append(GeneralConstants.CSV_EOF);
+		builder.append(GeneralConstants.LINE_BREAK);
 	}
 	
 	private static <T> Object getValue(T e, Method m) {
