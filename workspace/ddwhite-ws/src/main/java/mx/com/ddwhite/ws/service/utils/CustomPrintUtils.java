@@ -31,9 +31,8 @@ public class CustomPrintUtils implements Printable {
 	// cut that paper!
 	public static final byte[] CUT_P = new byte[] { 0x1d, 'V', 1 };
 	public static final String PRINTER = "5830 Series";
-	public static final int CHARACTERS_BY_ROW = 30;
-	public static final String FORMAT_DATE = "yyyy-MM-dd HH:mm:ss";
-	public static final int PADDING = 1;
+	public static final int CHARACTERS_BY_ROW = 32;
+	public static final int PADDING = 0;
 	public static final String LOGO_DDWHITE = "logo-ticket-default.jpg";
 	
 	@Autowired

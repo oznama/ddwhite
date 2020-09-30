@@ -49,10 +49,19 @@ export class HeaderComponent implements OnInit {
   }
 
   makeCashout() {
+    /*
     const dialogRef = this.dialog.open(CashoutComponent);
     dialogRef.afterClosed().subscribe(result =>{
       window.localStorage.removeItem('sessionStart');
       window.localStorage.setItem('sessionStart', (new Date()).toString());
+    });
+    */
+    const userId = +window.localStorage.getItem('userId');
+    const startDate = new Date(window.localStorage.getItem('sessionStart'));
+    this.reportService.printCashout(userId, startDate, new Date()).subscribe(data => {
+      console.log(data);
+    }, error => {
+      console.error(error);
     });
   }
 

@@ -251,3 +251,10 @@ delete from venta_detalle  where id_venta  = 18;
 update venta_detalle set unidad = 2 where unidad is null;
 delete from venta_pago where id_venta = 18;
 delete from venta_total where id = 18;
+
+
+select num_piezas from compras where unidad = 2;
+update compras set num_piezas = null where unidad = 2;
+
+select num_piezas from venta_detalle where unidad = 2;
+update venta_detalle set num_piezas = null where unidad = 2;

@@ -35,6 +35,9 @@ public class ReportService {
 	@Autowired
 	private CashoutService cashoutService;
 	
+	@Autowired
+	private TicketPrintService ticketPrintService;
+	
 	public ReportGeneral getReportGeneral(String startDate, String endDate){
 		ReportGeneral general = new ReportGeneral();
 		List<AccountInput> in = getInputs(startDate, endDate);
@@ -108,10 +111,20 @@ public class ReportService {
 		return cashoutService.getCashout(startDate, endDate);
 	}
 	
+	@Deprecated
 	public Cashout getCashout(Date startDate, Date endDate) {
-		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
-		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
+		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
+		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
 		return getCashout(strStartDate, strEndDate);
+	}
+	
+	public void printCashout(Date startDate, Date endDate, Long userId) {
+		if( startDate == null ) startDate = GenericUtils.stringToDate(GenericUtils.dateToString(new Date(), GeneralConstants.FORMAT_DATE), GeneralConstants.FORMAT_DATE);
+		if( endDate == null ) endDate = GenericUtils.plusDay(startDate, 1);
+		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
+		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
+		Cashout cashout = getCashout(strStartDate, strEndDate);
+		ticketPrintService.cashout(cashout, userId, strStartDate, strEndDate);
 	}
 
 }

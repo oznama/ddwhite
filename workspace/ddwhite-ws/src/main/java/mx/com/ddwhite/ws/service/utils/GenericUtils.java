@@ -1,6 +1,7 @@
 package mx.com.ddwhite.ws.service.utils;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -15,6 +16,20 @@ public class GenericUtils {
 	 */
 	public static String currentDateToString(String format) {
 		return dateToString(new Date(), format);
+	}
+	
+	/**
+	 * String date with format to date
+	 * @param date to convert
+	 * @param format to parse
+	 * @return strint date
+	 */
+	public static Date stringToDate(String date, String format) {
+		try {
+			return new SimpleDateFormat(format).parse(date);
+		} catch (ParseException e) {
+			return new Date();
+		}  
 	}
 	
 	/**
@@ -42,5 +57,7 @@ public class GenericUtils {
 		calendar.add(Calendar.DAY_OF_MONTH, n);
 		return calendar.getTime();
 	}
+	
+	
 
 }
