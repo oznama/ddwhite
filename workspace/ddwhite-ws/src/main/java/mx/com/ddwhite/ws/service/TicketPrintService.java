@@ -210,7 +210,7 @@ public class TicketPrintService {
 		UserDto userCreateSale = userService.findById(saleDto.getUserId());
 		content.append(lineFormatted("Le atendio", AlignedEmun.CENTERED));
 		content.append(lineFormatted(userCreateSale.getFullName().toUpperCase(), AlignedEmun.CENTERED));
-		content.append(lineFormatted(GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME_SHORT), AlignedEmun.CENTERED));
+		content.append(lineFormatted(saleDto.getDateCreated(), AlignedEmun.CENTERED));
 		content.append(lineFormatted("*** No Venta: " + saleDto.getId() + " ***", AlignedEmun.CENTERED));
 		if (messageTicket != null && messageTicket.getDescription() != null)
 			content.append(lineFormatted(messageTicket.getDescription(), AlignedEmun.CENTERED));

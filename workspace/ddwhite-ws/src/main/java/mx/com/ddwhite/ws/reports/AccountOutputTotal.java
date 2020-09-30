@@ -3,7 +3,7 @@ package mx.com.ddwhite.ws.reports;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class AccountTotal implements Serializable {
+public class AccountOutputTotal implements Serializable {
 
 	/**
 	 * 
@@ -12,16 +12,16 @@ public class AccountTotal implements Serializable {
 
 	private Double quantityTotal;
 	private BigDecimal amountTotal;
-	private BigDecimal tTotal;
 	private BigDecimal sbTotal;
 	private BigDecimal ivaTotal;
+	private BigDecimal tTotal;
 
-	public AccountTotal() {
+	public AccountOutputTotal() {
 		this.quantityTotal = 0.0;
 		this.amountTotal = BigDecimal.valueOf(0);
-		this.tTotal = BigDecimal.valueOf(0);
 		this.sbTotal = BigDecimal.valueOf(0);
 		this.ivaTotal = BigDecimal.valueOf(0);
+		this.tTotal = BigDecimal.valueOf(0);
 	}
 
 	public Double getQuantityTotal() {

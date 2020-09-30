@@ -9,6 +9,8 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ReportFilterDialogComponent implements OnInit {
   searchForm: FormGroup;
   
+  reports: string[] = ['Compras', 'Ventas', 'Reimpresion Ticket'];
+  reportSelected: string;
   
   constructor(
     public dialogRef: MatDialogRef<ReportFilterDialogComponent>, 
@@ -18,11 +20,25 @@ export class ReportFilterDialogComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      report:[''],
+      startDate: [new Date()],
+      endDate: [new Date()],
+      saleId: [0]
     });
     this.searchForm.controls.startDate.disable;
     this.searchForm.controls.endDate.disable;
+  }
+
+  onChange(value: string){
+    this.reportSelected = value;
+  }
+
+  showDates(): boolean {
+    return this.reportSelected && this.reportSelected !== 'Reimpresion Ticket';
+  }
+
+  showTicketId(): boolean {
+    return this.reportSelected && this.reportSelected === 'Reimpresion Ticket';
   }
 
   search() {

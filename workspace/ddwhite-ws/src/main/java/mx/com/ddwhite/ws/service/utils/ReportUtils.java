@@ -7,8 +7,9 @@ import java.util.List;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.reports.AccountInput;
+import mx.com.ddwhite.ws.reports.AccountInputTotal;
 import mx.com.ddwhite.ws.reports.AccountOutput;
-import mx.com.ddwhite.ws.reports.AccountTotal;
+import mx.com.ddwhite.ws.reports.AccountOutputTotal;
 
 public class ReportUtils {
 	
@@ -17,8 +18,8 @@ public class ReportUtils {
 	 * @param outs to totalizing
 	 * @return AccountTotal outs
 	 */
-	public static AccountTotal getTotalOut(List<AccountOutput> outs) {
-		final AccountTotal at = new AccountTotal();
+	public static AccountOutputTotal getTotalOut(List<AccountOutput> outs) {
+		final AccountOutputTotal at = new AccountOutputTotal();
 		outs.forEach( o -> {
 			at.setQuantityTotal( at.getQuantityTotal() + o.getQuantity() );
 			at.setAmountTotal( at.getAmountTotal().add(o.getCost()) );
@@ -34,14 +35,14 @@ public class ReportUtils {
 	 * @param ins to totalizing
 	 * @return AccountTotal ins
 	 */
-	public static AccountTotal getTotalIn(List<AccountInput> ins) {
-		final AccountTotal at = new AccountTotal();
+	public static AccountInputTotal getTotalIn(List<AccountInput> ins) {
+		final AccountInputTotal at = new AccountInputTotal();
 		ins.forEach( i -> {
 			at.setQuantityTotal( at.getQuantityTotal() + i.getQuantity() );
-			at.setAmountTotal( at.getAmountTotal().add(i.getPrice()) );
 			at.settTotal(at.gettTotal().add(i.getTotal()));
 			at.setSbTotal(at.getSbTotal().add(i.getSubTotal()));
 			at.setIvaTotal(at.getIvaTotal().add(i.getIva()));
+			at.setGanancia(at.getGanancia().add(i.getGanancia()));
 		});
 		return at;
 	}

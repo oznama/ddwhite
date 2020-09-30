@@ -37,13 +37,28 @@ export class HeaderComponent implements OnInit {
     this.reportService.getWarehouseCSV('sku').subscribe(data => this.exportFile(data, 'almacen_'));
   }
 
-  openDialogProductSearch() {
+  openDialogReport() {
     const dialogRef = this.dialog.open(ReportFilterDialogComponent, { data: 'datefilter' });
     dialogRef.afterClosed().subscribe( result =>{
       if(result && result.data){
         const startDate = result.data.startDate;
         const endDate = result.data.endDate;
-        this.reportService.getGeneralCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'general_'));
+        const report = result.data.report;
+        const saleId = result.data.saleId;
+        switch (report) {
+          case "Compras":
+            this.reportService.getPurchasesCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'compras_'));
+            break;
+          case "Ventas":
+            this.reportService.getSalesCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'ventas_'));
+            break;
+          case "Reimpresion Ticket":
+            this.reportService.reprintTicket(saleId).subscribe(data => console.log(data));
+            break;
+          default:
+            this.reportService.getGeneralCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'general_'));
+            break;
+        }
       }
     });
   }
@@ -58,11 +73,7 @@ export class HeaderComponent implements OnInit {
     */
     const userId = +window.localStorage.getItem('userId');
     const startDate = new Date(window.localStorage.getItem('sessionStart'));
-    this.reportService.printCashout(userId, startDate, new Date()).subscribe(data => {
-      console.log(data);
-    }, error => {
-      console.error(error);
-    });
+    this.reportService.printCashout(userId, startDate, new Date()).subscribe(data => console.log(data));
   }
 
   private exportFile(data: ArrayBuffer, name: string){

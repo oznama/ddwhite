@@ -33,6 +33,18 @@ public class ReportController {
 		return service.getReportGeneralInCSV(startDate, endDate);
 	}
 	
+	@GetMapping("/purchases/csv")
+	public String getPurchasesCSV(@RequestParam(value = "startDate", required = true) Date startDate, 
+			@RequestParam(value = "endDate", required = true) Date endDate) {
+		return service.getReportPurchasesInCSV(startDate, endDate);
+	}
+	
+	@GetMapping("/sales/csv")
+	public String getSalesCSV(@RequestParam(value = "startDate", required = true) Date startDate, 
+			@RequestParam(value = "endDate", required = true) Date endDate) {
+		return service.getReportSalesInCSV(startDate, endDate);
+	}
+	
 	@GetMapping("/warehouse/csv")
 	public String getWarehouseCSV(Sort sort) {
 		return service.getWarehouseInCSV(sort);

@@ -28,4 +28,16 @@ export class ApiReportService {
     return this.http.get<Cashout>(this.context + '/print/cashout?userId='+ userId +'&startDate='+ startDate +'&endDate='+ endDate);
   }
 
+  getPurchasesCSV(startDate: string, endDate: string) : Observable<ArrayBuffer> {
+    return this.http.get(this.context + '/purchases/csv?startDate='+ startDate +'&endDate='+ endDate, responseTypeArrayBuffer);
+  }
+
+  getSalesCSV(startDate: string, endDate: string) : Observable<ArrayBuffer> {
+    return this.http.get(this.context + '/sales/csv?startDate='+ startDate +'&endDate='+ endDate, responseTypeArrayBuffer);
+  }
+
+  reprintTicket(saleId: number) : Observable<ArrayBuffer> {
+    return this.http.get(this.context + '/reprint/ticket?saleId='+ saleId, responseTypeArrayBuffer);
+  }
+
 }

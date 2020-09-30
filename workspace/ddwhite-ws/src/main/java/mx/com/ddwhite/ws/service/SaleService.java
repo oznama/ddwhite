@@ -48,6 +48,7 @@ public class SaleService {
 			persistDetail(saleDto.getDetail(), sale.getId());
 			persistPayment(saleDto.getPayments(), sale.getId());
 			saleDto.setId(sale.getId());
+			saleDto.setDateCreated(sale.getDateCreated());
 			// Manda a imprimir el ticket
 			ticketPrintService.ticket(saleDto);
 			return saleDto;

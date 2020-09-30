@@ -12,21 +12,21 @@ public class ReportGeneral implements Serializable {
 
 	private Totals totals;
 
-	private AccountTotal totalOut;
+	private AccountOutputTotal totalOut;
 	private List<AccountOutput> outputs;
 
-	private AccountTotal totalIn;
+	private AccountInputTotal totalIn;
 	private List<AccountInput> inputs;
 
 	public ReportGeneral() {
 		totals = new Totals();
 	}
 
-	public AccountTotal getTotalOut() {
+	public AccountOutputTotal getTotalOut() {
 		return totalOut;
 	}
 
-	public void setTotalOut(AccountTotal totalOut) {
+	public void setTotalOut(AccountOutputTotal totalOut) {
 		this.totalOut = totalOut;
 	}
 
@@ -38,11 +38,11 @@ public class ReportGeneral implements Serializable {
 		this.outputs = outputs;
 	}
 
-	public AccountTotal getTotalIn() {
+	public AccountInputTotal getTotalIn() {
 		return totalIn;
 	}
 
-	public void setTotalIn(AccountTotal totalIn) {
+	public void setTotalIn(AccountInputTotal totalIn) {
 		this.totalIn = totalIn;
 	}
 

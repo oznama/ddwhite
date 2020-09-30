@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.ProductInventory;
 import mx.com.ddwhite.ws.reports.AccountInput;
+import mx.com.ddwhite.ws.reports.AccountInputTotal;
 import mx.com.ddwhite.ws.reports.AccountOutput;
-import mx.com.ddwhite.ws.reports.AccountTotal;
+import mx.com.ddwhite.ws.reports.AccountOutputTotal;
 import mx.com.ddwhite.ws.reports.Cashout;
 import mx.com.ddwhite.ws.reports.ReportGeneral;
 import mx.com.ddwhite.ws.reports.Totals;
@@ -66,13 +67,37 @@ public class ReportService {
 		builder.append( ReportUtils.ExportListToCSV(true, general.getInputs(), AccountInput.class) );
 		builder.append(GeneralConstants.LINE_BREAK);
 		builder.append("TOTAL COMPRAS-GASTOS").append(GeneralConstants.LINE_BREAK);
-		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotalOut(), AccountTotal.class) );
+		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotalOut(), AccountOutputTotal.class) );
 		builder.append(GeneralConstants.LINE_BREAK);
 		builder.append("TOTAL VENTAS").append(GeneralConstants.LINE_BREAK);
-		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotalIn(), AccountTotal.class) );
+		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotalIn(), AccountInputTotal.class) );
 		builder.append(GeneralConstants.LINE_BREAK);
 		builder.append("DIFERENCIA").append(GeneralConstants.LINE_BREAK);
 		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotals(), Totals.class) );
+		return builder.toString();
+	}
+	
+	public String getReportPurchasesInCSV(Date startDate, Date endDate) {
+		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
+		endDate = GenericUtils.plusDay(endDate, 1);
+		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
+		ReportGeneral general = getReportGeneral(strStartDate, strEndDate);
+		StringBuilder builder = new StringBuilder();
+		builder.append( ReportUtils.ExportListToCSV(true, general.getOutputs(), AccountOutput.class) );
+		builder.append(GeneralConstants.LINE_BREAK);
+		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotalOut(), AccountOutputTotal.class) );
+		return builder.toString();
+	}
+	
+	public String getReportSalesInCSV(Date startDate, Date endDate) {
+		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
+		endDate = GenericUtils.plusDay(endDate, 1);
+		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
+		ReportGeneral general = getReportGeneral(strStartDate, strEndDate);
+		StringBuilder builder = new StringBuilder();
+		builder.append( ReportUtils.ExportListToCSV(true, general.getInputs(), AccountInput.class) );
+		builder.append(GeneralConstants.LINE_BREAK);
+		builder.append( ReportUtils.ExportObjectToCSV(true, general.getTotalIn(), AccountInputTotal.class) );
 		return builder.toString();
 	}
 	
@@ -111,7 +136,6 @@ public class ReportService {
 		return cashoutService.getCashout(startDate, endDate);
 	}
 	
-	@Deprecated
 	public Cashout getCashout(Date startDate, Date endDate) {
 		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);

@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -34,5 +35,8 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 	
 	@Query("SELECT DISTINCT p.unity FROM Purchase p WHERE p.product.id = :productId")
 	List<Long> findTypesProduct(@Param("productId") Long productId);
+	
+	@Query("SELECT p.cost FROM Purchase p WHERE p.product.id = :productId AND p.unity = :unity AND p.dateCreated < :date ORDER BY p.dateCreated DESC")
+	List<BigDecimal> findCosts(@Param("productId") Long productId, @Param("unity") Long unity, @Param("date") String date);
 
 }

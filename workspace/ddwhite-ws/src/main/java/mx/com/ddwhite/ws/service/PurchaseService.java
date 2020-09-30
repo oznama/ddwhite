@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -127,6 +128,16 @@ public class PurchaseService {
 	
 	public void saveReasign(PurchaseReasignDto purchaseReasignDto) {
 		purchaseReasignService.create(purchaseReasignDto);
+	}
+	
+	public BigDecimal getCostByProductAndDate(Long productId, Long unity, String date) {
+		try {
+			return repository.findCosts(productId, unity, date).get(0);
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.err.println(e.getMessage());
+			return BigDecimal.ZERO;
+		}
 	}
 	
 	private PurchaseDto setPurchaseDto(Purchase purchase) {

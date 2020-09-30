@@ -29,6 +29,8 @@ public class AccountInputService {
 	private UserService userService;
 	@Autowired
 	private CatalogService catalogService;
+	@Autowired
+	private PurchaseService purchaseService;
 	
 	public List<AccountInput> getInputs(String startDate, String endDate){
 		final List<AccountInput> lstAccIn = new ArrayList<>();
@@ -66,8 +68,10 @@ public class AccountInputService {
 		ai.setUnityDesc(catalogService.findById(detailDto.getUnity()).getName());
 		ai.setNumPiece(detailDto.getNumPiece());
 		ai.setQuantity(detailDto.getQuantity());
+		ai.setCost(purchaseService.getCostByProductAndDate(detailDto.getProductId(), detailDto.getUnity(), saleDto.getDateCreated()));
 		ai.setPrice(detailDto.getPrice());
 		ai.setTotal( ai.getPrice().multiply(BigDecimal.valueOf(ai.getQuantity())).setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN) );
+		ai.setGanancia( ai.getTotal().subtract( ai.getCost().multiply(BigDecimal.valueOf(ai.getQuantity()))).setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN));
 		ai.setSubTotal( ai.getTotal().divide(GeneralConstants.TAX, GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
 		ai.setIva(ai.getTotal().subtract(ai.getSubTotal()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
 		ai.setDate(saleDto.getDateCreated());

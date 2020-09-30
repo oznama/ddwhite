@@ -17,8 +17,10 @@ public class AccountInput implements Serializable {
 	private String unityDesc;
 	private Integer numPiece;
 	private Double quantity;
+	private BigDecimal cost;
 	private BigDecimal price;
 	private BigDecimal total;
+	private BigDecimal ganancia;
 	private BigDecimal subTotal;
 	private BigDecimal iva;
 	private String date;
@@ -117,6 +119,22 @@ public class AccountInput implements Serializable {
 
 	public void setDate(String date) {
 		this.date = date;
+	}
+
+	public BigDecimal getCost() {
+		return cost;
+	}
+
+	public void setCost(BigDecimal cost) {
+		this.cost = cost;
+	}
+
+	public BigDecimal getGanancia() {
+		return ganancia;
+	}
+
+	public void setGanancia(BigDecimal ganancia) {
+		this.ganancia = ganancia;
 	}
 
 }

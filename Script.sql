@@ -258,3 +258,13 @@ update compras set num_piezas = null where unidad = 2;
 
 select num_piezas from venta_detalle where unidad = 2;
 update venta_detalle set num_piezas = null where unidad = 2;
+
+select fecha_registro from venta_total where id = 15; ## 2020-09-16 20:33:55.0
+select * from venta_detalle where id_venta  = 15;
+
+select * from 
+
+##select id_venta from venta_detalle where id_producto = 8;
+
+select id, costo, unidad from compras where id_producto = 8  order by fecha_registro desc;
+select id, costo, unidad from compras where id_producto = 8 and fecha_registro < '2020-09-16 20:33:55.0' order by fecha_registro desc;
