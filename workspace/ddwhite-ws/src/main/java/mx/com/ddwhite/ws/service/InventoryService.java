@@ -41,9 +41,8 @@ public class InventoryService extends InventoryUtils {
 	@Autowired
 	private PurchaseReasingService purchaseReasignService;
 
-	public Page<ProductInventory> findInventory(Pageable pageable) {
-		Page<Product> products = productRepository.findAll(pageable);
-		return new PageImpl<>(setPurchasesToProducts(products.getContent()), pageable, productRepository.count());
+	public Page<ProductInventory> findInventory(Pageable pageable, String sku, String name) {
+		return new PageImpl<>(setPurchasesToProducts(checkWhatList(pageable, sku, name).getContent()), pageable, productRepository.count());
 	}
 
 	public Page<InventoryDto> getInventory(Pageable pageable) {
@@ -68,8 +67,8 @@ public class InventoryService extends InventoryUtils {
 		return null;
 	}
 	
-	public List<ProductInventory> findWarehouse(Sort sort){
-		List<ProductInventory> list = findInventory();
+	public List<ProductInventory> findWarehouse(Sort sort, String sku, String name){
+		List<ProductInventory> list = findInventory(sku, name);
 		list.forEach(product -> {
 			Double quantity = product.getInventory().getQuantity();
 			Double saled = sumSaleQuantity(
@@ -83,15 +82,15 @@ public class InventoryService extends InventoryUtils {
 		return list;
 	}
 	
-	public Page<ProductInventory> findForSale(Pageable pageable) {
-		List<ProductInventory> list = findWarehouse(pageable.getSort());
+	public Page<ProductInventory> findForSale(Pageable pageable, String sku, String name) {
+		List<ProductInventory> list = findWarehouse(pageable.getSort(), sku, name);
 		List<ProductInventory> listForSale = list.stream().filter(p -> p.getInventory().getQuantity() > 0)
 				.collect(Collectors.toList());
 		return pagging(listForSale, pageable);
 	}
 	
-	private List<ProductInventory> findInventory() {
-		List<Product> products = productRepository.findAll();
+	private List<ProductInventory> findInventory(String sku, String name) {
+		List<Product> products = checkWhatList(sku, name);
 		return setPurchasesToProducts(products);
 	}
 	
@@ -191,4 +190,28 @@ public class InventoryService extends InventoryUtils {
 		return quantityReasigned;
 	}
 	
+	
+	private Page<Product> checkWhatList(Pageable pageable, String sku, String name){
+		if( sku != null && name != null ) {
+			return new PageImpl<>(productRepository.findBySkuAndName(sku, name));
+		} else if ( sku != null) {;
+			return new PageImpl<>(productRepository.findBySku(sku));
+		} else if ( name != null ) {
+			return new PageImpl<>(productRepository.findByName(name));
+		} else {
+			return productRepository.findAll(pageable);
+		}
+	}
+	
+	private List<Product> checkWhatList(String sku, String name){
+		if( sku != null && name != null ) {
+			return productRepository.findBySkuAndName("%" + sku + "%", "%" + name + "%");
+		} else if ( sku != null) {
+			return productRepository.findBySku("%" + sku + "%");
+		} else if ( name != null ) {
+			return productRepository.findByName("%" + name + "%");
+		} else {
+			return productRepository.findAll();
+		}
+	}
 }

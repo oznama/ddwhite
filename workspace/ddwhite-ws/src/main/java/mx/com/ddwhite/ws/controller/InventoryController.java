@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.ddwhite.ws.dto.InventoryDto;
@@ -32,15 +33,19 @@ public class InventoryController {
 	}
 	
 	@GetMapping("/find/product")
-	public Page<ProductInventory> findInventory(Pageable pageable) {
-		return service.findInventory(pageable);
+	public Page<ProductInventory> findInventory(
+			@RequestParam(value = "sku", required = false) String sku, 
+			@RequestParam(value = "name", required = false) String name, 
+			Pageable pageable) {
+		return service.findInventory(pageable, sku, name);
 	}
 	
 	@GetMapping("/find/sale")
-	public Page<ProductInventory> findForSale(Pageable pageable) {
-		return service.findForSale(pageable);
+	public Page<ProductInventory> findForSale(
+			@RequestParam(value = "sku", required = false) String sku, 
+			@RequestParam(value = "name", required = false) String name, 
+			Pageable pageable) {
+		return service.findForSale(pageable, sku, name);
 	}
-
-	
 
 }

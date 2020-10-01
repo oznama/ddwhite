@@ -8,9 +8,11 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.ddwhite.ws.dto.ProductDto;
@@ -67,6 +69,21 @@ public class ProductController implements GenericController<ProductDto> {
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		}
+	}
+	
+	@GetMapping("/findBySku")
+	public List<ProductDto> findBySku(@RequestParam(value = "sku", required = true) String sku) {
+		return service.findBySku(sku);
+	}
+	
+	@GetMapping("/findByName")
+	public List<ProductDto> findByName(@RequestParam(value = "name", required = true) String name) {
+		return service.findByName(name);
+	}
+	
+	@GetMapping("/findBySkuAndName")
+	public List<ProductDto> findBySkuAndName(@RequestParam(value = "sku", required = true) String sku, @RequestParam(value = "name", required = true) String name) {
+		return service.findBySkuAndName(sku, name);
 	}
 	
 }

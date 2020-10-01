@@ -110,7 +110,7 @@ public class ReportService {
 	}
 	
 	public List<Warehouse> getWarehouse(Sort sort) {
-		List<ProductInventory> productsInventory = invetoryService.findWarehouse(sort);
+		List<ProductInventory> productsInventory = invetoryService.findWarehouse(sort, null, null);
 		final List<Warehouse> warehouses = new ArrayList<>();
 		productsInventory.forEach(pi -> {
 			Warehouse wh = new Warehouse();

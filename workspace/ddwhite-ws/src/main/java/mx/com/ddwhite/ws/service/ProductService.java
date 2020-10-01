@@ -32,20 +32,12 @@ public class ProductService {
 	public Page<ProductDto> findAll(Pageable pageable) {
 		final List<ProductDto> productsDto = new ArrayList<>();
 		Page<Product> products = repository.findAll(pageable);
-		products.forEach( product -> {
-			ProductDto productDto = new ProductDto();
-			BeanUtils.copyProperties(product, productDto);
-			productDto.setGroupDesc(catalogService.findById(productDto.getGroup()).getName());
-			productsDto.add(productDto);
-		});
+		products.forEach( product -> productsDto.add(mappingProd(product)));
 		return new PageImpl<>(productsDto, pageable, repository.count());
 	}
 	
 	public ProductDto findById(Long id) {
-		Product product = repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id));
-		ProductDto productDto = new ProductDto();
-		BeanUtils.copyProperties(product, productDto);
-		return productDto;
+		return mappingProd(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id)));
 	}
 	
 	public ProductDto create(ProductDto productDto) {
@@ -81,6 +73,31 @@ public class ProductService {
 		});
 		repository.saveAll(products);
 		repository.flush();
+	}
+	
+	public List<ProductDto> findBySku(String sku) {
+		return mappingList(repository.findBySku("%" + sku + "%"));
+	}
+	
+	public List<ProductDto> findByName(String name) {
+		return mappingList(repository.findByName("%" + name + "%"));
+	}
+	
+	public List<ProductDto> findBySkuAndName(String sku, String name) {
+		return mappingList(repository.findBySkuAndName("%" + sku + "%", "%" + name + "%"));
+	}
+	
+	private List<ProductDto> mappingList(List<Product> products){
+		final List<ProductDto> productsDto = new ArrayList<>();
+		products.forEach( product -> productsDto.add(mappingProd(product)));
+		return productsDto;
+	}
+	
+	private ProductDto mappingProd(Product product) {
+		ProductDto productDto = new ProductDto();
+		BeanUtils.copyProperties(product, productDto);
+		productDto.setGroupDesc(catalogService.findById(productDto.getGroup()).getName());
+		return productDto;
 	}
 
 }

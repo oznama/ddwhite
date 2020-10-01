@@ -34,8 +34,9 @@ export class ApiProductService {
     return this.http.delete<any>(this.context + '/delete/' + id);
   }
 
-  getInventory(page: number, size: number, sort: string) : Observable<ProductPageable> {
-    return this.http.get<ProductPageable>(baseUrl + '/inventory/find/product?page='+page+'&size='+size+'&sort='+sort);
+  getInventory(page: number, size: number, sort: string, sku: string, name: string) : Observable<ProductPageable> {
+    const url = '/inventory/find/product?page='+page+'&size='+size+'&sort='+sort +(sku ? '&sku='+sku : '') +(name ? '&name='+name : '');
+    return this.http.get<ProductPageable>(baseUrl + url);
   }
 
   /*
@@ -44,8 +45,22 @@ export class ApiProductService {
   }
   */
 
-  getProductsForSale(page: number, size: number, sort: string) : Observable<ProductPageable> {
-    return this.http.get<ProductPageable>(baseUrl + '/inventory/find/sale?page='+page+'&size='+size+'&sort='+sort);
+  getProductsForSale(page: number, size: number, sort: string, sku: string, name: string) : Observable<ProductPageable> {
+    const url = '/inventory/find/sale?page='+page+'&size='+size+'&sort='+sort +(sku ? '&sku='+sku : '') +(name ? '&name='+name : '');
+    return this.http.get<ProductPageable>(baseUrl + url);
+  }
+
+
+  findBySku(sku: string): Observable<Product[]> {
+    return this.http.get<Product[]>(this.context + '/findBySku?sku=' + sku);
+  }
+
+  findByName(name: string): Observable<Product[]> {
+    return this.http.get<Product[]>(this.context + '/findByName?name=' + name);
+  }
+
+  findBySkuAndName(sku: string, name: string): Observable<Product[]> {
+    return this.http.get<Product[]>(this.context + '/findBySkuAndName?sku=' + sku + '&name=' + name);
   }
 
 }

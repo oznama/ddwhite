@@ -36,13 +36,13 @@ export class ProductDialogSearchComponent implements OnInit {
 
   loadProducts(page: number): void{
     if( this.data.mode === 'inventory' ){
-      this.apiService.getInventory(page, pageSize, this.sort).subscribe( data => {
+      this.apiService.getInventory(page, pageSize, this.sort, null, null).subscribe( data => {
         this.totalPage = data.totalPages;
         this.products = of(data.content);
         this.productFiltred$ = of(data.content);
       });
     } else if( this.data.mode === 'sale' ){
-      this.apiService.getProductsForSale(page, pageSize, this.sort).subscribe( data => {
+      this.apiService.getProductsForSale(page, pageSize, this.sort, null, null).subscribe( data => {
         this.totalPage = data.totalPages;
         this.products = of(data.content);
         this.productFiltred$ = of(data.content);
@@ -63,6 +63,10 @@ export class ProductDialogSearchComponent implements OnInit {
     }
   }
 
+  /*
+   * Este metodo por el momento queda
+   * descartado, se hara busqueda directa
+   */
   doFilter(): void{
     var sku = this.searchForm.get('sku').value;
     var name = this.searchForm.get('name').value;
@@ -90,9 +94,30 @@ export class ProductDialogSearchComponent implements OnInit {
     }
   }
 
+  filter(): void{
+    var sku = this.searchForm.get('sku').value;
+    var name = this.searchForm.get('name').value;
+    if(sku === '') sku = null;
+    if(name === '') name = null;
+    if( this.data.mode === 'inventory' ){
+        this.apiService.getInventory(this.page, pageSize, this.sort, sku, name).subscribe( data => this.productFiltred$ = of(data.content));
+      } else if( this.data.mode === 'sale' ){
+        this.apiService.getProductsForSale(this.page, pageSize, this.sort, sku, name).subscribe( data => this.productFiltred$ = of(data.content));
+      } else if( this.data.mode == 'all' ){
+        if( sku && name ){
+          this.apiService.findBySkuAndName(sku, name).subscribe( data => this.productFiltred$ = of(data));
+        } else if( sku ){
+          this.apiService.findBySku(sku).subscribe( data => this.productFiltred$ = of(data));
+        } else if( name ){
+          this.apiService.findByName(name).subscribe( data => this.productFiltred$ = of(data));
+        }
+    }
+    this.totalPage = 1;
+  }
+
   clearFilter(): void{
     this.searchForm.reset();
-    this.productFiltred$ = this.products;
+    this.loadProducts(this.page);
   }
 
   select(product: Product): void{
