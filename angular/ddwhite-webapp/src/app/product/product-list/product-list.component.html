@@ -40,7 +40,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let product of productsFiltered$ | async">
+        <tr *ngFor="let product of products | async">
           <td class="hidden">{{product.id}}</td>
           <td>{{product.sku}}</td>
           <td>{{product.nameLarge}}</td>

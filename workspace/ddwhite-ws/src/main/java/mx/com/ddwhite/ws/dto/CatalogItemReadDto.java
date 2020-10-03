@@ -35,4 +35,19 @@ public class CatalogItemReadDto implements java.io.Serializable {
 		this.description = description;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("CatalogItemReadDto [id=");
+		builder.append(id);
+		builder.append(", name=");
+		builder.append(name);
+		builder.append(", description=");
+		builder.append(description);
+		builder.append("]");
+		return builder.toString();
+	}
+	
+	
+
 }

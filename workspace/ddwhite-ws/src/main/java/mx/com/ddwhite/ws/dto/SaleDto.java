@@ -116,5 +116,5 @@ public class SaleDto implements Serializable {
 	public void setPayments(List<SalePaymentDto> payments) {
 		this.payments = payments;
 	}
-
+	
 }

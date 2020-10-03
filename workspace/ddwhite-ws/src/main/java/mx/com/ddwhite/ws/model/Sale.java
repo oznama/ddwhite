@@ -2,6 +2,7 @@ package mx.com.ddwhite.ws.model;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.sql.Timestamp;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,6 +10,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Table(name = "venta_total")
@@ -37,7 +40,8 @@ public class Sale implements Serializable {
 	@Column(name = "folio_factura")
 	private String invoice;
 	@Column(name = "fecha_registro", insertable = false, updatable = false)
-	private String dateCreated;
+	@CreationTimestamp
+	private Timestamp dateCreated;
 
 	public Long getId() {
 		return id;
@@ -103,11 +107,11 @@ public class Sale implements Serializable {
 		this.invoice = invoice;
 	}
 
-	public String getDateCreated() {
+	public Timestamp getDateCreated() {
 		return dateCreated;
 	}
 
-	public void setDateCreated(String dateCreated) {
+	public void setDateCreated(Timestamp dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 

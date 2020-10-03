@@ -16,7 +16,6 @@ export class ProductListComponent implements OnInit {
 
   searchForm: FormGroup;
   products: Observable<Product[]>;
-  productsFiltered$: Observable<Product[]>;
 
   page: number = 0;
   sort: string = 'sku,asc';
@@ -42,7 +41,6 @@ export class ProductListComponent implements OnInit {
     this.apiService.get(page, pageSize, this.sort).subscribe( data => {
       this.totalPage = data.totalPages;
       this.products = of(data.content);
-      this.productsFiltered$ = of(data.content);
     });
   }
 
@@ -79,33 +77,19 @@ export class ProductListComponent implements OnInit {
   doFilter(): void{
     var sku = this.searchForm.get('sku').value;
     var name = this.searchForm.get('name').value;
-    if(sku || name){
-      if( sku && name ){
-        this.productsFiltered$ = this.products.pipe(map( 
-          items => items.filter( 
-            product => (product.sku.toLowerCase().includes(sku) 
-                      && product.nameLarge.toLowerCase().includes(name))
-          )
-        ));
-      } else if( sku ){
-        this.productsFiltered$ = this.products.pipe(map( 
-          items => items.filter( 
-            product => product.sku.toLowerCase().includes(sku)
-          )
-        ));
-      } else if( name ){
-        this.productsFiltered$ = this.products.pipe(map( 
-          items => items.filter( 
-            product => product.nameLarge.toLowerCase().includes(name)
-          )
-        ));
-      }
+    if( sku && name ){
+      this.apiService.findBySkuAndName(sku, name).subscribe( data => this.products = of(data));
+    } else if( sku ){
+      this.apiService.findBySku(sku).subscribe( data => this.products = of(data));
+    } else if( name ){
+      this.apiService.findByName(name).subscribe( data => this.products = of(data));
     }
+    this.totalPage = 1;
   }
 
   clearFilter(): void{
     this.searchForm.reset();
-    this.productsFiltered$ = this.products;
+    this.loadProducts(this.page);
   }
 
 }

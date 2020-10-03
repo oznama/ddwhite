@@ -10,6 +10,7 @@ drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
 drop table if exists usuarios;
+drop table if exists roles_privilegios;
 drop table if exists privilegios;
 drop table if exists roles;
 drop table if exists catalogos;

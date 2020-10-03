@@ -1,5 +1,9 @@
 <div class="div-sale" *ngIf="privileges.canSale()">
 
+	<div class="wrapper">
+		<button mat-raised-button color="warn" type="button" *ngIf="isToPay()" (click)="reset()">Limpiar compra</button>
+	</div>
+
 	<div class="div-sale-child">
 
 		  <div class="div-total">

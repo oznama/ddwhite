@@ -13,7 +13,6 @@ import { ApiProductService, pageSize } from './../../service/module.service';
 export class ProductDialogSearchComponent implements OnInit {
   searchForm: FormGroup;
   products: Observable<Product[]>;
-  productFiltred$: Observable<Product[]>;
 
   page: number = 0;
   sort: string = 'sku,asc';
@@ -39,19 +38,16 @@ export class ProductDialogSearchComponent implements OnInit {
       this.apiService.getInventory(page, pageSize, this.sort, null, null).subscribe( data => {
         this.totalPage = data.totalPages;
         this.products = of(data.content);
-        this.productFiltred$ = of(data.content);
       });
     } else if( this.data.mode === 'sale' ){
       this.apiService.getProductsForSale(page, pageSize, this.sort, null, null).subscribe( data => {
         this.totalPage = data.totalPages;
         this.products = of(data.content);
-        this.productFiltred$ = of(data.content);
       });
     } else if( this.data.mode == 'all' ){
       this.apiService.get(page, pageSize, this.sort).subscribe( data => {
         this.totalPage = data.totalPages;
         this.products = of(data.content);
-        this.productFiltred$ = of(data.content);
       });
     }
   }
@@ -63,53 +59,22 @@ export class ProductDialogSearchComponent implements OnInit {
     }
   }
 
-  /*
-   * Este metodo por el momento queda
-   * descartado, se hara busqueda directa
-   */
   doFilter(): void{
-    var sku = this.searchForm.get('sku').value;
-    var name = this.searchForm.get('name').value;
-    if(sku || name){
-      if( sku && name ){
-        this.productFiltred$ = this.products.pipe(map( 
-          items => items.filter( 
-            product => (product.sku.toLowerCase().includes(sku) 
-                      && product.nameLarge.toLowerCase().includes(name))
-          )
-        ));
-      } else if( sku ){
-        this.productFiltred$ = this.productFiltred$.pipe(map( 
-          items => items.filter( 
-            product => product.sku.toLowerCase().includes(sku)
-          )
-        ));
-      } else if( name ){
-        this.productFiltred$ = this.products.pipe(map( 
-          items => items.filter( 
-            product => product.nameLarge.toLowerCase().includes(name)
-          )
-        ));
-      }
-    }
-  }
-
-  filter(): void{
-    var sku = this.searchForm.get('sku').value;
-    var name = this.searchForm.get('name').value;
+    var sku = this.searchForm.controls.sku.value;
+    var name = this.searchForm.controls.name.value;
     if(sku === '') sku = null;
     if(name === '') name = null;
     if( this.data.mode === 'inventory' ){
-        this.apiService.getInventory(this.page, pageSize, this.sort, sku, name).subscribe( data => this.productFiltred$ = of(data.content));
+        this.apiService.getInventory(this.page, pageSize, this.sort, sku, name).subscribe( data => this.products = of(data.content));
       } else if( this.data.mode === 'sale' ){
-        this.apiService.getProductsForSale(this.page, pageSize, this.sort, sku, name).subscribe( data => this.productFiltred$ = of(data.content));
+        this.apiService.getProductsForSale(this.page, pageSize, this.sort, sku, name).subscribe( data => this.products = of(data.content));
       } else if( this.data.mode == 'all' ){
         if( sku && name ){
-          this.apiService.findBySkuAndName(sku, name).subscribe( data => this.productFiltred$ = of(data));
+          this.apiService.findBySkuAndName(sku, name).subscribe( data => this.products = of(data));
         } else if( sku ){
-          this.apiService.findBySku(sku).subscribe( data => this.productFiltred$ = of(data));
+          this.apiService.findBySku(sku).subscribe( data => this.products = of(data));
         } else if( name ){
-          this.apiService.findByName(name).subscribe( data => this.productFiltred$ = of(data));
+          this.apiService.findByName(name).subscribe( data => this.products = of(data));
         }
     }
     this.totalPage = 1;

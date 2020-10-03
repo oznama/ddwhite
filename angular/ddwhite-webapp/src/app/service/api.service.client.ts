@@ -29,4 +29,12 @@ export class ApiClientService {
   delete(id: number) {
     return this.http.delete<any>(this.context + '/delete/' + id);
   }
+
+  findByRfc(rfc: string) : Observable<Client[]> {
+    return this.http.get<Client[]>(this.context + '/findByRfc?rfc=' + rfc);
+  }
+
+  findByName(fullName: string) : Observable<Client[]> {
+    return this.http.get<Client[]>(this.context + '/findByName?fullName=' + fullName);
+  }
 }

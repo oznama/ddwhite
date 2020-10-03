@@ -1,5 +1,7 @@
 package mx.com.ddwhite.ws.controller;
 
+import java.util.List;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -7,7 +9,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
@@ -64,6 +68,16 @@ public class ClientController implements GenericController<Client> {
 		repository.delete(e);
 		repository.flush();
 		return ResponseEntity.ok().build();
+	}
+	
+	@GetMapping("/findByRfc")
+	public List<Client> findByRfc(@RequestParam(value = "rfc") String rfc) {
+		return repository.findByRfc("%" + rfc.toUpperCase() + "%");
+	}
+	
+	@GetMapping("/findByName")
+	public List<Client> findByName(@RequestParam(value = "fullName") String fullName) {
+		return repository.findByFullName("%" + fullName.toUpperCase() + "%");
 	}
 
 }

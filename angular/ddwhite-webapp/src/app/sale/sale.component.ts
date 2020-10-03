@@ -238,7 +238,6 @@ export class SaleComponent implements OnInit {
       this.sale.id = data;
         //this.openPrintTicket();
         //this.newTagTicket();
-      this.reset();
       this.alertService.success('Venta completada', alertOptions);
     }, error => {
       this.alertService.error('La venta no ha sido registrada: ' + error.error, alertOptions);

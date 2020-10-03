@@ -39,7 +39,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let client of clientsFiltred$ | async">
+        <tr *ngFor="let client of clients | async">
           <td class="hidden">{{client.id}}</td>
           <td>{{client.rfc}}</td>
           <td>{{client.name}} {{client.lastName}} {{client.midleName}}</td>

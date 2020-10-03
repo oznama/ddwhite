@@ -192,10 +192,10 @@ public class TicketPrintService {
 		content.append(lineFormatted(separator(), AlignedEmun.CENTERED));
 
 		// Total
-		if (saleDto.getClientId() != null) {
-			content.append(lineFormatted("SUBTOTAL: $ " + saleDto.getSubTotal(), AlignedEmun.RIGHT));
-			content.append(lineFormatted("IVA: $ " + saleDto.getTax(), AlignedEmun.RIGHT));
-		}
+//		if (saleDto.getClientId() != null) {
+//			content.append(lineFormatted("SUBTOTAL: $ " + saleDto.getSubTotal(), AlignedEmun.RIGHT));
+//			content.append(lineFormatted("IVA: $ " + saleDto.getTax(), AlignedEmun.RIGHT));
+//		}
 		content.append(lineFormatted("TOTAL M.N. $ " + saleDto.getTotal(), AlignedEmun.RIGHT));
 		// Payments
 		saleDto.getPayments().forEach(payment -> {
@@ -220,8 +220,9 @@ public class TicketPrintService {
 			content.append(lineFormatted("o en " + companyDataEmail.getDescription(), AlignedEmun.CENTERED));
 		if (companyDataWebsite != null && companyDataWebsite.getDescription() != null)
 			content.append(lineFormatted("visite " + companyDataWebsite.getDescription(), AlignedEmun.CENTERED));
-		if (companyDataRFC != null && companyDataRFC.getDescription() != null)
+		if (companyDataRFC != null && companyDataRFC.getDescription() != null) {
 			content.append(lineFormatted(companyDataBusinessName.getDescription().toUpperCase() + " "+ companyDataRFC.getDescription().toUpperCase(), AlignedEmun.CENTERED));
+		}
 
 		content.append(GeneralConstants.LINE_BREAK);
 		return content.toString();

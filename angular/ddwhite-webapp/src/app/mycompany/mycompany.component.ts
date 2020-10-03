@@ -27,9 +27,9 @@ export class MycompanyComponent implements OnInit {
       address: ['', Validators.required],
       phone: ['', [Validators.required, Validators.pattern("[0-9]{10,}")]],
       website: [, [Validators.pattern("((https?|ftp|smtp):\/\/)?(www.)?[a-z0-9]+\.[a-z]+(\/[a-zA-Z0-9#]+\/?)*")]],
-      email: [, [Validators.pattern("[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}")]],
+      email: [, [Validators.pattern("[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}")]],
       rfc: [, [Validators.pattern("[a-zA-Z0-9]{12,13}")]],
-      bussinessName: [],
+      bussinesName: [],
       messageTicket: [],
     });
     this.loadCompanyData();
@@ -37,6 +37,7 @@ export class MycompanyComponent implements OnInit {
 
   onSubmit() {
   	var body = this.addForm.value;
+    console.log(body);
     this.apiService.update(body).subscribe( data => {
         this.alertService.success('Datos de compa&ntilde;ia guardado', alertOptions);
       }, error => {
@@ -66,7 +67,7 @@ export class MycompanyComponent implements OnInit {
               this.addForm.controls.email.setValue(value.description);
               break;
             case 'NOMBRE_FISCAL':
-              this.addForm.controls.bussinessName.setValue(value.description);
+              this.addForm.controls.bussinesName.setValue(value.description);
               break;
             case 'RFC':
               this.addForm.controls.rfc.setValue(value.description);
