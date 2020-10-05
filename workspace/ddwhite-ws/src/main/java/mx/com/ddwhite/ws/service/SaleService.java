@@ -48,7 +48,7 @@ public class SaleService {
 			persistDetail(saleDto.getDetail(), sale.getId());
 			persistPayment(saleDto.getPayments(), sale.getId());
 			saleDto.setId(sale.getId());
-			saleDto.setDateCreated(GenericUtils.dateToString(sale.getDateCreated(), GeneralConstants.FORMAT_DATE_TIME_SHORT));
+			saleDto.setDateCreated(GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME_SHORT));
 			// Manda a imprimir el ticket
 			ticketPrintService.ticket(saleDto);
 			return saleDto;

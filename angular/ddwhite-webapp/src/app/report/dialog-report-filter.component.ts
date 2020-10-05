@@ -21,8 +21,8 @@ export class ReportFilterDialogComponent implements OnInit {
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
       report:[''],
-      startDate: [new Date()],
-      endDate: [new Date()],
+      startDate: [],
+      endDate: [],
       saleId: [0]
     });
     this.searchForm.controls.startDate.disable;

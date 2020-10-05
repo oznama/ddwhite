@@ -60,9 +60,9 @@ public class AccountOutputService {
 		ao.setGroup(catGroup.getName().toUpperCase());
 		ao.setQuantity(p.getQuantity());
 		ao.setCost(p.getCost());
-		ao.setTotal( p.getCost().multiply(BigDecimal.valueOf(p.getQuantity())).setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN) );
+		ao.setTotal( p.getCost().multiply(BigDecimal.valueOf(p.getQuantity()))/*.setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN)*/);
 		ao.setSubTotal( ao.getTotal().divide(GeneralConstants.TAX, GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
-		ao.setIva(ao.getTotal().subtract(ao.getSubTotal()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
+		ao.setIva(ao.getTotal().subtract(ao.getSubTotal())/*.setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN)*/);
 		ao.setDate(p.getDateCreated());
 		return ao;
 	}
@@ -79,7 +79,7 @@ public class AccountOutputService {
 		ao.setTotal( e.getAmount() );
 		if( e.getTaxeable() ) {
 			ao.setSubTotal( e.getAmount().divide(GeneralConstants.TAX, GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
-			ao.setIva(ao.getTotal().subtract(ao.getSubTotal()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));	
+			ao.setIva(ao.getTotal().subtract(ao.getSubTotal())/*.setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN)*/);	
 		} else {
 			ao.setSubTotal( BigDecimal.ZERO );
 			ao.setIva( BigDecimal.ZERO );	

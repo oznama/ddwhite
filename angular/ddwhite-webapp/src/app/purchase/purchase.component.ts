@@ -51,6 +51,7 @@ export class PurchaseComponent implements OnInit {
 
   private setPurchase(): Purchase {
     const np = +this.purchaseForm.controls.numPiece.value;
+    const currentUnity = +this.purchaseForm.controls.unity.value;
     return <Purchase> {
       productId: this.product.id,
       productName: this.product.nameLarge,
@@ -58,9 +59,9 @@ export class PurchaseComponent implements OnInit {
       providerName: this.provider.bussinesName,
       quantity: +this.purchaseForm.controls.quantity.value,
       cost: +this.purchaseForm.controls.cost.value,
-      unity: +this.purchaseForm.controls.unity.value,
-      unityDesc: this.catalogUnity.find(c => c.id === +this.purchaseForm.controls.unity.value).name,
-      numPiece: np === 0 ? null : np,
+      unity: currentUnity,
+      unityDesc: this.catalogUnity.find(c => c.id === currentUnity).name,
+      numPiece:  (np === 0 || currentUnity !== this.boxId) ? null : np,
       userId: +window.localStorage.getItem("userId")
     };
   }
