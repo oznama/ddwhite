@@ -28,6 +28,8 @@ public class SalePayment implements Serializable {
 	private Long payment;
 	@Column(name = "monto")
 	private BigDecimal amount;
+	@Column(name = "folio_voucher")
+	private String voucherFolio;
 
 	public Long getId() {
 		return id;
@@ -59,6 +61,14 @@ public class SalePayment implements Serializable {
 
 	public void setAmount(BigDecimal amount) {
 		this.amount = amount;
+	}
+
+	public String getVoucherFolio() {
+		return voucherFolio;
+	}
+
+	public void setVoucherFolio(String voucherFolio) {
+		this.voucherFolio = voucherFolio;
 	}
 
 }

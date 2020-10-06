@@ -107,7 +107,8 @@ public class Purchase implements Serializable {
 	}
 
 	public Product getProduct() {
-		if(product == null) product = new Product();
+		if (product == null)
+			product = new Product();
 		return product;
 	}
 

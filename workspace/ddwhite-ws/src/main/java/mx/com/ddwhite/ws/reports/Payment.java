@@ -1,28 +1,19 @@
-package mx.com.ddwhite.ws.dto;
+package mx.com.ddwhite.ws.reports;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class SalePaymentDto implements Serializable {
+public class Payment implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -3115585154032132752L;
-
-	private Long id;
+	private static final long serialVersionUID = 5828519586419438702L;
+	
 	private Long saleId;
-	private Long payment;
+	private String payment;
 	private BigDecimal amount;
 	private String voucherFolio;
-
-	public Long getId() {
-		return id;
-	}
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 	public Long getSaleId() {
 		return saleId;
@@ -32,11 +23,11 @@ public class SalePaymentDto implements Serializable {
 		this.saleId = saleId;
 	}
 
-	public Long getPayment() {
+	public String getPayment() {
 		return payment;
 	}
 
-	public void setPayment(Long payment) {
+	public void setPayment(String payment) {
 		this.payment = payment;
 	}
 
@@ -55,6 +46,5 @@ public class SalePaymentDto implements Serializable {
 	public void setVoucherFolio(String voucherFolio) {
 		this.voucherFolio = voucherFolio;
 	}
-	
 
 }

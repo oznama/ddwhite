@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.controller;
 
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +15,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.ddwhite.ws.dto.PurchaseDto;
+import mx.com.ddwhite.ws.dto.PurchaseListDto;
 import mx.com.ddwhite.ws.dto.PurchaseReasignDto;
 import mx.com.ddwhite.ws.service.PurchaseService;
 
@@ -91,6 +94,17 @@ public class PurchaseController implements GenericController<PurchaseDto> {
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		}
+	}
+	
+	@GetMapping("/getList")
+	public List<PurchaseListDto> getList(@RequestParam(value = "startDate", required = true) Date startDate, 
+			@RequestParam(value = "endDate", required = true) Date endDate) {
+		return service.getList(startDate, endDate);
+	}
+	
+	@GetMapping("/getOne/{id}")
+	public PurchaseListDto getOne(@PathVariable("id") Long id) {
+		return service.getOne(id);
 	}
 
 }

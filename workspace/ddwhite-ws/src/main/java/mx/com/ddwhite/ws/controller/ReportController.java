@@ -77,5 +77,12 @@ public class ReportController {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
+	
+	@GetMapping("/payments")
+	public String payments(@RequestParam(value = "paymentId", required = false) Long paymentId,
+			@RequestParam(value = "startDate", required = false) Date startDate, 
+			@RequestParam(value = "endDate", required = false) Date endDate) {
+		return service.payments(paymentId, startDate, endDate);
+	}
 
 }

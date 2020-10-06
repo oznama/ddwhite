@@ -3,24 +3,24 @@ package mx.com.ddwhite.ws.dto;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class PurchaseDto implements Serializable {
+public class PurchaseListDto implements Serializable {
 
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = 8736913074809182382L;
+	private static final long serialVersionUID = -3171919940763715280L;
 
 	private Long id;
-	private Long userId;
-	private Long providerId;
-	private Long productId;
+	private String user;
+	private String provider;
+	private String product;
 	private Double quantity;
 	private BigDecimal cost;
 	private Long unity;
 	private String unityDesc;
 	private Integer numPiece;
 	private String dateCreated;
-	private ProductDto product;
+	private Boolean usedInSale;
 
 	public Long getId() {
 		return id;
@@ -30,28 +30,28 @@ public class PurchaseDto implements Serializable {
 		this.id = id;
 	}
 
-	public Long getUserId() {
-		return userId;
+	public String getUser() {
+		return user;
 	}
 
-	public void setUserId(Long userId) {
-		this.userId = userId;
+	public void setUser(String user) {
+		this.user = user;
 	}
 
-	public Long getProviderId() {
-		return providerId;
+	public String getProvider() {
+		return provider;
 	}
 
-	public void setProviderId(Long providerId) {
-		this.providerId = providerId;
+	public void setProvider(String provider) {
+		this.provider = provider;
 	}
 
-	public Long getProductId() {
-		return productId;
+	public String getProduct() {
+		return product;
 	}
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setProduct(String product) {
+		this.product = product;
 	}
 
 	public Double getQuantity() {
@@ -102,14 +102,12 @@ public class PurchaseDto implements Serializable {
 		this.dateCreated = dateCreated;
 	}
 
-	public ProductDto getProduct() {
-		if (product == null)
-			product = new ProductDto();
-		return product;
+	public Boolean getUsedInSale() {
+		return usedInSale;
 	}
 
-	public void setProduct(ProductDto product) {
-		this.product = product;
+	public void setUsedInSale(Boolean usedInSale) {
+		this.usedInSale = usedInSale;
 	}
 
 }

@@ -3,6 +3,7 @@ package mx.com.ddwhite.ws.service;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -10,14 +11,19 @@ import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.ProductInventory;
+import mx.com.ddwhite.ws.model.Sale;
+import mx.com.ddwhite.ws.model.SalePayment;
 import mx.com.ddwhite.ws.reports.AccountInput;
 import mx.com.ddwhite.ws.reports.AccountInputTotal;
 import mx.com.ddwhite.ws.reports.AccountOutput;
 import mx.com.ddwhite.ws.reports.AccountOutputTotal;
 import mx.com.ddwhite.ws.reports.Cashout;
+import mx.com.ddwhite.ws.reports.Payment;
 import mx.com.ddwhite.ws.reports.ReportGeneral;
 import mx.com.ddwhite.ws.reports.Totals;
 import mx.com.ddwhite.ws.reports.Warehouse;
+import mx.com.ddwhite.ws.repository.SalePaymentRepository;
+import mx.com.ddwhite.ws.repository.SaleRepository;
 import mx.com.ddwhite.ws.service.utils.GenericUtils;
 import mx.com.ddwhite.ws.service.utils.ReportUtils;
 
@@ -38,6 +44,15 @@ public class ReportService {
 	
 	@Autowired
 	private TicketPrintService ticketPrintService;
+	
+	@Autowired
+	private SaleRepository saleRepository;
+	
+	@Autowired
+	private SalePaymentRepository salePaymentRepository;
+	
+	@Autowired
+	private CatalogService catalogService;
 	
 	public ReportGeneral getReportGeneral(String startDate, String endDate){
 		ReportGeneral general = new ReportGeneral();
@@ -149,6 +164,33 @@ public class ReportService {
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
 		Cashout cashout = getCashout(strStartDate, strEndDate);
 		ticketPrintService.cashout(cashout, userId, strStartDate, strEndDate);
+	}
+	
+	public String payments(Long paymentId, Date startDate, Date endDate) {
+		List<SalePayment> listPayments = new ArrayList<>();
+		if( startDate != null && endDate != null  ) {
+			String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
+			endDate = GenericUtils.plusDay(endDate, 1);
+			String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
+			List<Sale> sales = saleRepository.findByRange(strStartDate, strEndDate);
+			final List<SalePayment> listPaymentsAux = new ArrayList<>();
+			sales.forEach(sale -> listPaymentsAux.addAll( salePaymentRepository.findBySale(sale.getId()) ));
+			if( paymentId != null )
+				listPayments = listPaymentsAux.stream().filter( p -> p.getPayment() == paymentId ).collect(Collectors.toList());
+		} else if (paymentId != null)
+			listPayments.addAll(salePaymentRepository.findByPayment(paymentId));
+		final List<Payment> paymentsFinded = new ArrayList<>();
+		listPayments.forEach(p -> {
+			Payment payment = new Payment();
+			payment.setSaleId(p.getSaleId());
+			payment.setPayment(catalogService.findById(p.getPayment()).getName());
+			payment.setAmount(p.getAmount());
+			payment.setVoucherFolio(p.getVoucherFolio());
+			paymentsFinded.add(payment);
+		});
+		StringBuilder builder = new StringBuilder();
+		builder.append( ReportUtils.ExportListToCSV(true, paymentsFinded, Payment.class) );
+		return builder.toString();
 	}
 
 }

@@ -113,7 +113,7 @@ public class SaleService {
 		List<Sale> sales = saleRepository.findByRange(strStartDate, strEndDate, pageable);
 		return new PageImpl<>(buildSalesDto(sales), pageable, saleRepository.findByRange(strStartDate, strEndDate).size());
 	}
-	
+
 	private List<SaleDto> buildSalesDto(final List<Sale> sales) {
 		final List<SaleDto> salesDto = new ArrayList<>();
 		sales.forEach( sale -> {
