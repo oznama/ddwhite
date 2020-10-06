@@ -45,6 +45,7 @@ export class HeaderComponent implements OnInit {
         const endDate = result.data.endDate;
         const report = result.data.report;
         const saleId = result.data.saleId;
+        const payment = result.data.payment;
         switch (report) {
           case "Compras":
             this.reportService.getPurchasesCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'compras_'));
@@ -55,6 +56,9 @@ export class HeaderComponent implements OnInit {
           case "Reimpresion Ticket":
             this.reportService.reprintTicket(saleId).subscribe(data => console.log(data));
             break;
+          case "Pagos":
+            this.reportService.payments(payment, startDate, endDate).subscribe(data => this.exportFile(data, 'pagos_'));
+              break;
           default:
             this.reportService.getGeneralCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'general_'));
             break;

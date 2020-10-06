@@ -1,5 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {CatalogItem} from './../model/catalog.model';
+import { ApiCatalogService } from './../service/api.service.catalog';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -9,13 +11,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ReportFilterDialogComponent implements OnInit {
   searchForm: FormGroup;
   
-  reports: string[] = ['Compras', 'Ventas', 'Reimpresion Ticket'];
+  reports: string[] = ['Compras', 'Ventas', 'Reimpresion Ticket', 'Pagos'];
   reportSelected: string;
+  catalogPayment: CatalogItem[];
   
   constructor(
     public dialogRef: MatDialogRef<ReportFilterDialogComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: string,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private catalogService: ApiCatalogService,) {
   }
 
   ngOnInit() {
@@ -23,10 +27,21 @@ export class ReportFilterDialogComponent implements OnInit {
       report:[''],
       startDate: [],
       endDate: [],
-      saleId: [0]
+      saleId: [0],
+      payment: [],
     });
+    this.loadCatalogPayment();
     this.searchForm.controls.startDate.disable;
     this.searchForm.controls.endDate.disable;
+  }
+
+  private loadCatalogPayment(): void{
+    this.catalogService.getByName('METODPAG').subscribe( response => {
+      this.catalogPayment = response.items;
+      this.searchForm.controls.payment.setValue(this.catalogPayment[0].id);
+    }, error =>{
+      console.error(error);
+    });
   }
 
   onChange(value: string){
@@ -39,6 +54,10 @@ export class ReportFilterDialogComponent implements OnInit {
 
   showTicketId(): boolean {
     return this.reportSelected && this.reportSelected === 'Reimpresion Ticket';
+  }
+
+  showPayments(): boolean {
+    return this.reportSelected && this.reportSelected === 'Pagos';
   }
 
   search() {

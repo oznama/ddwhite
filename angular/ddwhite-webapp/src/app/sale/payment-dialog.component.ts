@@ -30,6 +30,7 @@ export class PaymentDialogComponent implements OnInit {
     this.paymentForm = this.formBuilder.group({
       payment: [],
       amount: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
+      voucherFolio:[]
     });
     this.loadCatalogPayment();
     this.paymentForm.controls.amount.setValue(Math.ceil(this.data));
@@ -59,11 +60,13 @@ export class PaymentDialogComponent implements OnInit {
   add(): void {
     const paymentId: number = +this.paymentForm.controls.payment.value;
     const $amount: number = +this.paymentForm.controls.amount.value;
+    const voucherFolio: string = this.paymentForm.controls.voucherFolio.value;
     const catPayment = this.catalogPayment.find(item => item.id === paymentId);
     const payment = <SalePayment> {
       payment: catPayment.id,
       paymentDesc: catPayment.name,
-      amount: +$amount
+      amount: +$amount,
+      voucherFolio: voucherFolio
     };
     if( this.payments.filter( item => item.payment === payment.payment).length > 0 ){
       this.payments.find( item => {
@@ -80,6 +83,7 @@ export class PaymentDialogComponent implements OnInit {
     //this.paymentForm.reset();
     this.paymentForm.controls.payment.setValue(this.catalogPayment[0].id);
     this.paymentForm.controls.amount.setValue(this.data - this.totalAmount);
+    this.paymentForm.controls.voucherFolio.setValue(null);
   }
 
   remove(payment: SalePayment){

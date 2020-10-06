@@ -40,4 +40,9 @@ export class ApiReportService {
     return this.http.get(this.context + '/reprint/ticket?saleId='+ saleId, responseTypeArrayBuffer);
   }
 
+  payments(paymentId: number, startDate: string, endDate: string) : Observable<ArrayBuffer> {
+    return this.http.get(this.context + '/payments?paymentId='+ paymentId 
+      + (startDate ? '&startDate='+ startDate : '' ) + (endDate ? '&endDate='+ endDate : ''), responseTypeArrayBuffer);
+  }
+
 }

@@ -36,6 +36,14 @@
             <input matInput type="number" formControlName="saleId" placeholder="Folio de la compra" autocomplete="off"><br>
           </mat-form-field>
 
+          <mat-form-field class='third-width-input' *ngIf="showPayments()">
+            <select matNativeControl formControlName="payment" placeholder="Forma de pago" required>
+              <option *ngFor="let item of catalogPayment" [value]="item.id">
+                {{item.name}}
+              </option>
+            </select>
+          </mat-form-field>
+
           <div class="wrapper">
             <button mat-raised-button color="primary">Filtrar</button>
           </div>

@@ -1,0 +1,70 @@
+<div class="div-container">
+
+  <mat-card class="box-form">
+    <mat-card-header>
+      <mat-card-title>Modificar compra</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field [hidden]="true">
+          <input matInput formControlName="id">
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="provider" placeholder="Proveedor" readonly>
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="product" placeholder="Producto" readonly>
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="usedInSale" placeholder="Compra asociada?" readonly>
+        </mat-form-field>
+
+        <mat-form-field class='midle-width-input'>
+  	    	<input matInput formControlName="quantity" style="text-align:right; padding: 0 10px;" placeholder="Cantidad" maxlength="10" autocomplete="off" required>
+  	    	<mat-error>Campo incorrecto, solo numeros con maximo 3 decimales opcionales</mat-error>
+  	    </mat-form-field>
+  	    <mat-form-field class="midle-width-input">
+  	    	<input matInput formControlName="cost" style="text-align:right; padding: 0 10px" placeholder="Costo" maxlength="15" autocomplete="off" required>
+  	    	<mat-error>Campo incorrecto, solo monto con maximo 4 decimales opcionales</mat-error>
+  	    </mat-form-field>
+
+  	    <mat-form-field [hidden]="true">
+          <input matInput formControlName="unityDesc">
+        </mat-form-field>
+	    
+	  	<mat-form-field class='midle-width-input'>
+		  <select matNativeControl formControlName="unity" placeholder="Unidad" required>
+		    <option *ngFor="let item of catalogUnity" [value]="item.id">
+		      {{item.name}}
+		    </option>
+		  </select>
+		  <mat-error>Campo obligatorio</mat-error>
+		</mat-form-field>
+
+        <mat-form-field class='midle-width-input' *ngIf="showNumPiece()">
+          <input matInput formControlName="numPiece" placeholder="Numero de piezas" maxlength="5" type="number" autocomplete="off" required>
+          <mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="user" placeholder="Usuario ultima actualizacion" readonly>
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="dateCreated" placeholder="Fecha de registro" readonly>
+        </mat-form-field>
+
+        <div class="wrapper">
+          <button mat-raised-button color="warn" type="button" (click)="cancelar()">Cancelar</button>
+          <span class="spacer"></span>
+          <button mat-raised-button color="primary" [disabled]="formInvalid()">Guardar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

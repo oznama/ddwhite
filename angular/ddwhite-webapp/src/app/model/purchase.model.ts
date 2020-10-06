@@ -1,4 +1,5 @@
 export class Purchase {
+	id: number;
 	productId: number;
 	productName: string;
 	providerId: number;
@@ -23,4 +24,23 @@ export class PurchaseReasign{
 	constructor(init?:Partial<PurchaseReasign>){
 		Object.assign(this, init);
 	}
+}
+
+export class PurchaseList {
+	id: number;
+	user: string;
+	provider: string;
+	product: string;
+	quantity: number;
+	cost: number;
+	unity: number;
+	unityDesc: string;
+	numPiece: number;
+	dateCreated: string;
+	usedInSale: boolean;
+
+	constructor(init?:Partial<PurchaseList>){
+		Object.assign(this, init);
+	}
+
 }

@@ -9,7 +9,7 @@
       </div>
 	    <mat-card-content>
 	      <form [formGroup]="paymentForm">
-	        <mat-form-field class='midle-width-input'>
+	        <mat-form-field class='third-width-input'>
 	          <select matNativeControl formControlName="payment" placeholder="Forma de pago" required>
 	            <option *ngFor="let item of catalogPayment" [value]="item.id">
 	              {{item.name}}
@@ -17,10 +17,13 @@
 	          </select>
 	          <mat-error>Campo obligatorio</mat-error>
 	        </mat-form-field>
-	        <mat-form-field class="midle-width-input">
+	        <mat-form-field class="third-width-input">
 	          <input matInput formControlName="amount" style="text-align:right; padding: 0 10px;" placeholder="Monto" autocomplete="off" maxlength="10">
 	          <mat-error>Campo obligatorio</mat-error>
 	        </mat-form-field>
+          <mat-form-field class="third-width-input">
+            <input matInput formControlName="voucherFolio" placeholder="Folio de voucher" autocomplete="off" maxlength="50">
+          </mat-form-field>
 	        <div class="wrapper">
 	          <span class="spacer"></span>
 	          <button mat-raised-button type="button" type="button" [disabled]="!isFormValid()" (click)="add()">Agregar</button>
@@ -37,6 +40,7 @@
         <tr>
           <th>Metodo de pago</th>
           <th>Monto</th>
+          <th>Voucher</th>
           <th></th>
         </tr>
         </thead>
@@ -44,6 +48,7 @@
         <tr *ngFor="let payment of payments">
           <td>{{payment.paymentDesc}}</td>
           <td>{{payment.amount}}</td>
+          <td>{{payment.voucherFolio}}</td>
           <td>
         	 <button mat-raised-button color="warn" (click)="remove(payment)">Borrar</button>
           </td>

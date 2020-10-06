@@ -62,4 +62,5 @@ export class SalePayment{
 	payment: number;
 	paymentDesc: string;
 	amount: number;
+	voucherFolio: string;
 }

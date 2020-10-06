@@ -1,0 +1,83 @@
+<div class="div-container">
+
+  <div>
+    <mat-card class="box-form">
+      <mat-card-header>
+        <mat-card-title>Compras</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="wrapper">
+        <form [formGroup]="searchForm">
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha inicial</mat-label>
+            <input matInput formControlName="startDate" [matDatepicker]="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha Final</mat-label>
+            <input matInput formControlName="endDate" [matDatepicker]="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-icon aria-hidden="false" (click)="search()">search</mat-icon>
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div id="table-wrapper">
+    <div id="table-scroll">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th class="hidden">Id</th>
+          <th>Usuario</th>
+          <th>Proveedor</th>
+          <th>Producto</th>
+          <th>Fecha compra</th>
+          <th>Compras asociadas?</th>
+          <th>Cantidad</th>
+          <th>Unidad</th>
+          <th>Costo</th>
+          <th>Piezas</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let purchase of purchases | async">
+          <td class="hidden">{{purchase.id}}</td>
+          <td>{{purchase.user}}</td>
+          <td>{{purchase.provider}}</td>
+          <td>{{purchase.product}}</td>
+          <td>{{purchase.dateCreated}}</td>
+          <td>{{purchase.usedInSale? 'SI' : 'NO'}}</td>
+          <td>
+            <input #quantity style="text-align:right; padding: 0 10px;" maxlength="10" autocomplete="off" value="{{purchase.quantity}}">
+          </td>
+          <td>
+            <select #unity>
+              <option *ngFor="let item of catalogUnity" [value]="item.id" [selected]="item.id===purchase.unity">
+                {{item.name}}
+              </option>
+            </select>
+          </td>
+          <td>
+            <input #cost style="text-align:right; padding: 0 10px" maxlength="15" autocomplete="off"  value="{{purchase.cost}}">
+          </td>
+          <td>
+            <input #numPiece maxlength="5" type="number" autocomplete="off" value="{{purchase.numPiece}}">
+          </td>
+          <td>
+            <button mat-raised-button color="primary" *ngIf="privileges.canEdit()" style="margin-left: 20px;"
+            (click)="modify(purchase.id, +quantity.value, +unity.value, +cost.value, +numPiece.value)">Modificar</button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

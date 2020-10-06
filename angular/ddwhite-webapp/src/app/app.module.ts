@@ -62,6 +62,8 @@ import { MycompanyComponent } from './mycompany/mycompany.component';
 import { CashoutComponent } from './report/cashout-component/cashout.component';
 import { CatalogComponent } from './catalog/catalog.component';
 import { PurchaseReasignComponent } from './purchase/reasign/reasign.component';
+import { PurchaseEditComponent } from './purchase/purchase-edit/purchase-edit.component';
+import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.component';
 
 @NgModule({
   declarations: [
@@ -97,7 +99,9 @@ import { PurchaseReasignComponent } from './purchase/reasign/reasign.component';
     MycompanyComponent,
     CashoutComponent,
     CatalogComponent,
-    PurchaseReasignComponent
+    PurchaseReasignComponent,
+    PurchaseEditComponent,
+    PurchaseListComponent
   ],
   imports: [
     BrowserModule,

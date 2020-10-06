@@ -22,7 +22,7 @@
   </button>
   <mat-menu #menuInven="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item routerLink="/purchases" *ngIf="privileges.isPurchaser | async">
-      <mat-icon>point_of_sale</mat-icon><span>Compras</span>
+      <mat-icon>point_of_sale</mat-icon><span>Registrar compras</span>
     </button>
     <button mat-menu-item routerLink="/purchases-reasign" *ngIf="privileges.isPurchaser | async">
       <mat-icon>autorenew</mat-icon><span>Reasignar compra</span>
@@ -41,6 +41,9 @@
     </button>
     <button mat-menu-item routerLink="/client-list">
       <mat-icon>people</mat-icon><span>Clientes</span>
+    </button>
+    <button mat-menu-item routerLink="/purchase-list">
+      <mat-icon>point_of_sale</mat-icon><span>Compras</span>
     </button>
     <button mat-menu-item class="toolbar-button" routerLink="/sale-invoice">
       <mat-icon>article</mat-icon><span>Facturaci&oacute;n</span>
