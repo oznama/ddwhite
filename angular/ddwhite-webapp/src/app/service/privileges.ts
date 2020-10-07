@@ -30,7 +30,7 @@ export class Privileges {
 		return this.loginService.Privileges.length;
 	}
 
-	private isAdmin(): boolean {
+	public isAdmin(): boolean {
 		return this.loginService.Role === roles.ROOT || this.loginService.Role === roles.ADMIN;
 	}
 

@@ -26,6 +26,7 @@ import {
   ApiRoleService,
   ApiReportService,
   ApiCompanyService,
+  ApiSessionService,
   Privileges
 } from './service/module.service';
 import { AlertModule } from './_alert';
@@ -64,6 +65,7 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { PurchaseReasignComponent } from './purchase/reasign/reasign.component';
 import { PurchaseEditComponent } from './purchase/purchase-edit/purchase-edit.component';
 import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.component';
+import { SessionComponent } from './login/session/session.component';
 
 @NgModule({
   declarations: [
@@ -101,7 +103,8 @@ import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.co
     CatalogComponent,
     PurchaseReasignComponent,
     PurchaseEditComponent,
-    PurchaseListComponent
+    PurchaseListComponent,
+    SessionComponent
   ],
   imports: [
     BrowserModule,
@@ -130,6 +133,7 @@ import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.co
     ApiRoleService,
     ApiReportService,
     ApiCompanyService,
+    ApiSessionService,
     Privileges
   ],
   bootstrap: [AppComponent],

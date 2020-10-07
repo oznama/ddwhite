@@ -31,3 +31,16 @@ export class User {
 		Object.assign(this, init);
 	}
 }
+
+export class Session {
+	id: number;
+	userId: number;
+	inDate: string;
+	outDate: string;
+	initialAmount: number;
+
+	constructor(init?:Partial<Session>){
+		Object.assign(this, init);
+	}
+
+}

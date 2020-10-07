@@ -15,6 +15,7 @@ public class SalePaymentDto implements Serializable {
 	private Long payment;
 	private BigDecimal amount;
 	private String voucherFolio;
+	private BigDecimal comision;
 
 	public Long getId() {
 		return id;
@@ -55,6 +56,13 @@ public class SalePaymentDto implements Serializable {
 	public void setVoucherFolio(String voucherFolio) {
 		this.voucherFolio = voucherFolio;
 	}
-	
+
+	public BigDecimal getComision() {
+		return comision;
+	}
+
+	public void setComision(BigDecimal comision) {
+		this.comision = comision;
+	}
 
 }

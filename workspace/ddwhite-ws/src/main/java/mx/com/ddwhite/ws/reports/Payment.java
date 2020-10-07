@@ -9,11 +9,12 @@ public class Payment implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 5828519586419438702L;
-	
+
 	private Long saleId;
 	private String payment;
 	private BigDecimal amount;
 	private String voucherFolio;
+	private BigDecimal comision;
 
 	public Long getSaleId() {
 		return saleId;
@@ -45,6 +46,14 @@ public class Payment implements Serializable {
 
 	public void setVoucherFolio(String voucherFolio) {
 		this.voucherFolio = voucherFolio;
+	}
+
+	public BigDecimal getComision() {
+		return comision;
+	}
+
+	public void setComision(BigDecimal comision) {
+		this.comision = comision;
 	}
 
 }

@@ -1,10 +1,13 @@
 package mx.com.ddwhite.ws.service.utils;
 
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+
+import mx.com.ddwhite.ws.constants.GeneralConstants;
 
 
 public class GenericUtils {
@@ -56,6 +59,14 @@ public class GenericUtils {
 		calendar.setTime(date);
 		calendar.add(Calendar.DAY_OF_MONTH, n);
 		return calendar.getTime();
+	}
+	
+	public static BigDecimal getValueOfPercentage(Double value) {
+		return getValueOfPercentage(BigDecimal.valueOf(value));
+	}
+	
+	public static BigDecimal getValueOfPercentage(BigDecimal value) {
+		return value.divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE);
 	}
 	
 	

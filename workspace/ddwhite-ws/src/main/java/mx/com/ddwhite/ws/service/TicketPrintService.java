@@ -86,6 +86,7 @@ public class TicketPrintService {
 		content.append(lineFormatted("En el turno", AlignedEmun.CENTERED));
 		content.append(lineFormatted("De: " + start, AlignedEmun.CENTERED));
 		content.append(lineFormatted("A: " + end, AlignedEmun.CENTERED));
+		content.append(lineFormatted("Abierta con: $" + cashout.getInitialAmount(), AlignedEmun.CENTERED));
 		content.append(GeneralConstants.LINE_BREAK);
 		content.append(lineFormatted(separator(), AlignedEmun.CENTERED));
 		// Groups
@@ -201,7 +202,7 @@ public class TicketPrintService {
 		saleDto.getPayments().forEach(payment -> {
 			CatalogReadDto catPayment = catalogService.findById(payment.getPayment());
 			String strPayment = buildLine(catPayment.getName().toUpperCase() + ":", AlignedEmun.LEFT, COLUMN_20_SIZE);
-			String ammount = buildLine("$ " + payment.getAmount(), AlignedEmun.RIGHT, COLUMN_12_SIZE);
+			String ammount = buildLine("$ " + payment.getAmount().add(payment.getComision() != null ? payment.getComision() : BigDecimal.ZERO), AlignedEmun.RIGHT, COLUMN_12_SIZE);
 			content.append(padding() + strPayment + ammount + GeneralConstants.LINE_BREAK);
 		});
 		content.append(lineFormatted("CAMBIO $ " + saleDto.getChange(), AlignedEmun.RIGHT));

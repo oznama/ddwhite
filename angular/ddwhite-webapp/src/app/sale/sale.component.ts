@@ -72,7 +72,7 @@ export class SaleComponent implements OnInit {
 
   isToPay(){
     let totalPayment = this.salePayment ? 
-      this.salePayment.reduce(function(total, currentItem){return total + currentItem.amount;}, 0) : 0;
+      this.salePayment.reduce(function(total, currentItem){return total + (currentItem.amount + currentItem.comision);}, 0) : 0;
     return this.sale && this.sale.total && this.sale 
       && this.sale.change >= 0 && totalPayment >= this.sale.total;
   }
@@ -197,6 +197,7 @@ export class SaleComponent implements OnInit {
         if( result && result.data ){
           this.sale.change = result.data.change;
           this.salePayment = result.data.payments;
+          this.sale.total += +(this.salePayment.reduce(function(total, currentItem){return total + currentItem.comision;}, 0)).toFixed(2);
         }
       });
     }

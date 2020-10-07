@@ -24,8 +24,8 @@ export class ApiReportService {
   	return this.http.get<Cashout>(this.context + '/cashout?startDate='+ startDate +'&endDate='+ endDate);
   }
 
-  printCashout(userId: number, startDate: Date, endDate: Date) : Observable<Cashout> {
-    return this.http.get<Cashout>(this.context + '/print/cashout?userId='+ userId +'&startDate='+ startDate +'&endDate='+ endDate);
+  printCashout(userId: number) : Observable<Cashout> {
+    return this.http.get<Cashout>(this.context + '/print/cashout?userId='+ userId);
   }
 
   getPurchasesCSV(startDate: string, endDate: string) : Observable<ArrayBuffer> {

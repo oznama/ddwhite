@@ -9,7 +9,6 @@ public interface GeneralConstants {
 	String FORMAT_DATE_TIME_SHORT = "yyyy-MM-dd HH:mm:ss";
 	
 	int BIG_DECIMAL_ROUND = 1;
-	BigDecimal TAX = BigDecimal.valueOf(1.16);
 	BigDecimal FIXED_PRICE = BigDecimal.valueOf(0.01);
 	BigDecimal ONE_HUNDER = BigDecimal.valueOf(100);
 	String GROUP_EXPENSE = "GASTO";
@@ -29,5 +28,6 @@ public interface GeneralConstants {
 	String CATALOG_NAME_COMPANY_MAIL = "EMAIL";
 	String CATALOG_NAME_COMPANY_BUSSINES_NAME = "NOMBRE_FISCAL";
 	String CATALOG_NAME_COMPANY_RFC = "RFC";
+	String CATALOG_TAX = "IVA";
 
 }

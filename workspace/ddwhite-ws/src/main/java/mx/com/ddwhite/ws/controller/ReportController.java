@@ -57,11 +57,9 @@ public class ReportController {
 	}
 	
 	@GetMapping("/print/cashout")
-	public ResponseEntity<?> printCashout(@RequestParam(value = "userId", required = true) Long userId,
-			@RequestParam(value = "startDate", required = false) Date startDate, 
-			@RequestParam(value = "endDate", required = false) Date endDate) {
+	public ResponseEntity<?> printCashout(@RequestParam(value = "userId", required = true) Long userId) {
 		try {
-			service.printCashout(startDate, endDate, userId);
+			service.printCashout(userId);
 			return ResponseEntity.ok().build();
 		}catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

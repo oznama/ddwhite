@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiLoginService, ApiReportService, Privileges } from './../service/module.service';
+import { ApiLoginService, ApiReportService, ApiSessionService, Privileges } from './../service/module.service';
 import {MatDialog} from '@angular/material/dialog';
 import { ReportFilterDialogComponent } from '../report/dialog-report-filter.component';
 import { CashoutComponent } from '../report/cashout-component/cashout.component';
 import { saveAs } from 'file-saver';
+import { AlertService, alertOptions } from '../_alert';
 
 const CSV_EXTENSION = '.csv';
 
@@ -21,8 +22,10 @@ export class HeaderComponent implements OnInit {
   constructor(
     private apiService: ApiLoginService, 
     private reportService: ApiReportService,
+    private sessionService: ApiSessionService,
     public privileges: Privileges,
-    public dialog: MatDialog) { }
+    public dialog: MatDialog,
+    public alertService:AlertService) { }
 
   ngOnInit() {
     this.isLoggedIn$ = this.apiService.isLoggedIn;
@@ -30,7 +33,15 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout(){
-    this.apiService.logout();
+    this.sessionService.getCurrentSession(+window.localStorage.getItem("userId")).subscribe(data => {
+      if (data && data.id) {
+        this.sessionService.update(data.id).subscribe(data => {
+          this.apiService.logout();
+        }, error => this.alertService.error('No se ha podido cerrar sesion, error: ' + error.error, alertOptions));
+      } else {
+        if( this.privileges.isAdmin() ) this.apiService.logout();
+      }
+    },error => this.alertService.error('Error al recuperar sesion, error: ' + error.message, alertOptions));
   }
 
   getWarehouseCSV(){
@@ -76,8 +87,8 @@ export class HeaderComponent implements OnInit {
     });
     */
     const userId = +window.localStorage.getItem('userId');
-    const startDate = new Date(window.localStorage.getItem('sessionStart'));
-    this.reportService.printCashout(userId, startDate, new Date()).subscribe(data => console.log(data));
+    this.reportService.printCashout(userId).subscribe(data => console.log(data), 
+      error => this.alertService.error('Error al generar corte de caja, error: ' + error.message, alertOptions));
   }
 
   private exportFile(data: ArrayBuffer, name: string){

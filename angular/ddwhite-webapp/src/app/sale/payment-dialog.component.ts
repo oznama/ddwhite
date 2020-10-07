@@ -14,9 +14,12 @@ import { ApiCatalogService } from './../service/api.service.catalog';
 export class PaymentDialogComponent implements OnInit {
   paymentForm: FormGroup;
   catalogPayment: CatalogItem[];
+  catalogComisiones: CatalogItem[];
   payments: SalePayment[] = [];
   totalAmount: number = 0;
   decimals: number = 2;
+  efectivoId: number;
+  tax: number;
 
   constructor(
     public dialogRef: MatDialogRef<PaymentDialogComponent>, 
@@ -30,19 +33,25 @@ export class PaymentDialogComponent implements OnInit {
     this.paymentForm = this.formBuilder.group({
       payment: [],
       amount: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
-      voucherFolio:[]
+      voucherFolio:[],
+      comision: []
     });
-    this.loadCatalogPayment();
+    this.loadCatalogs();
     this.paymentForm.controls.amount.setValue(Math.ceil(this.data));
   }
 
-  private loadCatalogPayment(): void{
+  private loadCatalogs(): void{
     this.catalogService.getByName('METODPAG').subscribe( response => {
       this.catalogPayment = response.items;
-      this.paymentForm.controls.payment.setValue(this.catalogPayment[0].id);
-    }, error =>{
-      console.error(error);
-    });
+      this.efectivoId = this.catalogPayment[0].id;
+      this.paymentForm.controls.payment.setValue(this.efectivoId);
+    }, error => console.error(error));
+    this.catalogService.getByName('PINPAD').subscribe( response => this.catalogComisiones = response.items, error =>console.error(error));
+    this.catalogService.getByName('IVA').subscribe( response => this.tax = +response.description, error =>console.error(error));
+  }
+
+  showCreditDataExtra(){
+    return +this.paymentForm.controls.payment.value !== this.efectivoId;
   }
 
   private round(n: number): number {
@@ -57,16 +66,31 @@ export class PaymentDialogComponent implements OnInit {
     return this.paymentForm.valid && +this.paymentForm.controls.amount.value>0;
   }
 
+  private getValueOfPercentage(val: number): number {
+    return val/100;
+  }
+
   add(): void {
     const paymentId: number = +this.paymentForm.controls.payment.value;
-    const $amount: number = +this.paymentForm.controls.amount.value;
+    var $amount: number = +this.paymentForm.controls.amount.value;
     const voucherFolio: string = this.paymentForm.controls.voucherFolio.value;
+    const comisionId: number = +this.paymentForm.controls.comision.value;
+    var $comision = 0;
+    if( this.showCreditDataExtra() ){
+      const comision = this.catalogComisiones.find(item => item.id === comisionId).description;
+      const comisions = comision.split('%+');
+      comisions.forEach(c => $comision = $comision + ((c === 'IVA') ? 
+        ( $comision * this.getValueOfPercentage(this.tax)) : 
+        ( $amount * this.getValueOfPercentage(+c)))
+      )
+    }
     const catPayment = this.catalogPayment.find(item => item.id === paymentId);
     const payment = <SalePayment> {
       payment: catPayment.id,
       paymentDesc: catPayment.name,
       amount: +$amount,
-      voucherFolio: voucherFolio
+      voucherFolio: voucherFolio,
+      comision: ($comision===0?null:this.round($comision))
     };
     if( this.payments.filter( item => item.payment === payment.payment).length > 0 ){
       this.payments.find( item => {
@@ -81,9 +105,10 @@ export class PaymentDialogComponent implements OnInit {
 
     this.totalAmount = this.round(this.totalAmount+payment.amount);
     //this.paymentForm.reset();
-    this.paymentForm.controls.payment.setValue(this.catalogPayment[0].id);
+    this.paymentForm.controls.payment.setValue(this.efectivoId);
     this.paymentForm.controls.amount.setValue(this.data - this.totalAmount);
     this.paymentForm.controls.voucherFolio.setValue(null);
+    this.paymentForm.controls.comision.setValue(null);
   }
 
   remove(payment: SalePayment){

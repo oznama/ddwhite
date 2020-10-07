@@ -15,6 +15,7 @@ import mx.com.ddwhite.ws.dto.UserDto;
 import mx.com.ddwhite.ws.model.Client;
 import mx.com.ddwhite.ws.reports.AccountInput;
 import mx.com.ddwhite.ws.repository.ClientRepository;
+import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class AccountInputService {
@@ -72,7 +73,8 @@ public class AccountInputService {
 		ai.setPrice(detailDto.getPrice());
 		ai.setTotal( ai.getPrice().multiply(BigDecimal.valueOf(ai.getQuantity())).setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN) );
 		ai.setGanancia( ai.getTotal().subtract( ai.getCost().multiply(BigDecimal.valueOf(ai.getQuantity()))).setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN));
-		ai.setSubTotal( ai.getTotal().divide(GeneralConstants.TAX, GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
+		ai.setSubTotal( ai.getTotal().divide(GenericUtils.getValueOfPercentage(Double.valueOf(catalogService.findByName(GeneralConstants.CATALOG_TAX).getDescription())), 
+				GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
 		ai.setIva(ai.getTotal().subtract(ai.getSubTotal()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN));
 		ai.setDate(saleDto.getDateCreated());
 		return ai;

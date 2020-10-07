@@ -1,0 +1,23 @@
+<div mat-dialog-content>
+
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Apertura de caja</mat-card-title>
+      </mat-card-header>
+      <p class="text-blue">Bienvenido {{userFullName}}<br>Por favor, indica el monto de efectivo de apertura de caja</p>
+      <mat-card-content>
+        <form [formGroup]="sessionForm" (ngSubmit)="save()">
+
+	        <mat-form-field class="full-width-input">
+	  	    	<input matInput formControlName="amount" style="text-align:right; padding: 0 10px" placeholder="Monto" maxlength="15" autocomplete="off" required>
+	  	    	<mat-error>Campo incorrecto, solo monto con maximo 2 decimales opcionales</mat-error>
+	  	    </mat-form-field>
+
+	        <div class="wrapper">
+	            <button mat-raised-button color="primary" [disabled]="sessionForm.invalid">Abrir caja</button>
+	        </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+</div>

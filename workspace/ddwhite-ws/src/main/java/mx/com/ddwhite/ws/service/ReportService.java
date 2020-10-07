@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.ProductInventory;
+import mx.com.ddwhite.ws.dto.SessionDto;
 import mx.com.ddwhite.ws.model.Sale;
 import mx.com.ddwhite.ws.model.SalePayment;
 import mx.com.ddwhite.ws.reports.AccountInput;
@@ -53,6 +54,9 @@ public class ReportService {
 	
 	@Autowired
 	private CatalogService catalogService;
+	
+	@Autowired
+	private SessionService sessionService;
 	
 	public ReportGeneral getReportGeneral(String startDate, String endDate){
 		ReportGeneral general = new ReportGeneral();
@@ -157,13 +161,11 @@ public class ReportService {
 		return getCashout(strStartDate, strEndDate);
 	}
 	
-	public void printCashout(Date startDate, Date endDate, Long userId) {
-		if( startDate == null ) startDate = GenericUtils.stringToDate(GenericUtils.dateToString(new Date(), GeneralConstants.FORMAT_DATE), GeneralConstants.FORMAT_DATE);
-		if( endDate == null ) endDate = GenericUtils.plusDay(startDate, 1);
-		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
-		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
-		Cashout cashout = getCashout(strStartDate, strEndDate);
-		ticketPrintService.cashout(cashout, userId, strStartDate, strEndDate);
+	public void printCashout(Long userId) {
+		SessionDto sessionDto = sessionService.findCurrentSession(userId);
+		Cashout cashout = getCashout(sessionDto.getInDate(), sessionDto.getOutDate());
+		cashout.setInitialAmount(sessionDto.getInitialAmount());
+		ticketPrintService.cashout(cashout, userId, sessionDto.getInDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 	}
 	
 	public String payments(Long paymentId, Date startDate, Date endDate) {
@@ -186,6 +188,7 @@ public class ReportService {
 			payment.setPayment(catalogService.findById(p.getPayment()).getName());
 			payment.setAmount(p.getAmount());
 			payment.setVoucherFolio(p.getVoucherFolio());
+			payment.setComision(p.getComision());
 			paymentsFinded.add(payment);
 		});
 		StringBuilder builder = new StringBuilder();

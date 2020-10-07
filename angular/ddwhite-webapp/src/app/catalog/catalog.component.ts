@@ -17,6 +17,8 @@ export class CatalogComponent implements OnInit {
   private catalogId: number;
   catalogs: Catalog[];
   catalogItems: CatalogItem[];
+  private catalogSelected: Catalog;
+  private catalogConst: string  = "CONST";
 
   ngOnInit(): void {
     this.loadCatalogs();
@@ -50,6 +52,10 @@ export class CatalogComponent implements OnInit {
   	return updetable;
   }
 
+  nameDissabled(){
+    return this.catalogSelected.name === this.catalogConst;
+  }
+
   update(id: number, n:string, d:string){
   	this.catalogItems.find( catalogItem => {
   		if(catalogItem.id === id){
@@ -64,10 +70,10 @@ export class CatalogComponent implements OnInit {
   }
 
   onChange(id: number) {
-  	const catalogFinded = this.catalogs.find( catalog => catalog.id === id);
-  	this.catalogId = catalogFinded.id;
-  	if(catalogFinded)
-  		this.catalogItems = catalogFinded.items;
+  	this.catalogSelected = this.catalogs.find( catalog => catalog.id === id);
+  	this.catalogId = this.catalogSelected.id;
+  	if(this.catalogSelected)
+  		this.catalogItems = this.catalogSelected.items;
   }
 
   tableValid(){

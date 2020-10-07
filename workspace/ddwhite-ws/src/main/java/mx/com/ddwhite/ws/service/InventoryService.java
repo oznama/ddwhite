@@ -1,6 +1,5 @@
 package mx.com.ddwhite.ws.service;
 
-import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
@@ -25,6 +24,7 @@ import mx.com.ddwhite.ws.model.Purchase;
 import mx.com.ddwhite.ws.repository.ProductRepository;
 import mx.com.ddwhite.ws.repository.PurchaseRepository;
 import mx.com.ddwhite.ws.repository.SaleDetailRepository;
+import mx.com.ddwhite.ws.service.utils.GenericUtils;
 import mx.com.ddwhite.ws.service.utils.InventoryUtils;
 
 @Service
@@ -151,19 +151,9 @@ public class InventoryService extends InventoryUtils {
 			inv.setAverageCost(averageCost(purchases));
 			inv.setCurrentCost(maxCost(purchases));
 			inv.setNumPiece(numPiece);
-//			inv.setPrice(product.getCost().multiply(product.getPercentage()).setScale(GeneralConstants.BIG_DECIMAL_ROUND,
-//					BigDecimal.ROUND_HALF_EVEN));
-//			inv.setPrice(product.getCost().multiply(product.getPercentage()).multiply(GeneralConstants.TAX).setScale(0,RoundingMode.UP).subtract(GeneralConstants.FIXED_PRICE));
-//			inv.setPrice(
-//					inv.getCurrentCost()
-//					.multiply(product.getPercentage().divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE))
-//					.multiply(GeneralConstants.TAX)
-//					.setScale(0,RoundingMode.UP)
-//					.subtract(GeneralConstants.FIXED_PRICE));
-			inv.setPrice(
-					inv.getCurrentCost()
-					.multiply(product.getPercentage().divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE))
-					.multiply(GeneralConstants.TAX)
+			inv.setPrice(inv.getCurrentCost()
+					.multiply(GenericUtils.getValueOfPercentage(product.getPercentage()))
+					.multiply(GenericUtils.getValueOfPercentage(Double.valueOf(catalogService.findByName(GeneralConstants.CATALOG_TAX).getDescription())))
 					.setScale(0,RoundingMode.UP));
 		}
 		return inv;

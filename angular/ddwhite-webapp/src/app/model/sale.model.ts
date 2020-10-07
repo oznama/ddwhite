@@ -63,4 +63,5 @@ export class SalePayment{
 	paymentDesc: string;
 	amount: number;
 	voucherFolio: string;
+	comision: number;
 }

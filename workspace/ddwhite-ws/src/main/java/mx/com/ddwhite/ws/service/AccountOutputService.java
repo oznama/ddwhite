@@ -17,6 +17,7 @@ import mx.com.ddwhite.ws.reports.AccountOutput;
 import mx.com.ddwhite.ws.repository.ExpenseRepository;
 import mx.com.ddwhite.ws.repository.ProviderRepository;
 import mx.com.ddwhite.ws.repository.PurchaseRepository;
+import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class AccountOutputService {
@@ -61,7 +62,8 @@ public class AccountOutputService {
 		ao.setQuantity(p.getQuantity());
 		ao.setCost(p.getCost());
 		ao.setTotal( p.getCost().multiply(BigDecimal.valueOf(p.getQuantity()))/*.setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN)*/);
-		ao.setSubTotal( ao.getTotal().divide(GeneralConstants.TAX, GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
+		ao.setSubTotal( ao.getTotal().divide(GenericUtils.getValueOfPercentage(Double.valueOf(catalogService.findByName(GeneralConstants.CATALOG_TAX).getDescription())), 
+				GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
 		ao.setIva(ao.getTotal().subtract(ao.getSubTotal())/*.setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN)*/);
 		ao.setDate(p.getDateCreated());
 		return ao;
@@ -78,7 +80,8 @@ public class AccountOutputService {
 		ao.setCost(e.getAmount());
 		ao.setTotal( e.getAmount() );
 		if( e.getTaxeable() ) {
-			ao.setSubTotal( e.getAmount().divide(GeneralConstants.TAX, GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
+			ao.setSubTotal( e.getAmount().divide(GenericUtils.getValueOfPercentage(Double.valueOf(catalogService.findByName(GeneralConstants.CATALOG_TAX).getDescription())), 
+					GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN) );
 			ao.setIva(ao.getTotal().subtract(ao.getSubTotal())/*.setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN)*/);	
 		} else {
 			ao.setSubTotal( BigDecimal.ZERO );

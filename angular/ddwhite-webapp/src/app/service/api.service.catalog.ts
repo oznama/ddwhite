@@ -28,3 +28,7 @@ export class ApiCatalogService {
   }
 
 }
+
+export const CAT_CONST = {
+  AMOUNT_MIN_BOX: 'MONTO_MIN_CAJA'
+}

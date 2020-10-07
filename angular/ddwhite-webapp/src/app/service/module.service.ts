@@ -13,6 +13,7 @@ export * from './api.service.expense';
 export * from './api.service.role';
 export * from './api.service.report';
 export * from './api.service.company';
+export * from './api.service.session';
 export * from './privileges';
 
 export const pageSize: number = 50;
