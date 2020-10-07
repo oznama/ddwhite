@@ -5,12 +5,12 @@ import {MatDialog} from '@angular/material/dialog';
 import {CatalogItem} from './../model/catalog.model';
 import {Purchase} from './../model/purchase.model';
 import { AlertService, alertOptions } from '../_alert';
-import { ApiCatalogService, ApiPurchaseService } from './../service/module.service';
+import { ApiCatalogService, ApiPurchaseService, CAT_CONST } from './../service/module.service';
 import { ProductDialogSearchComponent } from './../product/dialog-search/product-dialog-search.component';
 import { ProviderDialogSearchComponent } from './../provider/dialog-search/provider-dialog-search.component';
 import { Provider } from './../model/provider.model';
 import { Product } from './../model/product.model';
-import {PurchaseDialogCostComponent} from './purchase-dialog-cost-component';
+import {PurchaseDialogCostComponent} from './purchase-dialog-cost/purchase-dialog-cost-component';
 
 @Component({
   selector: 'app-purchase',
@@ -79,7 +79,7 @@ export class PurchaseComponent implements OnInit {
   }
 
   private loadCatalogUnity(): void{
-  	this.catalogService.getByName('UNIDADES').subscribe( response => {
+  	this.catalogService.getByName(CAT_CONST.UNITIES).subscribe( response => {
     	this.catalogUnity = response.items;
       this.boxId = this.catalogUnity.find( ci => ci.name.toUpperCase() === 'CAJA' ).id;
     }, error =>{

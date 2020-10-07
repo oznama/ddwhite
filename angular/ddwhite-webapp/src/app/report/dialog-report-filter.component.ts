@@ -1,7 +1,7 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CatalogItem} from './../model/catalog.model';
-import { ApiCatalogService } from './../service/api.service.catalog';
+import { ApiCatalogService, CAT_CONST } from './../service/api.service.catalog';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
 @Component({
@@ -36,7 +36,7 @@ export class ReportFilterDialogComponent implements OnInit {
   }
 
   private loadCatalogPayment(): void{
-    this.catalogService.getByName('METODPAG').subscribe( response => {
+    this.catalogService.getByName(CAT_CONST.PAYMENT_METHOD).subscribe( response => {
       this.catalogPayment = response.items;
       this.searchForm.controls.payment.setValue(this.catalogPayment[0].id);
     }, error =>{

@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Router} from "@angular/router";
 import {first} from "rxjs/operators";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import { ApiPurchaseService, ApiCatalogService } from "../../service/module.service";
+import { ApiPurchaseService, ApiCatalogService, CAT_CONST } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import {CatalogItem} from './../../model/catalog.model';
 import {Purchase} from '../../model/purchase.model';
@@ -63,7 +63,7 @@ export class PurchaseEditComponent implements OnInit {
   }
 
   private loadCatalogUnity(): void{
-  	this.catalogService.getByName('UNIDADES').subscribe( response => {
+  	this.catalogService.getByName(CAT_CONST.UNITIES).subscribe( response => {
     	this.catalogUnity = response.items;
       this.boxId = this.catalogUnity.find( ci => ci.name.toUpperCase() === 'CAJA' ).id;
     }, error =>{

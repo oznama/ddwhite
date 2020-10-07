@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {Router} from "@angular/router";
-import { ApiProductService, ApiCatalogService } from "../../service/module.service";
+import { ApiProductService, ApiCatalogService, CAT_CONST } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
 import { Product } from '../../model/product.model';
 import {CatalogItem} from './../../model/catalog.model';
@@ -37,7 +37,7 @@ export class ProductAddComponent implements OnInit {
   }
 
   private loadCatalogGroup(): void{
-    this.catalogService.getByName('GRUPOPROD').subscribe( response => {
+    this.catalogService.getByName(CAT_CONST.PRODUCT_GROUP).subscribe( response => {
       this.catalogGroup = response.items;
     }, error =>{
       console.error(error);

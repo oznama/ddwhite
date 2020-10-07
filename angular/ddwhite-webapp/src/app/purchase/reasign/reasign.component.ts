@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {Purchase, PurchaseReasign} from '../../model/purchase.model';
 import { AlertService, alertOptions } from '../../_alert';
 import { ApiPurchaseService } from '../../service/module.service';
-import {PurchaseDialogCostComponent} from '../purchase-dialog-cost-component';
+import {PurchaseDialogCostComponent} from '../purchase-dialog-cost/purchase-dialog-cost-component';
 
 @Component({
   selector: 'purchase-reasign',

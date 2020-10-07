@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Sale, SalePayment } from '../../model/sale.model';
 import {CatalogItem} from '../../model/catalog.model';
 import { Company } from '../../model/company.model';
-import { ApiCatalogService, ApiLoginService } from '../../service/module.service';
+import { ApiCatalogService, ApiLoginService, CAT_CONST } from '../../service/module.service';
 
 @Component({
   selector: 'sale-ticket',
@@ -30,7 +30,7 @@ export class TicketComponent implements OnInit {
   }
 
   private loadCompanyData(): void{
-    this.catalogService.getByName('COMPANY').subscribe( response => {
+    this.catalogService.getByName(CAT_CONST.DATA_COMPANY).subscribe( response => {
       if(response && response.items){
         response.items.forEach( (value, index) => {
           switch(value.name){

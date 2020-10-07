@@ -4,7 +4,7 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Observable, of } from 'rxjs/index';
 import {first} from "rxjs/operators";
 import {PurchaseList, Purchase} from '../../model/purchase.model';
-import { ApiPurchaseService, ApiCatalogService, Privileges } from '../../service/module.service';
+import { ApiPurchaseService, ApiCatalogService, Privileges, CAT_CONST } from '../../service/module.service';
 import {CatalogItem} from './../../model/catalog.model';
 import { AlertService, alertOptions } from '../../_alert';
 
@@ -36,7 +36,7 @@ export class PurchaseListComponent implements OnInit {
   }
 
   private loadCatalogUnity(): void{
-    this.catalogService.getByName('UNIDADES').subscribe( response => {
+    this.catalogService.getByName(CAT_CONST.UNITIES).subscribe( response => {
       this.catalogUnity = response.items;
       this.boxId = this.catalogUnity.find( ci => ci.name.toUpperCase() === 'CAJA' ).id;
     }, error =>{
@@ -60,7 +60,6 @@ export class PurchaseListComponent implements OnInit {
 
   modify(id: number, quantity: number, unity: number, cost: number, numPiece: number) {
     const body = this.setPurchase(id, quantity, unity, cost, numPiece);
-    console.log(body);
     this.purchaseService.update(body).pipe(first()).subscribe(
         data => {
           if(data.status === 200) {

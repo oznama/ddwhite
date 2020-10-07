@@ -1,0 +1,26 @@
+<div mat-dialog-content>
+
+  <mat-card>
+
+    <mat-card-header>
+      <mat-card-title>Descuento</mat-card-title>
+    </mat-card-header>
+    
+    <p>
+      <span class="text-blue">Producto: {{data.nameLarge}}</span>
+      <br>
+      <span class="text-blue">Precio: {{data.inventory.price}}</span>
+    </p>
+
+    <mat-card-content>
+      <form [formGroup]="discountForm" (ngSubmit)="applyDiscount()">
+        <mat-form-field appearance="fill">
+          <input matInput formControlName="percentage" style="text-align:right; padding: 0 10px;" placeholder="% descuento aplicar" autocomplete="off" maxlength="10">
+          <mat-error>Campo obligatorio</mat-error>
+        </mat-form-field>
+        <button mat-raised-button color="primary" [disabled]="discountForm.invalid">Aplicar</button>
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+</div>

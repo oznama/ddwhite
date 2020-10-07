@@ -44,9 +44,9 @@ import { ProductAddComponent } from './product/product-add/product-add.component
 import { ProductListComponent } from './product/product-list/product-list.component';
 import { ProductDialogSearchComponent } from './product/dialog-search/product-dialog-search.component';
 import { PurchaseComponent } from './purchase/purchase.component';
-import { PurchaseDialogCostComponent } from './purchase/purchase-dialog-cost-component';
+import { PurchaseDialogCostComponent } from './purchase/purchase-dialog-cost/purchase-dialog-cost-component';
 import { SaleComponent } from './sale/sale.component';
-import { PaymentDialogComponent } from './sale/payment-dialog.component';
+import { PaymentDialogComponent } from './sale/payment-dialog-component/payment-dialog.component';
 import { ClientAddComponent } from './client/client-add/client-add.component';
 import { ClientEditComponent } from './client/client-edit/client-edit.component';
 import { ClientListComponent } from './client/client-list/client-list.component';
@@ -66,6 +66,7 @@ import { PurchaseReasignComponent } from './purchase/reasign/reasign.component';
 import { PurchaseEditComponent } from './purchase/purchase-edit/purchase-edit.component';
 import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.component';
 import { SessionComponent } from './login/session/session.component';
+import { DiscountDialogComponent } from './sale/discount-dialog-component/discount-dialog.component';
 
 @NgModule({
   declarations: [
@@ -104,7 +105,8 @@ import { SessionComponent } from './login/session/session.component';
     PurchaseReasignComponent,
     PurchaseEditComponent,
     PurchaseListComponent,
-    SessionComponent
+    SessionComponent,
+    DiscountDialogComponent
   ],
   imports: [
     BrowserModule,

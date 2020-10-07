@@ -38,7 +38,6 @@ export class SessionComponent implements OnInit {
 
   save(){
     const amount = +this.sessionForm.controls.amount.value;
-    console.log('Monto capturado', amount, 'Monto minimo', this.amountMin);
     if( amount >= this.amountMin) {
       const session = <Session> {
         userId: +window.localStorage.getItem("userId"),

@@ -5,12 +5,13 @@ import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
 import {Sale, SaleDetail, SalePayment} from './../model/sale.model';
 import { AlertService, alertOptions } from '../_alert';
-import { ApiSaleService,Privileges } from './../service/module.service';
+import { ApiSaleService,Privileges, ApiCatalogService, CAT_CONST } from './../service/module.service';
 import { ProductDialogSearchComponent } from './../product/dialog-search/product-dialog-search.component';
 import { ClientAddComponent } from './../client/client-add/client-add.component';
 import { ClientDialogSearchComponent } from './../client/dialog-search/client-dialog-search.component';
-import { PaymentDialogComponent } from './payment-dialog.component';
+import { PaymentDialogComponent } from './payment-dialog-component/payment-dialog.component';
 import { TicketComponent } from './ticket-component/ticket.component';
+import { DiscountDialogComponent } from './discount-dialog-component/discount-dialog.component';
 
 import { Client } from './../model/client.model';
 import { Product } from './../model/product.model';
@@ -36,6 +37,7 @@ export class SaleComponent implements OnInit {
   constructor(
   	private formBuilder: FormBuilder,
   	private apiService: ApiSaleService,
+    public catalogService:ApiCatalogService,
     public privileges:Privileges,
     public alertService:AlertService,
   	public dialog: MatDialog,
@@ -176,6 +178,7 @@ export class SaleComponent implements OnInit {
         this.product.inventory.unity = result.data.inventory.unity;
         this.product.inventory.unityDesc = result.data.inventory.unityDesc;
         this.product.inventory.numPiece = result.data.inventory.numPiece;
+        this.openDiscountDialog();
       }
     });
   }
@@ -209,6 +212,19 @@ export class SaleComponent implements OnInit {
       this.reset(); 
       this.alertService.success('Venta completada', alertOptions);
     });
+  }
+
+  openDiscountDialog(){
+    this.catalogService.getByName(CAT_CONST.DISCOUNTS).subscribe(response =>{
+      if(response.description.trim().toUpperCase()==='SI'){
+        const dialogRef = this.dialog.open(DiscountDialogComponent, {data: this.product});
+        dialogRef.afterClosed().subscribe(result => {
+          let discount = result.data/100*this.product.inventory.price;
+          let newPrice = this.product.inventory.price - discount;
+          this.product.inventory.price = +newPrice.toFixed();
+        })
+      }
+    })
   }
 
   private newTagTicket(){

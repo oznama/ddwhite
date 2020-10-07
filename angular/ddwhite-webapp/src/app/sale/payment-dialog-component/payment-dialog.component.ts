@@ -1,15 +1,15 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AlertService, alertOptions } from '../_alert';
-import {CatalogItem} from './../model/catalog.model';
-import { Sale, SalePayment } from './../model/sale.model';
-import { ApiCatalogService } from './../service/api.service.catalog';
+import { AlertService, alertOptions } from '../../_alert';
+import {CatalogItem} from '../../model/catalog.model';
+import { Sale, SalePayment } from '../../model/sale.model';
+import { ApiCatalogService, CAT_CONST } from '../../service/api.service.catalog';
 
 @Component({
   selector: 'payment-dialog',
   templateUrl: 'payment-dialog.component.html',
-  styleUrls: ['./sale.component.css']
+  styleUrls: ['../sale.component.css']
 })
 export class PaymentDialogComponent implements OnInit {
   paymentForm: FormGroup;
@@ -41,13 +41,13 @@ export class PaymentDialogComponent implements OnInit {
   }
 
   private loadCatalogs(): void{
-    this.catalogService.getByName('METODPAG').subscribe( response => {
+    this.catalogService.getByName(CAT_CONST.PAYMENT_METHOD).subscribe( response => {
       this.catalogPayment = response.items;
       this.efectivoId = this.catalogPayment[0].id;
       this.paymentForm.controls.payment.setValue(this.efectivoId);
     }, error => console.error(error));
-    this.catalogService.getByName('PINPAD').subscribe( response => this.catalogComisiones = response.items, error =>console.error(error));
-    this.catalogService.getByName('IVA').subscribe( response => this.tax = +response.description, error =>console.error(error));
+    this.catalogService.getByName(CAT_CONST.PIN_PAD).subscribe( response => this.catalogComisiones = response.items, error =>console.error(error));
+    this.catalogService.getByName(CAT_CONST.TAX).subscribe( response => this.tax = +response.description, error =>console.error(error));
   }
 
   showCreditDataExtra(){
