@@ -13,53 +13,49 @@
 
       <form [formGroup]="purchaseForm">
 
-        <div class="wrapper" style="padding: 0 50px">
+        <div fxLayoutAlign="center center">
+          <button mat-raised-button color="primary" class="midle-width-input" [disabled]="!tableValid()" (click)="builkSave()">Terminar compra</button>
+        </div>
+
+        <div class="wrapper">
           <span style="font-size: 20px; text-transform: uppercase;">Proveedor selecionado: </span>
           <span class="text-red" *ngIf="!provider.id">Click en la lupa para buscar proveedor...</span>
           <span class="text-blue" *ngIf="provider.id">{{provider.bussinesName}}</span>
-          <span class="spacer"></span>
-          <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogProviderSearch()">search</mat-icon>
+          <mat-icon (click)="openDialogProviderSearch()">search</mat-icon>
         </div>
-        <div class="wrapper" style="padding: 0 50px">
+        <div class="wrapper">
           <span style="font-size: 20px; text-transform: uppercase;">Producto selecionado: </span>
           <span class="text-red" *ngIf="!product.id">Click en la lupa para buscar producto...</span>
           <span class="text-blue" *ngIf="product.id">{{product.sku + ' ' + product.nameLarge}}</span>
-          <span class="spacer"></span>
-          <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogProductSearch()">search</mat-icon>  
+          <mat-icon (click)="openDialogProductSearch()">search</mat-icon>
         </div>
+        <div class="wrapper">
+          <mat-form-field appearance="fill">
+    	    	<input matInput formControlName="quantity" style="text-align:right; padding: 0 10px;" 
+            placeholder="Cantidad" maxlength="10" autocomplete="off" required>
+    	    	<mat-error>Campo incorrecto, solo numeros con maximo 3 decimales opcionales</mat-error>
+    	    </mat-form-field>
+    	    <mat-form-field appearance="fill">
+    	    	<input matInput formControlName="cost" style="text-align:right; padding: 0 10px" placeholder="Costo" maxlength="15" autocomplete="off" required>
+    	    	<mat-error>Campo incorrecto, solo monto con maximo 4 decimales opcionales</mat-error>
+    	    </mat-form-field>
+  	    
+      	  <mat-form-field appearance="fill">
+      		  <select matNativeControl formControlName="unity" placeholder="Unidad" required>
+      		    <option *ngFor="let item of catalogUnity" [value]="item.id">
+      		      {{item.name}}
+      		    </option>
+      		  </select>
+      		  <mat-error>Campo obligatorio</mat-error>
+      		</mat-form-field>
 
+          <mat-form-field appearance="fill" *ngIf="showNumPiece()">
+            <input matInput formControlName="numPiece" placeholder="Numero de piezas" maxlength="5" type="number" autocomplete="off" required>
+            <mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
+          </mat-form-field>
 
-        <mat-form-field class='midle-width-input'>
-  	    	<input matInput formControlName="quantity" style="text-align:right; padding: 0 10px;" placeholder="Cantidad" maxlength="10" autocomplete="off" required>
-  	    	<mat-error>Campo incorrecto, solo numeros con maximo 3 decimales opcionales</mat-error>
-  	    </mat-form-field>
-  	    <mat-form-field class="midle-width-input">
-  	    	<input matInput formControlName="cost" style="text-align:right; padding: 0 10px" placeholder="Costo" maxlength="15" autocomplete="off" required>
-  	    	<mat-error>Campo incorrecto, solo monto con maximo 4 decimales opcionales</mat-error>
-  	    </mat-form-field>
-	    
-    	  <mat-form-field class='midle-width-input'>
-    		  <select matNativeControl formControlName="unity" placeholder="Unidad" required>
-    		    <option *ngFor="let item of catalogUnity" [value]="item.id">
-    		      {{item.name}}
-    		    </option>
-    		  </select>
-    		  <mat-error>Campo obligatorio</mat-error>
-    		</mat-form-field>
-
-        <mat-form-field class='midle-width-input' *ngIf="showNumPiece()">
-          <input matInput formControlName="numPiece" placeholder="Numero de piezas" maxlength="5" type="number" autocomplete="off" required>
-          <mat-error>Campo incorrecto, solo numeros menores de 6 digitos</mat-error>
-        </mat-form-field>
-
-		    <div class="wrapper">
-          <span class="spacer"></span>
           <button mat-raised-button type="button" [disabled]="formInvalid()" (click)="agregar()">Agregar</button>
           <!--button mat-raised-button color="primary" [disabled]="purchaseForm.invalid" (click)="onSubmit()">Guardar</button-->
-        </div>
-
-		    <div fxLayoutAlign="center center">
-        	<button mat-raised-button color="primary" class="midle-width-input" [disabled]="!tableValid()" (click)="builkSave()">Terminar compra</button>
         </div>
 
       </form>

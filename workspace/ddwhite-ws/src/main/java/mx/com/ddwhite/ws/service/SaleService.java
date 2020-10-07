@@ -17,9 +17,11 @@ import mx.com.ddwhite.ws.dto.SaleDetailDto;
 import mx.com.ddwhite.ws.dto.SaleDto;
 import mx.com.ddwhite.ws.dto.SalePaymentDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
+import mx.com.ddwhite.ws.model.Client;
 import mx.com.ddwhite.ws.model.Sale;
 import mx.com.ddwhite.ws.model.SaleDetail;
 import mx.com.ddwhite.ws.model.SalePayment;
+import mx.com.ddwhite.ws.repository.ClientRepository;
 import mx.com.ddwhite.ws.repository.SaleDetailRepository;
 import mx.com.ddwhite.ws.repository.SalePaymentRepository;
 import mx.com.ddwhite.ws.repository.SaleRepository;
@@ -40,6 +42,9 @@ public class SaleService {
 	@Autowired
 	private TicketPrintService ticketPrintService;
 	
+	@Autowired
+	private ClientRepository clientRepository;
+	
 	public SaleDto save(SaleDto saleDto) throws Throwable {
 		Sale sale = new Sale();
 		BeanUtils.copyProperties(saleDto, sale);
@@ -57,8 +62,8 @@ public class SaleService {
 		}
 	}
 	
-	public void updateInvoice(Long id, String invoice) {
-		saleRepository.updateInvoice(invoice, id);
+	public void updateInvoice(Long id, String invoice, Long clientId) {
+		saleRepository.updateInvoice(invoice, clientId, id);
 		saleRepository.flush();
 	}
 
@@ -95,10 +100,7 @@ public class SaleService {
 	}
 
 	public SaleDto findById(Long id) throws ResourceNotFoundException {
-		Sale sale = saleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(Sale.class.getSimpleName(), "id", id));
-		SaleDto saleDto = new SaleDto();
-		bindSale(sale, saleDto);
-		return saleDto;
+		return bindSale(saleRepository.getOne(id));
 	}
 	
 	public List<SaleDto> findByRange(String startDate, String endDate) {
@@ -116,18 +118,23 @@ public class SaleService {
 
 	private List<SaleDto> buildSalesDto(final List<Sale> sales) {
 		final List<SaleDto> salesDto = new ArrayList<>();
-		sales.forEach( sale -> {
-			final SaleDto saleDto = new SaleDto();
-			bindSale(sale, saleDto);
-			salesDto.add(saleDto);
-		} );
+		sales.forEach( sale -> salesDto.add(bindSale(sale)));
 		return salesDto;
 	}
 	
-	private void bindSale(Sale sale, final SaleDto saleDto) {
+	private SaleDto bindSale(Sale sale) {
+		SaleDto saleDto = new SaleDto();
 		BeanUtils.copyProperties(sale, saleDto);
 		bindDetail(saleDto);
 		bindPayment(saleDto);
+		if(sale.getClientId() != null) {
+			Client client = clientRepository.getOne(sale.getClientId());
+			if( client != null) {
+				saleDto.setClientRfc(client.getRfc());
+				saleDto.setClientName(client.getName() + " " + client.getMidleName() + " " + client.getLastName());	
+			}
+		}
+		return saleDto;
 	}
 
 	private void bindPayment(final SaleDto saleDto) {

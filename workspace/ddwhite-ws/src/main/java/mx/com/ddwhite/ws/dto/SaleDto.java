@@ -15,6 +15,8 @@ public class SaleDto implements Serializable {
 	private Long id;
 	private Long userId;
 	private Long clientId;
+	private String clientRfc;
+	private String clientName;
 	private BigDecimal subTotal;
 	private BigDecimal tax;
 	private BigDecimal total;
@@ -51,6 +53,22 @@ public class SaleDto implements Serializable {
 
 	public void setClientId(Long clientId) {
 		this.clientId = clientId;
+	}
+
+	public String getClientRfc() {
+		return clientRfc;
+	}
+
+	public void setClientRfc(String clientRfc) {
+		this.clientRfc = clientRfc;
+	}
+
+	public String getClientName() {
+		return clientName;
+	}
+
+	public void setClientName(String clientName) {
+		this.clientName = clientName;
 	}
 
 	public BigDecimal getSubTotal() {

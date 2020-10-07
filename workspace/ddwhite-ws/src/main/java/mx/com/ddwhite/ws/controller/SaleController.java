@@ -47,7 +47,7 @@ public class SaleController implements GenericController<SaleDto> {
 	@Override
 	public ResponseEntity<?> update(SaleDto entity) {
 		try {
-			service.updateInvoice(entity.getId(), entity.getInvoice());
+			service.updateInvoice(entity.getId(), entity.getInvoice(), entity.getClientId());
 			return ResponseEntity.ok().build();
 		} catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());

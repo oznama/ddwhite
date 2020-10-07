@@ -56,11 +56,11 @@
 
   <!-- Pagination -->
   <div class="wrapper">
-    <mat-icon aria-hidden="false" (click)="pagination(0)">first_page</mat-icon>
-    <mat-icon aria-hidden="false" (click)="pagination(page-1)">arrow_back</mat-icon>
+    <mat-icon (click)="pagination(0)">first_page</mat-icon>
+    <mat-icon (click)="pagination(page-1)">arrow_back</mat-icon>
     page {{page+1}} of {{totalPage}}
-    <mat-icon aria-hidden="false" (click)="pagination(page+1)">arrow_forward</mat-icon>
-    <mat-icon aria-hidden="false" (click)="pagination(totalPage-1)">last_page</mat-icon>
+    <mat-icon (click)="pagination(page+1)">arrow_forward</mat-icon>
+    <mat-icon (click)="pagination(totalPage-1)">last_page</mat-icon>
   </div>
 
 </div>

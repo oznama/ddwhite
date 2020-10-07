@@ -5,26 +5,24 @@
       <mat-card-title>Busqueda por rango de fecha</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content>
+    <mat-card-content class="wrapper">
       <form [formGroup]="searchForm" (ngSubmit)="search(0)">
 
-        <mat-form-field appearance="fill" class="midle-width-input">
+        <mat-form-field appearance="fill">
           <mat-label>Fecha inicial</mat-label>
           <input matInput formControlName="startDate" [matDatepicker]="startDate" required>
           <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
           <mat-datepicker #startDate disabled="false"></mat-datepicker>
         </mat-form-field>
 
-        <mat-form-field appearance="fill" class="midle-width-input">
+        <mat-form-field appearance="fill">
           <mat-label>Fecha Final</mat-label>
           <input matInput formControlName="endDate" [matDatepicker]="endDate" required="">
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
           <mat-datepicker #endDate disabled="false"></mat-datepicker>
         </mat-form-field>
-        <div class="wrapper">
-          <span class="spacer"></span>
-          <button mat-raised-button color="primary" [disabled]="searchForm.invalid">Filtrar</button>
-        </div>
+        
+        <button mat-raised-button color="primary" [disabled]="searchForm.invalid">Filtrar</button>
       </form>
     </mat-card-content>
   </mat-card>
@@ -39,23 +37,30 @@
         <thead>
         <tr>
           <th>Folio</th>
+          <th>Cliente</th>
           <th>Total</th>
           <th>No Artic</th>
           <th>Factura</th>
-          <th></th>
+          <th>
+            <button mat-raised-button type="button" (click)="openDialogClientAdd()">Registrar cliente</button>
+          </th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let sale of sales | async">
           <td>{{sale.id}}</td>
-          <td>{{sale.total}}</td>
+          <td>
+            {{sale.clientId ? ((sale.clientRfc ? (sale.clientRfc + ' ') : '') + sale.clientName) : 'Sin cliente'}}
+            <mat-icon (click)="openDialogClientSearch(sale.id)">search</mat-icon>
+          </td>
+          <td>$ {{sale.total}}</td>
           <td>{{sale.detail.length}}</td>
           <td class="midle-width-input">
             <input #invoiceCaptured maxlength="100" autocomplete="off" value="{{sale.invoice}}"> <!-- formControlName="invoice" -->
           </td>
           <td>
-            <button mat-raised-button color="primary" style="width:100px" type="button" 
-              [disabled]="!rowValid(sale.id, invoiceCaptured.value)" (click)="update(sale.id, invoiceCaptured.value)">Actualizar</button>
+            <button mat-raised-button color="primary" type="button" [disabled]="!rowValid(sale.id, invoiceCaptured.value, sale.clientId)" 
+            (click)="update(sale.id, invoiceCaptured.value, sale.clientId)">Actualizar</button>
           </td>
         </tr>
         </tbody>
@@ -65,11 +70,11 @@
 
   <!-- Pagination -->
   <div class="wrapper">
-    <mat-icon aria-hidden="false" (click)="pagination(0)">first_page</mat-icon>
-    <mat-icon aria-hidden="false" (click)="pagination(page-1)">arrow_back</mat-icon>
+    <mat-icon (click)="pagination(0)">first_page</mat-icon>
+    <mat-icon (click)="pagination(page-1)">arrow_back</mat-icon>
     page {{page+1}} of {{totalPage}}
-    <mat-icon aria-hidden="false" (click)="pagination(page+1)">arrow_forward</mat-icon>
-    <mat-icon aria-hidden="false" (click)="pagination(totalPage-1)">last_page</mat-icon>
+    <mat-icon (click)="pagination(page+1)">arrow_forward</mat-icon>
+    <mat-icon (click)="pagination(totalPage-1)">last_page</mat-icon>
   </div>
 
 </div>

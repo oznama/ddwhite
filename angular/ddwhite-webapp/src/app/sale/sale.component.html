@@ -64,9 +64,8 @@
 			          <span style="font-size: 20px; text-transform: uppercase;">Cliente selecionado: </span>
 			          <span class="text-red" *ngIf="!client.id">SIN FACTURA &oacute; click en la lupa para buscar...</span>
 			          <span class="text-blue" *ngIf="client.id">{{client.name + ' ' +  client.lastName + ' ' +  client.midleName}}</span>
-			          <span class="spacer"></span>
-			          <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogClientSearch()">search</mat-icon>
-			          <mat-icon aria-hidden="false" aria-label="Example clear icon" *ngIf="client.id" (click)="unSelectClient()">clear</mat-icon>
+			          <mat-icon (click)="openDialogClientSearch()">search</mat-icon>
+			          <mat-icon *ngIf="client.id" (click)="unSelectClient()">clear</mat-icon>
 					  <span class="spacer"></span>
 			          <button mat-raised-button color="primary" (click)="openDialogClientAdd()">Registrar cliente</button>
 			        </div>
@@ -80,15 +79,10 @@
 			  	    	<input matInput formControlName="quantity" style="text-align:right; padding: 0 10px;" placeholder="Cantidad" maxlength="10" autocomplete="off" required>
 			  	    	<mat-error>Campo incorrecto, solo numeros con maximo 3 decimales opcionales</mat-error>
 			  	      </mat-form-field>
-			  	      <mat-icon aria-hidden="false" aria-label="Example search icon" (click)="openDialogProductSearch()">search</mat-icon>
-			          <span class="spacer"></span>
-			        </div>
-
-					<div class="wrapper">
-			          <span class="spacer"></span>
+			  	      <mat-icon (click)="openDialogProductSearch()">search</mat-icon>
+			  	      <span class="spacer"></span>
 			          <button mat-raised-button type="button" [disabled]="formInvalid()" (click)="agregar()">Agregar</button>
 			        </div>
-
 			      </form>
 			    </mat-card-content>
 			  </mat-card>

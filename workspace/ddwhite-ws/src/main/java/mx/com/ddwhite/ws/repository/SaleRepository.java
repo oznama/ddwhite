@@ -24,6 +24,6 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 	
 	@Modifying
 	@Transactional
-	@Query("UPDATE Sale s SET s.invoice=:invoice WHERE s.id = :id")
-	void updateInvoice(@Param("invoice") String invoice, @Param("id") Long id);
+	@Query("UPDATE Sale s SET s.invoice=:invoice, s.clientId=:clientId WHERE s.id = :id")
+	void updateInvoice(@Param("invoice") String invoice, @Param("clientId") Long clientId, @Param("id") Long id);
 }

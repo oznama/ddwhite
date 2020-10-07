@@ -18,25 +18,27 @@
             </select>
           </mat-form-field>
 
-          <mat-form-field class="midle-width-input" *ngIf="showDates()">
-            <mat-label>Fecha inicial</mat-label>
-            <input matInput formControlName="startDate" [matDatepicker]="startDate">
-            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
-            <mat-datepicker #startDate disabled="false"></mat-datepicker>
-          </mat-form-field>
+          <div class="wrapper">
+            <mat-form-field appearance="fill" *ngIf="showDates()">
+              <mat-label>Fecha inicial</mat-label>
+              <input matInput formControlName="startDate" [matDatepicker]="startDate">
+              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+              <mat-datepicker #startDate disabled="false"></mat-datepicker>
+            </mat-form-field>
 
-          <mat-form-field class="midle-width-input" *ngIf="showDates()">
-            <mat-label>Fecha Final</mat-label>
-            <input matInput formControlName="endDate" [matDatepicker]="endDate">
-            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
-            <mat-datepicker #endDate disabled="false"></mat-datepicker>
-          </mat-form-field>
+            <mat-form-field appearance="fill" *ngIf="showDates()">
+              <mat-label>Fecha Final</mat-label>
+              <input matInput formControlName="endDate" [matDatepicker]="endDate">
+              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+              <mat-datepicker #endDate disabled="false"></mat-datepicker>
+            </mat-form-field>
+          </div>
 
-          <mat-form-field class="third-width-input" *ngIf="showTicketId()">
+          <mat-form-field class="full-width-input" *ngIf="showTicketId()">
             <input matInput type="number" formControlName="saleId" placeholder="Folio de la compra" autocomplete="off"><br>
           </mat-form-field>
 
-          <mat-form-field class='third-width-input' *ngIf="showPayments()">
+          <mat-form-field class='full-width-input' *ngIf="showPayments()">
             <select matNativeControl formControlName="payment" placeholder="Forma de pago" required>
               <option *ngFor="let item of catalogPayment" [value]="item.id">
                 {{item.name}}

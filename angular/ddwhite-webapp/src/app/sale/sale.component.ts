@@ -185,12 +185,12 @@ export class SaleComponent implements OnInit {
 
   openDialogClientSearch() {
     const dialogRef = this.dialog.open(ClientDialogSearchComponent);
-    dialogRef.afterClosed().subscribe( result =>{this.setClient(result);});
+    dialogRef.afterClosed().subscribe( result => this.setClient(result));
   }
 
   openDialogClientAdd() {
     const dialogRef = this.dialog.open(ClientAddComponent);
-    dialogRef.afterClosed().subscribe( result =>{this.setClient(result);});
+    dialogRef.afterClosed().subscribe( result => this.setClient(result));
   }
 
   openDialogPayments(){
@@ -229,7 +229,7 @@ export class SaleComponent implements OnInit {
 
   private newTagTicket(){
     window.localStorage.setItem('currentSale', JSON.stringify(this.sale));
-    this.router.navigate([]).then(result => { window.open( window.location.origin + '/ticket-tag', '_blank'); });
+    this.router.navigate([]).then(result => window.open( window.location.origin + '/ticket-tag', '_blank'));
   }
 
   private setClient(result: any): void {
