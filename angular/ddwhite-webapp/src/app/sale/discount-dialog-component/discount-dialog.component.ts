@@ -9,6 +9,8 @@ import { Product } from './../../model/product.model';
 })
 export class DiscountDialogComponent implements OnInit {
   discountForm: FormGroup;
+  amountDiscounted: number;
+  amount: number;
   
   constructor(
     public dialogRef: MatDialogRef<DiscountDialogComponent>, 
@@ -18,13 +20,20 @@ export class DiscountDialogComponent implements OnInit {
 
   ngOnInit() {
     this.discountForm = this.formBuilder.group({
-      percentage: [, [Validators.required,Validators.pattern("[0-9]{0,6}")]]
+      percentage: [0, [Validators.required,Validators.pattern("[0-9]{0,3}")]]
     });
+    this.amount = this.data.inventory.price;
+    this.amountDiscounted = this.amount;
+  }
+
+  onChangePercentage(value: number){
+    let discount = value/100*this.amount;
+    let newPrice = this.amount - discount;
+    this.amountDiscounted = +newPrice.toFixed();
   }
 
   applyDiscount(){
-    let percentage = +this.discountForm.controls.percentage.value;
-    this.dialogRef.close({ event: 'close', data: percentage });
+    this.dialogRef.close({ event: 'close', data: this.amountDiscounted });
   }
 
 

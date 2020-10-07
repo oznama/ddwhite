@@ -219,10 +219,8 @@ export class SaleComponent implements OnInit {
       if(response.description.trim().toUpperCase()==='SI'){
         const dialogRef = this.dialog.open(DiscountDialogComponent, {data: this.product});
         dialogRef.afterClosed().subscribe(result => {
-          let discount = result.data/100*this.product.inventory.price;
-          let newPrice = this.product.inventory.price - discount;
-          this.product.inventory.price = +newPrice.toFixed();
-        })
+          if(result && result.data) this.product.inventory.price = result.data
+        });
       }
     })
   }
