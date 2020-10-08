@@ -34,40 +34,14 @@
   </div>
 
   <div *ngIf="showQuantityInput()">
-
-    <div class="box-form">
-
-      <button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button>
-
-      <table style="width:100%">
-        <tr>
-          <td>
-            <label>Producto: </label>
-            <span class="text-blue">{{purchaseSelected.product.nameLarge}}</span><br>
-          </td>
-          <td>
-            <label>Unidad: </label>
-            <span class="text-blue">{{purchaseSelected.unityDesc}}</span><br>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <label>Cantidad: </label>
-            <span class="text-blue">{{purchaseSelected.quantity}}</span><br>
-          </td>
-          <td>
-            <label>N&uacute;mero de piezas por cantidad: </label>
-            <span class="text-blue">{{purchaseSelected.quantity}}</span><br>
-          </td>
-        </tr>
-      </table>
-      <div class="wrapper">
-        <mat-form-field class="third-width-input">
-          <input class="" matInput type="number" #quantity placeholder="Cantidad a reasignar" autocomplete="off"><br>
-        </mat-form-field>
-      </div>
-    </div>
-    
+    <span class="text-blue">Producto: {{purchaseSelected.product.nameLarge}}</span>
+    <span class="text-blue">Unidad: {{purchaseSelected.unityDesc}}</span>
+    <span class="text-blue">Cantidad: {{purchaseSelected.quantity}}</span>
+    <span class="text-blue">N&uacute;mero de piezas por cantidad: {{purchaseSelected.numPiece}}</span>
+    <mat-form-field class="quart-width-input">
+      <input matInput type="number" #quantity placeholder="Cantidad a reasignar" [value]="1" autocomplete="off">
+    </mat-form-field>
+    <span class="text-red" *ngIf="+quantity.value<=0">La cantidad a reasignar no puede ser menor a 0</span>
 
     <table class="table table-striped">
       <thead>
@@ -76,7 +50,7 @@
         <th>Producto</th>
         <th>Unidad</th>
         <th>Cantidad</th>
-        <th></th>
+        <th><button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button></th>
       </tr>
       </thead>
       <tbody>
@@ -86,12 +60,11 @@
         <td>{{purchase.unityDesc}}</td>
         <td>{{purchase.quantity}}</td>
         <td>
-          <button mat-raised-button color="primary" (click)="reasign(purchase.id, +quantity.value)">Reasingar</button>
+          <button mat-raised-button color="primary" *ngIf="+quantity.value>0" (click)="reasign(purchase.id, +quantity.value)">Reasingar</button>
         </td>
       </tr>
       </tbody>
     </table>
-
   </div>
 
 </div>

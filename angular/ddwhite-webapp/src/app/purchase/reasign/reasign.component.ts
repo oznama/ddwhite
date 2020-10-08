@@ -60,9 +60,11 @@ export class PurchaseReasignComponent implements OnInit {
   	this.purchaseService.findByProduct(purchaseId, productId).subscribe( response => {
     	this.purchasesByProduct = response;
     	if(this.showQuantityInput()){
-			this.purchaseOrigin = purchaseId;
+			  this.purchaseOrigin = purchaseId;
     		this.purchaseSelected = purchase;
-    	}
+    	} else {
+        this.alertService.warn('La compra del producto selecionado, no tiene presentación distinta a cual reasignar', alertOptions);
+      }
     }, error =>{
     	console.error(error);
     });

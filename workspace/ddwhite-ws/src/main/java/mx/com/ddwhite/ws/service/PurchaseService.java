@@ -99,7 +99,8 @@ public class PurchaseService {
 			PurchaseDto purchaseDto = setPurchaseDto(purchase);
 			Double saled = sumSaleQuantity(saleDetailRepository
 					.findByProductAndUnityWithoutPieces(purchaseDto.getProduct().getId(), purchaseDto.getUnity()));
-			purchaseDto.setQuantity(purchaseDto.getQuantity() - saled);
+			Double reasigned = sumQuantityReasigned(purchaseReasignService.findByDestiny(purchase.getId()));
+			purchaseDto.setQuantity(purchaseDto.getQuantity() + reasigned - saled);
 			purchasesDto.add(purchaseDto);
 		});
 		return purchasesDto;
@@ -202,6 +203,10 @@ public class PurchaseService {
 
 	private Double sumPurchasesReasign(List<PurchaseReasignDto> purchasesReasigned) {
 		return purchasesReasigned.stream().mapToDouble(sd -> sd.getQuantity().doubleValue()).sum();
+	}
+	
+	private Double sumQuantityReasigned(List<PurchaseReasignDto> purchasesReasigned) {
+		return purchasesReasigned.stream().mapToDouble( p -> (p.getQuantity().doubleValue() * findById(p.getPurchasesOrigin()).getNumPiece())).sum();
 	}
 
 }
