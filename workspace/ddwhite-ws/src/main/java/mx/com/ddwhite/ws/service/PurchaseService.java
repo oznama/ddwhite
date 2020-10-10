@@ -143,7 +143,6 @@ public class PurchaseService {
 			return repository.findCosts(productId, unity, date).get(0);
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println(e.getMessage());
 			return BigDecimal.ZERO;
 		}
 	}

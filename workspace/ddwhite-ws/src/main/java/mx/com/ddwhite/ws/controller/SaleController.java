@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,6 +63,16 @@ public class SaleController implements GenericController<SaleDto> {
 	@GetMapping("/find/bydates")
 	public Page<SaleDto> findByRange(@RequestParam("start") Date start, @RequestParam("end") Date end,Pageable pageable) {
 		return service.findByRange(start, end, pageable);
+	}
+	
+	@GetMapping("/getChasInRegister")
+	public BigDecimal getChasInRegister(@RequestParam(value = "userId", required = true) Long userId) {
+		return service.getChasInRegister(userId);
+	}
+	
+	@GetMapping("/getExcedent")
+	public BigDecimal getExcedent(@RequestParam(value = "userId", required = true) Long userId) {
+		return service.getExcedent(userId);
 	}
 
 }

@@ -21,6 +21,7 @@ public class SaleDto implements Serializable {
 	private BigDecimal tax;
 	private BigDecimal total;
 	private BigDecimal change;
+	private BigDecimal discount;
 	private String invoice;
 	private String dateCreated;
 	private List<SaleDetailDto> detail;
@@ -101,6 +102,14 @@ public class SaleDto implements Serializable {
 
 	public void setChange(BigDecimal change) {
 		this.change = change;
+	}
+
+	public BigDecimal getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(BigDecimal discount) {
+		this.discount = discount;
 	}
 
 	public String getInvoice() {

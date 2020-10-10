@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
+import mx.com.ddwhite.ws.dto.ProductDto;
 import mx.com.ddwhite.ws.dto.SaleDetailDto;
 import mx.com.ddwhite.ws.dto.SaleDto;
 import mx.com.ddwhite.ws.dto.SalePaymentDto;
@@ -59,10 +60,10 @@ public class CashoutService {
 	}
 
 	private void bindCashoutDetail(Cashout cashout, SaleDetailDto detailDto) {
-		String group = catalogService.findById(productService.findById(detailDto.getId()).getGroup()).getName();
+		ProductDto product = productService.findById(detailDto.getProductId());
 		BigDecimal dtotal = detailDto.getPrice().multiply(BigDecimal.valueOf(detailDto.getQuantity()))
 				.setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN);
-		CashoutDetail cd = new CashoutDetail(group, dtotal);
+		CashoutDetail cd = new CashoutDetail(product.getGroupDesc(), dtotal);
 		if (cashout.getDetail().contains(cd)) {
 			int index = cashout.getDetail().indexOf(cd);
 			CashoutDetail cdFinded = cashout.getDetail().get(index);

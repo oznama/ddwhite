@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 
+import org.springframework.util.StringUtils;
+
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 
 
@@ -42,7 +44,7 @@ public class GenericUtils {
 	 * @return date string
 	 */
 	public static String dateToString(Date date, String format) {
-		if( date == null || format.isEmpty())
+		if( date == null || StringUtils.isEmpty(format))
 			return null;
 		DateFormat formatter = new SimpleDateFormat(format);
 		return formatter.format(date);

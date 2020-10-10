@@ -34,6 +34,8 @@ public class Sale implements Serializable {
 	private BigDecimal total;
 	@Column(name = "cambio")
 	private BigDecimal change;
+	@Column(name = "descuento")
+	private BigDecimal discount;
 	@Column(name = "folio_factura")
 	private String invoice;
 	@Column(name = "fecha_registro", insertable = false, updatable = false)
@@ -93,6 +95,14 @@ public class Sale implements Serializable {
 
 	public void setChange(BigDecimal change) {
 		this.change = change;
+	}
+
+	public BigDecimal getDiscount() {
+		return discount;
+	}
+
+	public void setDiscount(BigDecimal discount) {
+		this.discount = discount;
 	}
 
 	public String getInvoice() {

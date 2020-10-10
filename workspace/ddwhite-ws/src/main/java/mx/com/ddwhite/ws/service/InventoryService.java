@@ -69,6 +69,7 @@ public class InventoryService extends InventoryUtils {
 	
 	public List<ProductInventory> findWarehouse(Sort sort, String sku, String name){
 		List<ProductInventory> list = findInventory(sku, name);
+		System.out.println("tabla inventario: " + list.size());
 		list.forEach(product -> {
 			Double quantity = product.getInventory().getQuantity();
 			Double saled = sumSaleQuantity(
@@ -183,11 +184,11 @@ public class InventoryService extends InventoryUtils {
 	
 	private Page<Product> checkWhatList(Pageable pageable, String sku, String name){
 		if( sku != null && name != null ) {
-			return new PageImpl<>(productRepository.findBySkuAndName(sku, name));
+			return new PageImpl<>(productRepository.findBySkuAndName("%" + sku + "%", "%" + name + "%"));
 		} else if ( sku != null) {;
-			return new PageImpl<>(productRepository.findBySku(sku));
+			return new PageImpl<>(productRepository.findBySku("%" + sku + "%"));
 		} else if ( name != null ) {
-			return new PageImpl<>(productRepository.findByName(name));
+			return new PageImpl<>(productRepository.findByName("%" + name + "%"));
 		} else {
 			return productRepository.findAll(pageable);
 		}

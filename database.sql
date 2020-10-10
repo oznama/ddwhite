@@ -9,6 +9,7 @@ drop table if exists compras_reasingadas;
 drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
+drop table if exists sesion;
 drop table if exists usuarios;
 drop table if exists roles_privilegios;
 drop table if exists privilegios;
@@ -140,6 +141,7 @@ create table if not exists venta_total(
 	iva decimal(10,2) not null,
 	total decimal(20,2) not null,
 	cambio decimal(20,2) not null,
+	descuento decimal(10,2),
 	fecha_registro datetime default current_timestamp,
 	primary key(id)
 );
@@ -164,6 +166,8 @@ create table if not exists venta_pago(
 	id_venta bigint not null,
 	forma_pago bigint not null,
 	monto decimal(20,2) not null,
+	folio_voucher char(99),
+	comision decimal(10,2),
 	primary key(id)
 );
 alter table venta_pago add constraint foreign key (id_venta) references venta_total (id);
@@ -178,3 +182,14 @@ create table if not exists compras_reasingadas(
 );
 alter table compras_reasingadas add constraint foreign key (id_compra_origen) references compras (id);
 alter table compras_reasingadas add constraint foreign key (id_compra_destino) references compras (id);
+
+create table if not exists sesion(
+	id bigint not null auto_increment,
+	id_usuario bigint not null,
+	entrada datetime default current_timestamp,
+	salida datetime,
+	monto_inicial decimal(10,4) not null,
+	retiro datetime default current_timestamp,
+	primary key(id)
+);
+alter table sesion add constraint foreign key (id_usuario) references usuarios (id);

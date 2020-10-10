@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.ProductInventory;
@@ -157,20 +159,35 @@ public class ReportService {
 	
 	public Cashout getCashout(Date startDate, Date endDate) {
 		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
+		endDate = GenericUtils.plusDay(endDate, 1);
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
 		return getCashout(strStartDate, strEndDate);
 	}
 	
-	public void printCashout(Long userId) {
-		SessionDto sessionDto = sessionService.findCurrentSession(userId);
-		Cashout cashout = getCashout(sessionDto.getInDate(), sessionDto.getOutDate());
-		cashout.setInitialAmount(sessionDto.getInitialAmount());
-		ticketPrintService.cashout(cashout, userId, sessionDto.getInDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+	public void printCashout(Long userId, Date startDate, Date endDate, BigDecimal cashInBox) {
+		Cashout cashout;
+		SessionDto sessionDto;
+		String strStartDate = null;
+		String strEndDate = null;
+		if( !StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate) ) {
+			strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
+			strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
+			sessionDto = sessionService.findByUserIdAndRange(userId, strStartDate, strEndDate);
+			cashout = getCashout(strStartDate, strEndDate);
+		} else {
+			sessionDto = sessionService.findCurrentSession(userId);
+			cashout = getCashout(sessionDto.getInDate(), sessionDto.getOutDate());
+		}
+		cashout.setInitialAmount(sessionDto.getInitialAmount() != null ? sessionDto.getInitialAmount() : BigDecimal.ZERO);
+		cashout.setCurrentAmount(cashInBox);
+		String fromStartDate = !StringUtils.isEmpty(sessionDto.getInDate()) ? sessionDto.getInDate() : strStartDate;
+		String toEndDate = !StringUtils.isEmpty(strEndDate) ? strEndDate : GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
+		ticketPrintService.cashout(cashout, userId, fromStartDate, toEndDate);
 	}
 	
 	public String payments(Long paymentId, Date startDate, Date endDate) {
 		List<SalePayment> listPayments = new ArrayList<>();
-		if( startDate != null && endDate != null  ) {
+		if( !StringUtils.isEmpty(startDate) && !StringUtils.isEmpty(endDate) ) {
 			String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
 			endDate = GenericUtils.plusDay(endDate, 1);
 			String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);

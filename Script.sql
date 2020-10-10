@@ -56,6 +56,40 @@ update compras set cantidad = 10 where id = 19;
 
 truncate table catalogos;
 
+insert into catalogos(nombre, descripcion) values('CONST', 'CONSTANTES');
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('MONTO_MIN_CAJA', '200', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('MONTO_MAX_CAJA', '500', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('IVA', '16', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('DESCUENTO_ACTIVO', 'SI', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('MYSQL_PATH', 'C:\\Program Files\\MySQL\\MySQL Server 5.7', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+
+insert into catalogos(nombre, descripcion) values('PINPAD', 'COMISIONES PINPAD');
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('UNA SOLA EXIBICION', '3.6%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('3 MESES', '3.6%+4.5%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('6 MESES', '3.6%+7.5%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('9 MESES', '3.6%+9.9%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('12 MESES', '3.6%+11.95%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+
+insert into catalogos(nombre, descripcion) values('DESCUENTO', 'DESCUENTOS');
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('10%', '10', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('20%', '20', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('30%', '30', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('40%', '40', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('50%', '50', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+
+insert into catalogos(nombre, descripcion) values('DENOMINACION', 'DENOMINACIONES DE EFECTIVO');
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('0.10', '10 CENTAVOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('0.50', '50 CENTAVOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('1', '1 PESO', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('2', '2 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('5', '5 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('10', '10 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('20', '20 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('50', '50 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('100', '100 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('200', '200 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('500', '500 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+
 -- DATOS COMPAnIA
 insert into catalogos(nombre, descripcion) values('COMPANY', 'DATOS DE LA COMPANIA');
 -- UNIDADES DE MEDIDA PARA PRODUCTOS
@@ -268,3 +302,78 @@ select * from
 
 select id, costo, unidad from compras where id_producto = 8  order by fecha_registro desc;
 select id, costo, unidad from compras where id_producto = 8 and fecha_registro < '2020-09-16 20:33:55.0' order by fecha_registro desc;
+
+##############################################
+##############################################
+## ALTERS NUEVA VERSION PRECIOSO 05/10/2020
+##############################################
+##############################################
+alter table venta_pago add column folio_voucher char(99);
+alter table venta_pago add column comision decimal(10,2);
+insert into catalogos(nombre, descripcion) values('CONST', 'CONSTANTES');
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('MONTO_MIN_CAJA', '200', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('IVA', '16', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('DESCUENTO_ACTIVO', 'SI', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+
+insert into catalogos(nombre, descripcion) values('PINPAD', 'COMISIONES PINPAD');
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('UNA SOLA EXIBICION', '3.6%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('3 MESES', '3.6%+4.5%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('6 MESES', '3.6%+7.5%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('9 MESES', '3.6%+9.9%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('12 MESES', '3.6%+11.95%+IVA', (select id from (select id from catalogos where nombre = 'PINPAD') as id_catalog_parent));
+
+## ALTERS 08/10/2020
+alter table venta_total add column descuento decimal(10,2);
+alter table sesion add column retiro datetime default current_timestamp;
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('MYSQL_PATH', 'C:\\Program Files\\MySQL\\MySQL Server 5.7', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('MONTO_MAX_CAJA', '500', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion) values('DESCUENTO', 'DESCUENTOS');
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('10%', '10', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('20%', '20', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('30%', '30', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('40%', '40', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('50%', '50', (select id from (select id from catalogos where nombre = 'DESCUENTO') as id_catalog_parent));
+insert into catalogos(nombre, descripcion) values('DENOMINACION', 'DENOMINACIONES DE EFECTIVO');
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('0.10', '10 CENTAVOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('0.50', '50 CENTAVOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('1', '1 PESO', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('2', '2 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('5', '5 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('10', '10 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('20', '20 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('50', '50 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('100', '100 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('200', '200 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('500', '500 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+
+
+truncate sesion;
+select * from sesion;
+update sesion set salida = null where id = 1;
+
+select * from venta_total;
+update venta_total set id_cliente = null, folio_factura = null where id = 1;
+
+
+select total, sub_total, iva from venta_total where id = 2;
+select * from venta_detalle where id_venta = 2;
+select * from venta_pago where id_venta = 2;
+
+update venta_detalle set cantidad = 1 where id = 3;
+
+update venta_total set total = 218, sub_total = 183.12, iva = 34.88 where id = 2;
+update venta_pago set monto = 218 where id = 2;
+
+select * from venta_pago;
+
+truncate venta_pago ;
+truncate venta_detalle ;
+truncate venta_total ;
+
+update venta_total set descuento = null where descuento = 0;
+
+insert into sesion (id_usuario, entrada, monto_inicial, retiro) values (2, '2020-10-09 09:27:33.0', 500, '2020-10-09 09:27:33.0');
+update sesion set salida = null where id = 4;
+update sesion set salida = null, retiro = '2020-10-09 09:27:33.0' where id = 4;
+
+truncate sesion;

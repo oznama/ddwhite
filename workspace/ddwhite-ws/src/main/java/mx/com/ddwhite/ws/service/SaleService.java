@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -16,6 +17,7 @@ import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.SaleDetailDto;
 import mx.com.ddwhite.ws.dto.SaleDto;
 import mx.com.ddwhite.ws.dto.SalePaymentDto;
+import mx.com.ddwhite.ws.dto.SessionDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.Client;
 import mx.com.ddwhite.ws.model.Sale;
@@ -29,6 +31,8 @@ import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class SaleService {
+	
+	private final String MODULE = Sale.class.getSimpleName();
 	
 	@Autowired
 	private SaleRepository saleRepository;
@@ -44,6 +48,12 @@ public class SaleService {
 	
 	@Autowired
 	private ClientRepository clientRepository;
+	
+	@Autowired
+	private CatalogService catalogService;
+	
+	@Autowired
+	private SessionService sessionService;
 	
 	public SaleDto save(SaleDto saleDto) throws Throwable {
 		Sale sale = new Sale();
@@ -99,8 +109,8 @@ public class SaleService {
 		}
 	}
 
-	public SaleDto findById(Long id) throws ResourceNotFoundException {
-		return bindSale(saleRepository.getOne(id));
+	public SaleDto findById(Long id) {
+		return bindSale(saleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id)));
 	}
 	
 	public List<SaleDto> findByRange(String startDate, String endDate) {
@@ -114,6 +124,27 @@ public class SaleService {
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
 		List<Sale> sales = saleRepository.findByRange(strStartDate, strEndDate, pageable);
 		return new PageImpl<>(buildSalesDto(sales), pageable, saleRepository.findByRange(strStartDate, strEndDate).size());
+	}
+	
+	public BigDecimal getExcedent(Long userId) {
+		BigDecimal maxAmount = BigDecimal.valueOf(
+				Double.valueOf(catalogService.findByName(GeneralConstants.CATALOG_MAX_AMOUNT_CASH_WITHDRAWAL).getDescription()))
+				.setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN);
+		BigDecimal currentAmount = getChasInRegister(userId);
+		return currentAmount.subtract(maxAmount).doubleValue() > 0 ? currentAmount : BigDecimal.ZERO;
+	}
+	
+	public BigDecimal getChasInRegister(Long userId) {
+		Long paymentCashId = catalogService.findByName(GeneralConstants.CATALOG_PAYMENT_METHOD_CASH).getId();
+		BigDecimal currentAmount = new BigDecimal(0);
+		SessionDto currentSession = sessionService.findCurrentSession(userId);
+		List<SaleDto> currentSales = findByRange(currentSession.getWithdrawalDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+		for(SaleDto sale : currentSales) {
+			List<SalePayment> salePayments = salePaymentRepository.findBySaleAndPayment(sale.getId(), paymentCashId);
+			BigDecimal totalOfSale = salePayments.stream().map(s -> s.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
+			currentAmount = currentAmount.add(totalOfSale.subtract(sale.getChange()));
+		};
+		return currentAmount;
 	}
 
 	private List<SaleDto> buildSalesDto(final List<Sale> sales) {

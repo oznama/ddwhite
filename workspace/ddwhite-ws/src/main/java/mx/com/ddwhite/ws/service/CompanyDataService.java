@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.CatalogItemReadDto;
@@ -40,7 +41,7 @@ public class CompanyDataService {
 	}
 	
 	private void createCatalogItem(Long catalogParentId, String property, String description) {
-		if( description != null && !description.isEmpty() ) {
+		if( !StringUtils.isEmpty(description) ) {
 			if( catalogService.findByNameAndCatalogParent(catalogParentId, property) != null ) return;
 			Catalog catalogItem = new Catalog();
 			catalogItem.setCatalogParentId(catalogParentId);
@@ -55,7 +56,7 @@ public class CompanyDataService {
 	}
 	
 	private void updateCatalogItem(Long id, String description, String property) {
-		description = description == null || description.isEmpty() ? null : description;
+		description = StringUtils.isEmpty(description) ? null : description;
 		try {
 			catalogService.updateDescription(id, description);
 		} catch (Exception e) {

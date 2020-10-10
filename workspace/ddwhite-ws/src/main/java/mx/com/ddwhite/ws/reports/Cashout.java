@@ -15,6 +15,7 @@ public class Cashout implements Serializable {
 	private BigDecimal total;
 	private BigDecimal totalChange;
 	private BigDecimal initialAmount;
+	private BigDecimal currentAmount;
 
 	private List<CashoutDetail> detail;
 	private List<CashoutPayment> payment;
@@ -48,6 +49,14 @@ public class Cashout implements Serializable {
 
 	public void setInitialAmount(BigDecimal initialAmount) {
 		this.initialAmount = initialAmount;
+	}
+
+	public BigDecimal getCurrentAmount() {
+		return currentAmount;
+	}
+
+	public void setCurrentAmount(BigDecimal currentAmount) {
+		this.currentAmount = currentAmount;
 	}
 
 	public List<CashoutDetail> getDetail() {

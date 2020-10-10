@@ -52,6 +52,15 @@ public class SessionService {
 		return sessionDto;
 	}
 	
+	public SessionDto findByUserIdAndRange(Long userId, String startDate, String endDate) {
+		SessionDto sessionDto = new SessionDto();
+		List<Session> sessions = repository.findByUserIdAndRange(userId, startDate, endDate);
+		if(!sessions.isEmpty()) {
+			BeanUtils.copyProperties(sessions.get(0), sessionDto);
+		}
+		return sessionDto;
+	}
+	
 	public SessionDto create(SessionDto sessionDto) {
 		Session session = new Session();
 		BeanUtils.copyProperties(sessionDto, session);
@@ -64,6 +73,12 @@ public class SessionService {
 		String outDate = GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
 		repository.updateCloseSession(id, outDate);
 		return outDate;
+	}
+	
+	public String updateWithdrawalDate(Long id) {
+		String withdrawalDate = GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
+		repository.updateWithdrawalDate(id, withdrawalDate);
+		return withdrawalDate;
 	}
 	
 	private SessionDto getSessionDto(Session session) {

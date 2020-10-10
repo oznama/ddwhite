@@ -20,5 +20,8 @@ public interface SalePaymentRepository extends JpaRepository<SalePayment, Long> 
 	
 	@Query("SELECT sp FROM SalePayment sp WHERE sp.payment = :payment")
 	List<SalePayment> findByPayment(@Param("payment") Long payment);
+	
+	@Query("SELECT sp FROM SalePayment sp WHERE sp.saleId = :saleId AND sp.payment = :payment")
+	List<SalePayment> findBySaleAndPayment(@Param("saleId") Long saleId, @Param("payment") Long payment);
 
 }

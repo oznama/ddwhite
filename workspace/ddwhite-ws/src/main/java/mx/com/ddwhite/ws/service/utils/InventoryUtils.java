@@ -49,7 +49,8 @@ public class InventoryUtils {
 	}
 
 	protected BigDecimal averageCost(List<Purchase> purchases) {
-		return BigDecimal.valueOf(purchases.stream().mapToDouble( c -> c.getCost().doubleValue()).average().orElse(0.0)).setScale(GeneralConstants.BIG_DECIMAL_ROUND,BigDecimal.ROUND_HALF_EVEN);
+		return BigDecimal.valueOf(purchases.stream().mapToDouble(c -> c.getCost().doubleValue()).average().orElse(0.0))
+				.setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN);
 	}
 	
 	protected BigDecimal maxCost(List<Purchase> purchases) {

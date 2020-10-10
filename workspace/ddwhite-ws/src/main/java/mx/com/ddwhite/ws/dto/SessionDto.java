@@ -15,6 +15,7 @@ public class SessionDto implements Serializable {
 	private String inDate;
 	private String outDate;
 	private BigDecimal initialAmount;
+	private String withdrawalDate;
 
 	public Long getId() {
 		return id;
@@ -54,6 +55,14 @@ public class SessionDto implements Serializable {
 
 	public void setInitialAmount(BigDecimal initialAmount) {
 		this.initialAmount = initialAmount;
+	}
+
+	public String getWithdrawalDate() {
+		return withdrawalDate;
+	}
+
+	public void setWithdrawalDate(String withdrawalDate) {
+		this.withdrawalDate = withdrawalDate;
 	}
 
 	@Override

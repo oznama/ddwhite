@@ -30,6 +30,8 @@ public class Session implements Serializable {
 	private String outDate;
 	@Column(name = "monto_inicial")
 	private BigDecimal initialAmount;
+	@Column(name = "retiro", insertable = false)
+	private String withdrawalDate;
 
 	public Long getId() {
 		return id;
@@ -69,6 +71,14 @@ public class Session implements Serializable {
 
 	public void setInitialAmount(BigDecimal initialAmount) {
 		this.initialAmount = initialAmount;
+	}
+
+	public String getWithdrawalDate() {
+		return withdrawalDate;
+	}
+
+	public void setWithdrawalDate(String withdrawalDate) {
+		this.withdrawalDate = withdrawalDate;
 	}
 
 }
