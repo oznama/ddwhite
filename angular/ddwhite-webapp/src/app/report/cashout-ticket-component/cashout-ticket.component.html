@@ -1,0 +1,54 @@
+<div mat-dialog-content>
+    <mat-card>
+
+      <mat-card-header>
+        <mat-card-title>Corte de caja</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content>
+        <form [formGroup]="searchForm" (ngSubmit)="imprimir()">
+
+          <div *ngIf="privileges.isAdmin()">
+            <mat-form-field class="full-width-input">
+              <select matNativeControl formControlName="user" placeholder="Usuario">
+                <option *ngFor="let user of users" [value]="user.id">
+                  {{user.fullName}}
+                </option>
+              </select>
+            </mat-form-field>
+          </div>
+
+          <div *ngIf="privileges.isAdmin()">
+            <mat-form-field class="midle-width-input">
+              <mat-label>Fecha inicial</mat-label>
+              <input matInput formControlName="startDate" [matDatepicker]="startDate" autocomplete="off">
+              <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+              <mat-datepicker #startDate disabled="false"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="midle-width-input">
+              <input matInput type="time" formControlName="startTime" placeholder="Hora entrada" min="07:00" max="20:00">
+            </mat-form-field>
+            <mat-form-field class="midle-width-input">
+              <mat-label>Fecha Final</mat-label>
+              <input matInput formControlName="endDate" [matDatepicker]="endDate" autocomplete="off">
+              <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+              <mat-datepicker #endDate disabled="false"></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field class="midle-width-input">
+              <input matInput type="time" formControlName="endTime" placeholder="Hora salida" min="07:00" max="20:00">
+            </mat-form-field>
+          </div>
+
+          <mat-form-field class="full-width-input">
+            <input matInput formControlName="amount" style="text-align:right; padding: 0 10px" placeholder="Efectivo en caja" 
+            maxlength="15" autocomplete="off" required>
+            <mat-error>Campo incorrecto, solo monto con maximo 2 decimales opcionales</mat-error>
+          </mat-form-field>
+
+          <div class="wrapper">
+            <button mat-raised-button color="primary" [disabled]="searchForm.invalid">Imprimir</button>
+          </div>
+        </form>
+      </mat-card-content>
+    </mat-card>
+</div>

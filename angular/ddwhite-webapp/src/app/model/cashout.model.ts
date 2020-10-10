@@ -27,3 +27,13 @@ export class CashoutPayment {
 	}
 
 }
+
+export class Withdrawall {
+	denomination: string;
+	denominationValue: number;
+	quantity: number;
+	
+	constructor(init?:Partial<Withdrawall>){
+		Object.assign(this, init);
+	}
+}

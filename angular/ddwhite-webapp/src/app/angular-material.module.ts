@@ -12,7 +12,9 @@ MatDialogModule,
 MatProgressSpinnerModule,
 MatDatepickerModule,
 MatNativeDateModule,
-MatCheckboxModule
+MatCheckboxModule,
+MatCardModule,
+MatProgressBarModule
 } from '@angular/material';
 
 @NgModule({
@@ -28,7 +30,9 @@ imports: [
    MatProgressSpinnerModule,
    MatDatepickerModule,
    MatNativeDateModule,
-   MatCheckboxModule
+   MatCheckboxModule,
+   MatCardModule,
+   MatProgressBarModule
 ],
 exports: [
    MatButtonModule,
@@ -41,7 +45,9 @@ exports: [
    MatProgressSpinnerModule,
    MatDatepickerModule,
    MatNativeDateModule,
-   MatCheckboxModule
+   MatCheckboxModule,
+   MatCardModule,
+   MatProgressBarModule
 ],
 providers: []
 })

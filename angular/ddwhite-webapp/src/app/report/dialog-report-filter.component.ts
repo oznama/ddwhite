@@ -11,7 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ReportFilterDialogComponent implements OnInit {
   searchForm: FormGroup;
   
-  reports: string[] = ['Compras', 'Ventas', 'Reimpresion Ticket', 'Pagos'];
+  reports: string[] = ['Compras', 'Ventas', 'Pagos'];
   reportSelected: string;
   catalogPayment: CatalogItem[];
   
@@ -27,7 +27,6 @@ export class ReportFilterDialogComponent implements OnInit {
       report:[''],
       startDate: [],
       endDate: [],
-      saleId: [0],
       payment: [],
     });
     this.loadCatalogPayment();
@@ -50,10 +49,6 @@ export class ReportFilterDialogComponent implements OnInit {
 
   showDates(): boolean {
     return this.reportSelected && this.reportSelected !== 'Reimpresion Ticket';
-  }
-
-  showTicketId(): boolean {
-    return this.reportSelected && this.reportSelected === 'Reimpresion Ticket';
   }
 
   showPayments(): boolean {

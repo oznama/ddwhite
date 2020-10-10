@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs/index";
 import { baseUrl, observeResponse } from '../../environments/environment';
-import { Cashout } from '../model/cashout.model';
+import { Cashout, Withdrawall } from '../model/cashout.model';
 
 const responseTypeArrayBuffer: any = {responseType: 'arraybuffer'};
 
@@ -24,8 +24,9 @@ export class ApiReportService {
   	return this.http.get<Cashout>(this.context + '/cashout?startDate='+ startDate +'&endDate='+ endDate);
   }
 
-  printCashout(userId: number) : Observable<Cashout> {
-    return this.http.get<Cashout>(this.context + '/print/cashout?userId='+ userId);
+  printCashout(userId: number, startDate: Date, endDate: Date, cashInBox: number) : any {
+    return this.http.get(this.context + '/print/cashout?userId='+ userId + '&cashInBox='+cashInBox
+      + ( startDate ? '&startDate='+ startDate : '') + ( endDate ? '&endDate='+ endDate : ''));
   }
 
   getPurchasesCSV(startDate: string, endDate: string) : Observable<ArrayBuffer> {
@@ -36,13 +37,17 @@ export class ApiReportService {
     return this.http.get(this.context + '/sales/csv?startDate='+ startDate +'&endDate='+ endDate, responseTypeArrayBuffer);
   }
 
-  reprintTicket(saleId: number) : Observable<ArrayBuffer> {
+  reprintTicket(saleId: number) : any {
     return this.http.get(this.context + '/reprint/ticket?saleId='+ saleId, responseTypeArrayBuffer);
   }
 
   payments(paymentId: number, startDate: string, endDate: string) : Observable<ArrayBuffer> {
     return this.http.get(this.context + '/payments?paymentId='+ paymentId 
       + (startDate ? '&startDate='+ startDate : '' ) + (endDate ? '&endDate='+ endDate : ''), responseTypeArrayBuffer);
+  }
+
+  withdrawall(userId: number, denominations: Withdrawall[]) : any {
+    return this.http.post(this.context + '/print/withdrawall?userId='+ userId, denominations);
   }
 
 }

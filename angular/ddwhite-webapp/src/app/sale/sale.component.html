@@ -1,9 +1,5 @@
 <div class="div-sale" *ngIf="privileges.canSale()">
 
-	<div class="wrapper">
-		<button mat-raised-button color="warn" type="button" *ngIf="isToPay()" (click)="reset()">Limpiar compra</button>
-	</div>
-
 	<div class="div-sale-child">
 
 		  <div class="div-total">
@@ -18,7 +14,9 @@
 			          <th>Met. de pago</th>
 			          <th>Monto</th>
 			          <th>
-			          	<button mat-raised-button color="primary" *ngIf="isToPayments()" (click)="openDialogPayments()">Editar</button>
+			          	<button mat-fab color="primary" *ngIf="isToPayments()" (click)="openDialogPayments()">
+			          		<mat-icon>money</mat-icon>
+			          	</button>
 			          </th>
 			        </tr>
 			        </thead>
@@ -39,19 +37,23 @@
 					<span class="span-block">Iva: $ {{sale.tax}}</span>
 					<span class="span-block">Total: $ {{sale.total}}</span>
 					<span class="span-block">Cambio: $ {{sale.change}}</span>
+					<span class="text-blue" *ngIf="sale.discount">Descuento: {{sale.discount}}%</span>
 				</div>
 			</div>
 			<div class="box-pay">
-				<button mat-raised-button class="button-pay" type="button" *ngIf="isToPay()" (click)="pagar()">Pagar</button>
+				<button mat-fab color="warn" type="button" (click)="reset()"><mat-icon>clear</mat-icon></button>
+				<button mat-fab color="accent" type="button" *ngIf="hasDiscount && (sale.total || sale.total >0)" (click)="openDiscountDialog()">
+					<mat-icon>money_off</mat-icon>
+				</button>
+				<button mat-fab class="button-pay" type="button" *ngIf="isToPay()" (click)="pagar()">
+					<mat-icon>attach_money</mat-icon>
+				</button>
 			</div>
 		  </div>
 
 		  <div class="div-container">
 
-		  	<mat-card-header>
-		      <mat-card-title>Registrar venta</mat-card-title>
-		    </mat-card-header>
-
+		  	<span class="spacer"></span>
 		  	<span>Fecha: {{date | date: "dd/mm/yyyy"}} {{date | date: "HH:mm:ss"}}</span>
 
 			  <mat-card class="box-form">
@@ -67,21 +69,21 @@
 			          <mat-icon (click)="openDialogClientSearch()">search</mat-icon>
 			          <mat-icon *ngIf="client.id" (click)="unSelectClient()">clear</mat-icon>
 					  <span class="spacer"></span>
-			          <button mat-raised-button color="primary" (click)="openDialogClientAdd()">Registrar cliente</button>
+			          <button mat-fab color="primary" (click)="openDialogClientAdd()"><mat-icon>people</mat-icon></button>
 			        </div>
 			        <div class="wrapper">
 			          <span style="font-size: 20px; text-transform: uppercase;">Producto</span>
 			          <span class="text-red" *ngIf="!product.id">Click en la lupa para buscar producto...</span>
 			          <span class="text-blue" *ngIf="product.id">{{product.sku + ' ' + product.nameLarge}}</span>
 			          <span style="font-size: 20px; text-transform: uppercase;">Precio:</span>
-			  	      <span class="text-blue"> $ {{product.price}}</span>
+			  	      <span class="text-blue"> $ {{product.inventory.price}}</span>
 			          <mat-form-field style="width: 10%;">
 			  	    	<input matInput formControlName="quantity" style="text-align:right; padding: 0 10px;" placeholder="Cantidad" maxlength="10" autocomplete="off" required>
 			  	    	<mat-error>Campo incorrecto, solo numeros con maximo 3 decimales opcionales</mat-error>
 			  	      </mat-form-field>
 			  	      <mat-icon (click)="openDialogProductSearch()">search</mat-icon>
 			  	      <span class="spacer"></span>
-			          <button mat-raised-button type="button" [disabled]="formInvalid()" (click)="agregar()">Agregar</button>
+			          <button mat-fab type="button" [disabled]="formInvalid()" (click)="agregar()"><mat-icon>add</mat-icon></button>
 			        </div>
 			      </form>
 			    </mat-card-content>
@@ -108,7 +110,7 @@
 			          <td>{{product.price}}</td>
 			          <td>{{product.total}}</td>
 			          <td>
-			            <button mat-raised-button color="warn" (click)="remove(product)">Borrar</button>
+			            <button mat-mini-fab color="warn" (click)="remove(product)"><mat-icon>clear</mat-icon></button>
 			          </td>
 			        </tr>
 			        </tbody>

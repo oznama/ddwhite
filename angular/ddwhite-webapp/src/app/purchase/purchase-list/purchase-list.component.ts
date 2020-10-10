@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 //import {Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import { Observable, of } from 'rxjs/index';
-import {first} from "rxjs/operators";
+import {first, map} from "rxjs/operators";
 import {PurchaseList, Purchase} from '../../model/purchase.model';
 import { ApiPurchaseService, ApiCatalogService, Privileges, CAT_CONST } from '../../service/module.service';
 import {CatalogItem} from './../../model/catalog.model';
@@ -19,6 +19,8 @@ export class PurchaseListComponent implements OnInit {
   purchases: Observable<PurchaseList[]>;
   catalogUnity: CatalogItem[];
   boxId: number;
+  purchasesFiltred: Observable<PurchaseList[]>;
+  hasElements: boolean = false;
 
   constructor(private formBuilder: FormBuilder,
   	/*private router:Router,*/
@@ -30,7 +32,8 @@ export class PurchaseListComponent implements OnInit {
   ngOnInit(): void {
   	this.searchForm = this.formBuilder.group({
       startDate: [],
-      endDate: []
+      endDate: [],
+      productName: []
     });
     this.loadCatalogUnity();
   }
@@ -47,7 +50,9 @@ export class PurchaseListComponent implements OnInit {
   search() {
     this.purchaseService.getList(this.searchForm.controls.startDate.value, this.searchForm.controls.endDate.value).subscribe(response => {
     	this.purchases = of(response);
-    });
+      this.purchasesFiltred = of(response);
+      this.hasElements = true;
+    }, error => this.hasElements = false);
   }
 
 /*
@@ -83,6 +88,20 @@ export class PurchaseListComponent implements OnInit {
       numPiece:  (numPiece === 0 || unity !== this.boxId) ? null : numPiece,
       userId: +window.localStorage.getItem("userId")
     };
+  }
+
+  doFilter(): void{
+    var productName = this.searchForm.controls.productName.value;
+    if( productName ){
+      this.purchasesFiltred = this.purchases.pipe(map( 
+        items => items.filter(purchase => purchase.product.toUpperCase().includes(productName.toUpperCase()))
+      ));
+    }
+  }
+
+  clearFilter(): void{
+    this.searchForm.controls.productName.setValue(null);
+    this.purchasesFiltred = this.purchases;
   }
 
 }

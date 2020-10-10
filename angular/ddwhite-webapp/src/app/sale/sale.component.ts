@@ -12,6 +12,7 @@ import { ClientDialogSearchComponent } from './../client/dialog-search/client-di
 import { PaymentDialogComponent } from './payment-dialog-component/payment-dialog.component';
 import { TicketComponent } from './ticket-component/ticket.component';
 import { DiscountDialogComponent } from './discount-dialog-component/discount-dialog.component';
+import { WithdrawallDialogComponent } from './withdrawall-dialog-component/withdrawall-dialog.component';
 
 import { Client } from './../model/client.model';
 import { Product } from './../model/product.model';
@@ -31,8 +32,9 @@ export class SaleComponent implements OnInit {
   saleDetail: SaleDetail[] = [];
   salePayment: SalePayment[] = [];
   quantityDefault: string = '1';
-  iva: number = 1.16;
+  tax: number;
   decimals: number = 2;
+  hasDiscount: boolean = false;
 
   constructor(
   	private formBuilder: FormBuilder,
@@ -49,6 +51,15 @@ export class SaleComponent implements OnInit {
     this.saleForm = this.formBuilder.group({
   		quantity: [this.quantityDefault, [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,3})?")]]
   	})
+    this.loadData();
+  }
+
+  private loadData(){
+    this.catalogService.getByName(CAT_CONST.DISCOUNT_ENABLED).subscribe(response =>this.hasDiscount = response.description.trim().toUpperCase()==='SI');
+    this.catalogService.getByName(CAT_CONST.TAX).subscribe( response => {
+      this.tax = +response.description;
+      this.tax = this.tax/100+1;
+    }, error => this.tax = 0);
   }
 
   unSelectClient(){
@@ -129,7 +140,7 @@ export class SaleComponent implements OnInit {
     const total = saleDetail.total;
 
   	//if(this.client.rfc) { // Con impuesto
-      const subtotal = total / this.iva;
+      const subtotal = total / this.tax;
       const iva = total - subtotal;
       this.sale.total = this.round(this.sale.total + total);
       this.sale.subTotal = this.round(this.sale.subTotal + subtotal);
@@ -144,7 +155,7 @@ export class SaleComponent implements OnInit {
   private unTotalize(saleDetail: SaleDetail){
     const total = saleDetail.total;
   	//if(this.client.rfc) { // Con impuesto
-      const subtotal = total / this.iva;
+      const subtotal = total / this.tax;
       const iva = total - subtotal;
   		this.sale.tax = this.round(this.sale.tax - iva);
   		this.sale.subTotal = this.round(this.sale.subTotal - subtotal);
@@ -153,6 +164,14 @@ export class SaleComponent implements OnInit {
   		this.sale.subTotal = this.round(this.sale.subTotal - total);
   		this.sale.total = this.round(this.sale.subTotal);
   	}*/
+  }
+
+  private reTotalize(discount: number){
+    this.sale.total = discount;
+    const subtotal = this.sale.total / this.tax;
+    const iva = this.sale.total - subtotal;
+    this.sale.subTotal = this.round(subtotal);
+    this.sale.tax = this.round(iva);
   }
 
   remove(saleDetail: SaleDetail){
@@ -178,7 +197,6 @@ export class SaleComponent implements OnInit {
         this.product.inventory.unity = result.data.inventory.unity;
         this.product.inventory.unityDesc = result.data.inventory.unityDesc;
         this.product.inventory.numPiece = result.data.inventory.numPiece;
-        this.openDiscountDialog();
       }
     });
   }
@@ -215,14 +233,38 @@ export class SaleComponent implements OnInit {
   }
 
   openDiscountDialog(){
-    this.catalogService.getByName(CAT_CONST.DISCOUNTS).subscribe(response =>{
-      if(response.description.trim().toUpperCase()==='SI'){
-        const dialogRef = this.dialog.open(DiscountDialogComponent, {data: this.product});
-        dialogRef.afterClosed().subscribe(result => {
-          if(result && result.data) this.product.inventory.price = result.data
-        });
+    this.removeDiscount();
+    const dialogRef = this.dialog.open(DiscountDialogComponent, {data: this.sale.total});
+    dialogRef.afterClosed().subscribe(result => {
+      if(result && result.data) {
+        this.sale.discount = result.data.discount;
+        this.reTotalize(result.data.amountDiscounted);
+      } else {
+        this.removeDiscount();
       }
-    })
+    });
+  }
+
+  private checkWithdrall(){
+    this.apiService.getExcedent(+window.localStorage.getItem("userId")).subscribe( response => {
+      if(response && response > 0) {
+        const dialogRef = this.dialog.open(WithdrawallDialogComponent, {data: response});
+      }
+    });
+  }
+
+  private removeDiscount(){
+    if( this.sale.discount ) {
+      this.sale.discount = null;
+      this.salePayment = []; 
+      this.sale.change = null;
+      this.saleDetail.forEach(sd => {
+        this.sale.total = null;
+        this.sale.subTotal = null;
+        this.sale.tax = null;
+        this.totalize(sd)
+      });
+    }
   }
 
   private newTagTicket(){
@@ -254,6 +296,7 @@ export class SaleComponent implements OnInit {
         //this.openPrintTicket();
         //this.newTagTicket();
       this.alertService.success('Venta completada', alertOptions);
+      this.checkWithdrall();
     }, error => {
       this.alertService.error('La venta no ha sido registrada: ' + error.error, alertOptions);
     });

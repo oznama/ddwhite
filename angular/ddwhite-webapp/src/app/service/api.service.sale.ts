@@ -22,4 +22,12 @@ export class ApiSaleService {
     return this.http.put<any>(this.context + '/update', sale, observeResponse);
   }
 
+  getExcedent(userId: number) {
+    return this.http.get<number>(this.context + '/getExcedent?userId='+ userId);
+  }
+
+  getChasInRegister(userId: number) {
+    return this.http.get<number>(this.context + '/getChasInRegister?userId='+ userId);
+  }
+
 }

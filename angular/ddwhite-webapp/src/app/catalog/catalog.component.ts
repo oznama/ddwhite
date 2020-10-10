@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ApiCatalogService } from "../service/module.service";
+import { ApiCatalogService, CAT_CONST } from "../service/module.service";
 import { AlertService, alertOptions } from '../_alert';
 import {Catalog, CatalogItem} from '../model/catalog.model';
 
@@ -18,7 +18,6 @@ export class CatalogComponent implements OnInit {
   catalogs: Catalog[];
   catalogItems: CatalogItem[];
   private catalogSelected: Catalog;
-  private catalogConst: string  = "CONST";
 
   ngOnInit(): void {
     this.loadCatalogs();
@@ -53,7 +52,7 @@ export class CatalogComponent implements OnInit {
   }
 
   nameDissabled(){
-    return this.catalogSelected.name === this.catalogConst;
+    return this.catalogSelected.name === CAT_CONST.CONST || this.catalogSelected.name === CAT_CONST.PAYMENT_METHOD;
   }
 
   update(id: number, n:string, d:string){

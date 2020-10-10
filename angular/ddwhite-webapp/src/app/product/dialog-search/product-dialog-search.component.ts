@@ -30,7 +30,7 @@ export class ProductDialogSearchComponent implements OnInit {
       sku: [],
       name: [],
     });
-    this.loadProducts(this.page);
+    //this.loadProducts(this.page);
   }
 
   loadProducts(page: number): void{
@@ -65,9 +65,15 @@ export class ProductDialogSearchComponent implements OnInit {
     if(sku === '') sku = null;
     if(name === '') name = null;
     if( this.data.mode === 'inventory' ){
-        this.apiService.getInventory(this.page, pageSize, this.sort, sku, name).subscribe( data => this.products = of(data.content));
+        this.apiService.getInventory(this.page, pageSize, this.sort, sku, name).subscribe( data => {
+          this.products = of(data.content)
+          if(!sku && !name) this.totalPage = data.totalPages;
+        });
       } else if( this.data.mode === 'sale' ){
-        this.apiService.getProductsForSale(this.page, pageSize, this.sort, sku, name).subscribe( data => this.products = of(data.content));
+        this.apiService.getProductsForSale(this.page, pageSize, this.sort, sku, name).subscribe( data => {
+          this.products = of(data.content);
+          if(!sku && !name) this.totalPage = data.totalPages;
+        });
       } else if( this.data.mode == 'all' ){
         if( sku && name ){
           this.apiService.findBySkuAndName(sku, name).subscribe( data => this.products = of(data));

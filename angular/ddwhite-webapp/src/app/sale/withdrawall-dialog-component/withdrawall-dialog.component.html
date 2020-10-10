@@ -1,0 +1,25 @@
+<div mat-dialog-content>
+
+  <div class="box-form">
+
+    <p><span class="text-red">Excedente: $ {{excedent}}</span></p>
+
+    <div *ngFor="let denomination of catalogDenominations">
+      <button mat-mini-fab color="warn" (click)="substract(denomination.description)">
+        <mat-icon>exposure_neg_1</mat-icon>
+      </button>
+      <button mat-raised-button color="warn" (click)="add(denomination.description)">
+        {{denomination.description}}
+      </button>
+      <span class="spacer"></span>
+      <span class="text-blue">{{getQuantity(denomination.description)}}</span>
+    </div>
+    <p><span class="text-blue">Acumulado: $ {{captured}}</span></p>
+
+    <div class="wrapper">
+      <button mat-raised-button color="primary" type="button" [disabled]="hideButton()" (click)="withdrwall()">Retirar</button>
+    </div>
+
+  </div>
+
+</div>

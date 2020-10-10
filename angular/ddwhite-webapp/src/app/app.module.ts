@@ -27,6 +27,7 @@ import {
   ApiReportService,
   ApiCompanyService,
   ApiSessionService,
+  ApiDatabaseService,
   Privileges
 } from './service/module.service';
 import { AlertModule } from './_alert';
@@ -67,6 +68,10 @@ import { PurchaseEditComponent } from './purchase/purchase-edit/purchase-edit.co
 import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.component';
 import { SessionComponent } from './login/session/session.component';
 import { DiscountDialogComponent } from './sale/discount-dialog-component/discount-dialog.component';
+import { ReprintTicketDialogComponent } from './report/reprint-ticket-component/reprint-ticket.component';
+import { CashoutTicketComponent } from './report/cashout-ticket-component/cashout-ticket.component';
+import { DatabaseComponent } from './management/database/database.component';
+import { WithdrawallDialogComponent } from './sale/withdrawall-dialog-component/withdrawall-dialog.component';
 
 @NgModule({
   declarations: [
@@ -106,7 +111,11 @@ import { DiscountDialogComponent } from './sale/discount-dialog-component/discou
     PurchaseEditComponent,
     PurchaseListComponent,
     SessionComponent,
-    DiscountDialogComponent
+    DiscountDialogComponent,
+    ReprintTicketDialogComponent,
+    CashoutTicketComponent,
+    DatabaseComponent,
+    WithdrawallDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -136,6 +145,7 @@ import { DiscountDialogComponent } from './sale/discount-dialog-component/discou
     ApiReportService,
     ApiCompanyService,
     ApiSessionService,
+    ApiDatabaseService,
     Privileges
   ],
   bootstrap: [AppComponent],

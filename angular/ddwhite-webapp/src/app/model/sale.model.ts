@@ -29,6 +29,7 @@ export class Sale {
 	tax: number;
 	change: number;
 	invoice: string;
+	discount: number;
 
 	detail: SaleDetail[];
 	payments: SalePayment[];

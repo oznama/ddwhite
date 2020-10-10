@@ -1,13 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import { ApiLoginService, ApiReportService, ApiSessionService, Privileges } from './../service/module.service';
+import { ApiLoginService, ApiReportService, ApiSessionService, ApiSaleService, 
+  Privileges, exportFile, CSV_EXTENSION } from './../service/module.service';
 import {MatDialog} from '@angular/material/dialog';
 import { ReportFilterDialogComponent } from '../report/dialog-report-filter.component';
-import { CashoutComponent } from '../report/cashout-component/cashout.component';
-import { saveAs } from 'file-saver';
+import { ReprintTicketDialogComponent } from '../report/reprint-ticket-component/reprint-ticket.component';
+//import { CashoutComponent } from '../report/cashout-component/cashout.component';
+import { CashoutTicketComponent } from '../report/cashout-ticket-component/cashout-ticket.component';
+import { WithdrawallDialogComponent } from '../sale/withdrawall-dialog-component/withdrawall-dialog.component';
 import { AlertService, alertOptions } from '../_alert';
-
-const CSV_EXTENSION = '.csv';
 
 @Component({
   selector: 'app-header',
@@ -23,6 +24,7 @@ export class HeaderComponent implements OnInit {
     private apiService: ApiLoginService, 
     private reportService: ApiReportService,
     private sessionService: ApiSessionService,
+    private saleService: ApiSaleService,
     public privileges: Privileges,
     public dialog: MatDialog,
     public alertService:AlertService) { }
@@ -33,6 +35,18 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout(){
+
+    this.saleService.getChasInRegister(+window.localStorage.getItem("userId")).subscribe( response => {
+      if(response && response > 0) {
+        this.alertService.warn('Aun cuentas con $'+ response +' peso(s) de efectivo en caja', alertOptions)
+      } else {
+        const dialogRef = this.dialog.open(CashoutTicketComponent, { disableClose: !this.privileges.isAdmin() });
+        dialogRef.afterClosed().subscribe(result => this.closeSession());
+      }
+    });
+  }
+
+  private closeSession(){
     this.sessionService.getCurrentSession(+window.localStorage.getItem("userId")).subscribe(data => {
       if (data && data.id) {
         this.sessionService.update(data.id).subscribe(data => {
@@ -45,7 +59,7 @@ export class HeaderComponent implements OnInit {
   }
 
   getWarehouseCSV(){
-    this.reportService.getWarehouseCSV('sku').subscribe(data => this.exportFile(data, 'almacen_'));
+    this.reportService.getWarehouseCSV('sku').subscribe(data => exportFile(data, 'almacen_', CSV_EXTENSION));
   }
 
   openDialogReport() {
@@ -59,23 +73,24 @@ export class HeaderComponent implements OnInit {
         const payment = result.data.payment;
         switch (report) {
           case "Compras":
-            this.reportService.getPurchasesCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'compras_'));
+            this.reportService.getPurchasesCSV(startDate, endDate).subscribe(data => exportFile(data, 'compras_', CSV_EXTENSION));
             break;
           case "Ventas":
-            this.reportService.getSalesCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'ventas_'));
-            break;
-          case "Reimpresion Ticket":
-            this.reportService.reprintTicket(saleId).subscribe(data => console.log(data));
+            this.reportService.getSalesCSV(startDate, endDate).subscribe(data => exportFile(data, 'ventas_', CSV_EXTENSION));
             break;
           case "Pagos":
-            this.reportService.payments(payment, startDate, endDate).subscribe(data => this.exportFile(data, 'pagos_'));
+            this.reportService.payments(payment, startDate, endDate).subscribe(data => exportFile(data, 'pagos_', CSV_EXTENSION));
               break;
           default:
-            this.reportService.getGeneralCSV(startDate, endDate).subscribe(data => this.exportFile(data, 'general_'));
+            this.reportService.getGeneralCSV(startDate, endDate).subscribe(data => exportFile(data, 'general_', CSV_EXTENSION));
             break;
         }
       }
     });
+  }
+
+  reprintTicket(){
+    this.dialog.open(ReprintTicketDialogComponent);
   }
 
   makeCashout() {
@@ -86,18 +101,17 @@ export class HeaderComponent implements OnInit {
       window.localStorage.setItem('sessionStart', (new Date()).toString());
     });
     */
-    const userId = +window.localStorage.getItem('userId');
-    this.reportService.printCashout(userId).subscribe(data => console.log(data), 
-      error => this.alertService.error('Error al generar corte de caja, error: ' + error.message, alertOptions));
+    this.dialog.open(CashoutTicketComponent);
   }
 
-  private exportFile(data: ArrayBuffer, name: string){
-    const blob = new Blob([data], { type: 'application/octet-stream' });
-    const now = new Date();
-    const month = (now.getMonth()+1);
-    var strMonth = (month < 10 ? '0' : '') + month;
-    const strNow = now.getDate()+ strMonth +now.getFullYear()+'_'+now.getHours()+''+now.getMinutes()+''+now.getSeconds();
-    const fileName = name + strNow + CSV_EXTENSION;
-    saveAs(blob, fileName);
+  checkWithdrall() {
+    this.saleService.getChasInRegister(+window.localStorage.getItem("userId")).subscribe( response => {
+      if(response && response > 0) {
+        const dialogRef = this.dialog.open(WithdrawallDialogComponent, {data: response});
+      } else {
+        this.alertService.warn('No existe excedente de efectivo', alertOptions)
+      }
+    });
   }
+
 }

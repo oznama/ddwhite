@@ -14,6 +14,8 @@ export * from './api.service.role';
 export * from './api.service.report';
 export * from './api.service.company';
 export * from './api.service.session';
+export * from './api.service.database';
 export * from './privileges';
+export * from './utils';
 
 export const pageSize: number = 50;

@@ -50,6 +50,7 @@
           <th>Metodo de pago</th>
           <th>Monto</th>
           <th>Comision</th>
+          <th>Total</th>
           <th>Voucher</th>
           <th></th>
         </tr>
@@ -59,6 +60,7 @@
           <td>{{payment.paymentDesc}}</td>
           <td>{{payment.amount}}</td>
           <td>{{payment.comision}}</td>
+          <td>{{payment.amount+payment.comision}}</td>
           <td>{{payment.voucherFolio}}</td>
           <td>
         	 <button mat-raised-button color="warn" (click)="remove(payment)">Borrar</button>

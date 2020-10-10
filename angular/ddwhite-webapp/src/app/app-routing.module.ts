@@ -24,6 +24,7 @@ import { PurchaseReasignComponent } from './purchase/reasign/reasign.component';
 import { TicketTagComponent } from './sale/ticket-tag-component/ticket-tag.component';
 import { PurchaseEditComponent } from './purchase/purchase-edit/purchase-edit.component';
 import { PurchaseListComponent } from './purchase/purchase-list/purchase-list.component';
+import { DatabaseComponent } from './management/database/database.component';
 
 const routes: Routes = [
 	{ path: '', pathMatch: 'full', redirectTo: 'login'},
@@ -50,6 +51,7 @@ const routes: Routes = [
 	{ path: 'ticket-tag', component: TicketTagComponent },
 	{ path: 'purchase-edit', component: PurchaseEditComponent, canActivate: [AuthGuard] },
 	{ path: 'purchase-list', component: PurchaseListComponent, canActivate: [AuthGuard] },
+	{ path: 'mngt-database', component: DatabaseComponent,  canActivate: [AuthGuard] },
 ];
 
 @NgModule({

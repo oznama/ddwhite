@@ -1,0 +1,40 @@
+<div class="db-container">
+  <mat-card class="db-box">
+    <mat-card-header>
+      <mat-card-title>Mantenimiento Base de datos</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form [formGroup]="databaseForm">
+
+      	<mat-form-field class="full-width-input">
+      		<select matNativeControl formControlName="mode" (change)=onChange(+$event.target.value)>
+      			<option *ngFor="let option of options" [value]="option.value">
+      				{{option.viewValue}}
+      			</option>
+            </select>
+        </mat-form-field>
+
+    		<div style="text-align:center;" *ngIf="optionSelected === 2">
+    			<ul>  
+            <li *ngFor="let file of files">  
+              <mat-progress-bar [value]="file.progress"></mat-progress-bar>  
+              <span id="file-label">{{file.name}}</span>
+            </li>  
+          </ul>
+    			<mat-card-actions>  
+	            <button mat-raised-button type="button" color="primary" (click)="onClick()">Buscar</button>  
+	        </mat-card-actions>
+    		</div>
+
+    		<div class="wrapper" *ngIf="optionSelected === 1">
+    			<button mat-raised-button type="button" color="primary" (click)="backup()">Ejecutar</button>
+    		</div>
+        
+      </form>
+    </mat-card-content>
+  </mat-card>
+
+  <input type="file" #fileUpload id="fileUpload" name="fileUpload" accept=".sql" style="display:none;" />
+
+</div>

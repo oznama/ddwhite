@@ -31,7 +31,7 @@ export class ClientDialogSearchComponent implements OnInit {
       lastName: [],
       rfc: [],
     });
-    this.loadClients(this.page);
+    //this.loadClients(this.page);
   }
 
   private loadClients(page: number) {

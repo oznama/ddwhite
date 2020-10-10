@@ -66,11 +66,7 @@
 	height: 20%;
 }
 .button-pay{
-	width: 50%;
-	height: 50%;
-	font-size: 50px;
-	background: #3CB371;
-	color: white;
+  background: #3CB371;
 }
 #table-scroll-payment {
   height:150px;

@@ -23,6 +23,15 @@
           </mat-form-field>
 
           <mat-icon (click)="search()">search</mat-icon>
+
+          <div *ngIf="hasElements">
+            <mat-form-field style="width: 90%;">
+              <input matInput formControlName="productName" placeholder="Nombre de producto" maxlength="80">
+            </mat-form-field>
+            <mat-icon (click)="doFilter()">search</mat-icon>
+            <mat-icon (click)="clearFilter()">clear</mat-icon>
+          </div>
+
         </form>
       </mat-card-content>
     </mat-card>
@@ -47,7 +56,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let purchase of purchases | async">
+        <tr *ngFor="let purchase of purchasesFiltred | async">
           <td class="hidden">{{purchase.id}}</td>
           <td>{{purchase.user}}</td>
           <td>{{purchase.provider}}</td>
