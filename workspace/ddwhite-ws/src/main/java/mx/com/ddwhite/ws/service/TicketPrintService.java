@@ -16,6 +16,7 @@ import mx.com.ddwhite.ws.dto.UserDto;
 import mx.com.ddwhite.ws.dto.WithdrawalDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
 import mx.com.ddwhite.ws.model.Client;
+import mx.com.ddwhite.ws.model.Withdrawal;
 import mx.com.ddwhite.ws.reports.Cashout;
 import mx.com.ddwhite.ws.repository.ClientRepository;
 import mx.com.ddwhite.ws.service.utils.AlignedEmun;
@@ -45,6 +46,9 @@ public class TicketPrintService {
 	
 	@Autowired
 	private SessionService sessionService;
+	
+	@Autowired
+	private WithdrawalService withdrawalService;
 	
 	private final int COLUMN_20_SIZE = 20;
 	private final int COLUMN_12_SIZE = 12;
@@ -127,21 +131,37 @@ public class TicketPrintService {
 		content.append(hdGroup).append(hdTotal).append(GeneralConstants.LINE_BREAK);
 		cashout.getPayment().forEach(payment -> {
 			String strPayment = buildLine(payment.getPayment().toUpperCase(), AlignedEmun.LEFT, COLUMN_20_SIZE);
-			String ammount = buildLine("$" + payment.getAmount(), AlignedEmun.RIGHT, COLUMN_12_SIZE);
+			String ammount = "$" + (payment.getPayment().toUpperCase().equals(GeneralConstants.CATALOG_PAYMENT_METHOD_CASH) ? payment.getAmount().subtract(cashout.getTotalChange()) : payment.getAmount());
+			ammount = buildLine(ammount, AlignedEmun.RIGHT, COLUMN_12_SIZE);
 			content.append(padding() + strPayment + ammount + GeneralConstants.LINE_BREAK);
 		});
+		content.append(lineFormatted(separator(), AlignedEmun.CENTERED));
+		
+		// Retiros
+		List<Withdrawal> withdrawals = withdrawalService.findWithdrawallsByRange(start, end);
+		hdGroup = buildLine("RETIROS", AlignedEmun.LEFT, COLUMN_20_SIZE);
+		hdTotal = buildLine("MONTO", AlignedEmun.RIGHT, COLUMN_12_SIZE);
+		content.append(hdGroup).append(hdTotal).append(GeneralConstants.LINE_BREAK);
+		withdrawals.forEach(w -> {
+			String strRange = buildLine(w.getDateCreated(), AlignedEmun.LEFT, COLUMN_20_SIZE);
+			String strCreated = buildLine("$" + w.getAmmount(), AlignedEmun.RIGHT, COLUMN_12_SIZE);
+			content.append(padding() + strRange + strCreated + GeneralConstants.LINE_BREAK);
+		});
+		
+		
 		content.append(lineFormatted(separator(), AlignedEmun.CENTERED));
 		// Total
 		hdGroup = buildLine("TOTAL M.N.", AlignedEmun.LEFT, COLUMN_20_SIZE);
 		hdTotal = buildLine("$" + cashout.getTotal().setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN).toString(), AlignedEmun.RIGHT, COLUMN_12_SIZE);
 		content.append(hdGroup).append(hdTotal).append(GeneralConstants.LINE_BREAK);
-		hdGroup = buildLine("CAMBIO", AlignedEmun.LEFT, COLUMN_20_SIZE);
-		hdTotal = buildLine("$" + cashout.getTotalChange().toString(), AlignedEmun.RIGHT, COLUMN_12_SIZE);
-		content.append(hdGroup).append(hdTotal).append(GeneralConstants.LINE_BREAK);
+//		hdGroup = buildLine("CAMBIO", AlignedEmun.LEFT, COLUMN_20_SIZE);
+//		hdTotal = buildLine("$" + cashout.getTotalChange().toString(), AlignedEmun.RIGHT, COLUMN_12_SIZE);
+//		content.append(hdGroup).append(hdTotal).append(GeneralConstants.LINE_BREAK);
 		content.append(lineFormatted(separator(), AlignedEmun.CENTERED));
 		content.append(lineFormatted("Fecha imp: " + GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME_SHORT), AlignedEmun.CENTERED));
 		content.append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK);
 		content.append(lineFormatted("AUTORIZADO POR", AlignedEmun.CENTERED));
+		content.append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK);
 		return content.toString();
 	}
 	
@@ -152,10 +172,10 @@ public class TicketPrintService {
 		
 		UserDto userDto = userService.findById(userId);
 		SessionDto currentSession = sessionService.findCurrentSession(userId);
-		
+		String lastWithdrawal = withdrawalService.getLastDateWithdrawalBySession(currentSession.getId());
 		content.append(lineFormatted("De: " + userDto.getFullName().toUpperCase(), AlignedEmun.CENTERED));
 		content.append(lineFormatted("En el turno", AlignedEmun.CENTERED));
-		content.append(lineFormatted("De: " + currentSession.getWithdrawalDate(), AlignedEmun.CENTERED));
+		content.append(lineFormatted("De: " + lastWithdrawal, AlignedEmun.CENTERED));
 		content.append(lineFormatted("A: " + GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME), AlignedEmun.CENTERED));
 		content.append(GeneralConstants.LINE_BREAK);
 		content.append(lineFormatted(separator(), AlignedEmun.CENTERED));
@@ -180,7 +200,10 @@ public class TicketPrintService {
 		content.append(lineFormatted("Fecha imp: " + GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME_SHORT), AlignedEmun.CENTERED));
 		content.append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK);
 		content.append(lineFormatted("AUTORIZADO POR", AlignedEmun.CENTERED));
-		sessionService.updateWithdrawalDate(currentSession.getId());
+		content.append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK);
+		
+		withdrawalService.save(currentSession.getId(), denominations);
+		
 		return content.toString();
 	}
 
@@ -268,11 +291,12 @@ public class TicketPrintService {
 		});
 		content.append(lineFormatted("CAMBIO $ " + saleDto.getChange(), AlignedEmun.RIGHT));
 		if (saleDto.getDiscount() != null) {
-			content.append(lineFormatted("DESCUENTO " + saleDto.getDiscount() + "%", AlignedEmun.RIGHT));
 			BigDecimal totalReal = saleDto.getDetail().stream()
 					.map(s -> s.getPrice().multiply(BigDecimal.valueOf(s.getQuantity())))
 					.reduce(BigDecimal.ZERO, BigDecimal::add)
 					.setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN);
+			content.append(lineFormatted("TOTAL SIN DESCUENTO " +  totalReal + "%", AlignedEmun.RIGHT));
+			content.append(lineFormatted("DESCUENTO " + saleDto.getDiscount() + "%", AlignedEmun.RIGHT));
 			content.append(lineFormatted("USTED AHORRO $ " + totalReal.subtract(saleDto.getTotal()), AlignedEmun.RIGHT));
 		}
 		content.append(GeneralConstants.LINE_BREAK);

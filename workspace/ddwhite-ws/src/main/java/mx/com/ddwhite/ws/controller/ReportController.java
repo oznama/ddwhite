@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.ddwhite.ws.dto.WithdrawalDto;
 import mx.com.ddwhite.ws.exception.ResourceNotFoundException;
+import mx.com.ddwhite.ws.model.Withdrawal;
 import mx.com.ddwhite.ws.reports.Cashout;
 import mx.com.ddwhite.ws.service.ReportService;
 import mx.com.ddwhite.ws.service.TicketPrintService;
@@ -106,6 +107,11 @@ public class ReportController {
 		}catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
+	}
+	
+	@GetMapping("/currentWithdrawal")
+	public List<Withdrawal> findWithdrawalCurrentSession(@RequestParam(value = "userId", required = true) Long userId){
+		return service.findWithdrawalCurrentSession(userId);
 	}
 
 }

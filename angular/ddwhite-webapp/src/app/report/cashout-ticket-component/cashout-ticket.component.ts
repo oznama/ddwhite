@@ -3,6 +3,7 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ApiReportService, ApiUserService, Privileges } from '../../service/module.service';
 import {User} from "../../model/user.model";
+import {Withdrawal} from "../../model/cashout.model";
 import { AlertService, alertOptions } from '../../_alert';
 
 @Component({
@@ -13,6 +14,7 @@ export class CashoutTicketComponent implements OnInit {
 
   searchForm: FormGroup;
   users: User[];
+  withdrawals: Withdrawal[];
 
   constructor(public dialogRef: MatDialogRef<CashoutTicketComponent>,
     private formBuilder: FormBuilder,
@@ -30,11 +32,12 @@ export class CashoutTicketComponent implements OnInit {
       endTime: [],
       amount: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
     });
-    this.loadUsers();
+    this.loadData();
   }
 
-  private loadUsers(){
-    this.userService.get(0, 100, 'id,asc').subscribe( data => this.users = data.content)
+  private loadData(){
+    this.userService.get(0, 100, 'id,asc').subscribe( data => this.users = data.content);
+    this.reportService.currentWithdrawal(+window.localStorage.getItem('userId')).subscribe( data => this.withdrawals = data);
   }
 
   imprimir(){

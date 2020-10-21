@@ -10,7 +10,7 @@ import { ProductDialogSearchComponent } from './../product/dialog-search/product
 import { ClientAddComponent } from './../client/client-add/client-add.component';
 import { ClientDialogSearchComponent } from './../client/dialog-search/client-dialog-search.component';
 import { PaymentDialogComponent } from './payment-dialog-component/payment-dialog.component';
-import { TicketComponent } from './ticket-component/ticket.component';
+//import { TicketComponent } from './ticket-component/ticket.component';
 import { DiscountDialogComponent } from './discount-dialog-component/discount-dialog.component';
 import { WithdrawallDialogComponent } from './withdrawall-dialog-component/withdrawall-dialog.component';
 
@@ -27,14 +27,18 @@ export class SaleComponent implements OnInit {
   date: Date;
   saleForm: FormGroup;
   client: Client = new Client();
-  product: Product = new Product();
+  products: Product[] = [];
   sale: Sale = new Sale();
   saleDetail: SaleDetail[] = [];
   salePayment: SalePayment[] = [];
+  productsSelected: Product[];
   quantityDefault: string = '1';
   tax: number;
   decimals: number = 2;
   hasDiscount: boolean = false;
+  totals= [];
+  totalAmount: number = 0;
+  lastIdSale: number;
 
   constructor(
   	private formBuilder: FormBuilder,
@@ -55,6 +59,7 @@ export class SaleComponent implements OnInit {
   }
 
   private loadData(){
+    this.apiService.getLastSaleId().subscribe(response => this.lastIdSale = response);
     this.catalogService.getByName(CAT_CONST.DISCOUNT_ENABLED).subscribe(response =>this.hasDiscount = response.description.trim().toUpperCase()==='SI');
     this.catalogService.getByName(CAT_CONST.TAX).subscribe( response => {
       this.tax = +response.description;
@@ -66,22 +71,20 @@ export class SaleComponent implements OnInit {
     this.client = new Client();
   }
 
-  private setSaleDetail(): SaleDetail {
+  private setSaleDetail(product: Product): SaleDetail {
     return <SaleDetail> {
-      productId: this.product.id,
-      productName: this.product.nameLarge,
-      productShortName: this.product.nameShort,
-      quantity: +this.saleForm.controls.quantity.value,
-      price: this.product.inventory.price,
-      unity: this.product.inventory.unity,
-      unityDesc: this.product.inventory.unityDesc,
-      numPiece: this.product.inventory.numPiece
+      productId: product.id,
+      productName: product.nameLarge,
+      productShortName: product.nameShort,
+      quantity: product.inventory.quantity,
+      price: product.inventory.price,
+      unity: product.inventory.unity,
+      unityDesc: product.inventory.unityDesc,
+      numPiece: product.inventory.numPiece
     };
   }
 
-  formInvalid(){
-    return !(this.product.id && this.saleForm.controls.quantity.value);
-  }
+
 
   isToPay(){
     let totalPayment = this.salePayment ? 
@@ -94,11 +97,15 @@ export class SaleComponent implements OnInit {
     return this.sale && this.sale.total;
   }
 
-  agregar(){
-    const saleDetail = this.setSaleDetail();
+  private addProduct(product: Product){
+    const saleDetail = this.setSaleDetail(product);
     this.addProductToList(saleDetail);
+    if(!this.updateTotal(product.inventory.unityDesc, product.inventory.quantity))
+        this.addTotal(product.inventory.unityDesc, product.inventory.quantity);
+    this.totalAmount += product.inventory.quantity * product.inventory.price;
   }
 
+  /*
   private checkQuantity(quantity: number): boolean{
     if(quantity > this.product.inventory.quantity){
       this.alertService.error('No hay suficientes productos en existencia', alertOptions);
@@ -106,26 +113,27 @@ export class SaleComponent implements OnInit {
     }
     return true;
   }
+  */
 
   private round(n: number): number {
     return Number(n.toFixed(this.decimals));
   }
 
   private addProductToList(saleDetail: SaleDetail): void {
-  	let finded = false;
+    let finded = false;
     this.saleDetail.forEach( item => {
       if(item.productId === saleDetail.productId && item.unity === saleDetail.unity){
         finded = true;
         const quantity = item.quantity + saleDetail.quantity;
-        if(this.checkQuantity(quantity)){
+        //if(this.checkQuantity(quantity)){
           item.quantity = quantity;
           item.total = this.round(item.quantity * item.price);
           saleDetail.total = this.round(saleDetail.quantity * saleDetail.price);
           this.totalize(saleDetail);
-        }
+        //}
       }
     } );
-    if(!finded && this.checkQuantity(saleDetail.quantity)){
+    if(!finded /*&& this.checkQuantity(saleDetail.quantity)*/){
       saleDetail.total = this.round(saleDetail.quantity * saleDetail.price);
       this.saleDetail.push(saleDetail);
       this.totalize(saleDetail);
@@ -177,6 +185,12 @@ export class SaleComponent implements OnInit {
   remove(saleDetail: SaleDetail){
     this.unTotalize(this.saleDetail.find(item => item.productId === saleDetail.productId && item.unity === saleDetail.unity));
     this.saleDetail = this.saleDetail.filter(item => !(item.productId === saleDetail.productId && item.unity === saleDetail.unity));
+    this.productsSelected = this.productsSelected.filter(product => !(product.id === saleDetail.productId && product.inventory.unity === saleDetail.unity));
+    this.totals.forEach( t => {
+      if( t.unity === saleDetail.unityDesc ) t.quantity -= saleDetail.quantity;
+    });
+    this.totals = this.totals.filter( t => t.quantity > 0 )
+    this.totalAmount -= saleDetail.quantity * saleDetail.price;
   }
 
   tableValid(){
@@ -184,9 +198,10 @@ export class SaleComponent implements OnInit {
   }
 
   openDialogProductSearch() {
-    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'sale'} });
+    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'sale', productsSelected: this.productsSelected} });
     dialogRef.afterClosed().subscribe( result =>{
-      if( result && result.data ){
+      if( result && result.data && result.data.length > 0 ){
+        /*
         this.product.id = result.data.id;
         this.product.sku = result.data.sku;
         this.product.nameLarge = result.data.nameLarge;
@@ -197,6 +212,10 @@ export class SaleComponent implements OnInit {
         this.product.inventory.unity = result.data.inventory.unity;
         this.product.inventory.unityDesc = result.data.inventory.unityDesc;
         this.product.inventory.numPiece = result.data.inventory.numPiece;
+        */
+        this.productsSelected = result.data;
+        this.saleDetail = [];
+        result.data.forEach( p => this.addProduct(p) );
       }
     });
   }
@@ -224,6 +243,7 @@ export class SaleComponent implements OnInit {
     }
   }
 
+/* Discard
   openPrintTicket() {
     const dialogRef = this.dialog.open(TicketComponent, {data: this.sale});
     dialogRef.afterClosed().subscribe(result =>{
@@ -231,6 +251,7 @@ export class SaleComponent implements OnInit {
       this.alertService.success('Venta completada', alertOptions);
     });
   }
+*/
 
   openDiscountDialog(){
     this.removeDiscount();
@@ -258,19 +279,19 @@ export class SaleComponent implements OnInit {
       this.sale.discount = null;
       this.salePayment = []; 
       this.sale.change = null;
-      this.saleDetail.forEach(sd => {
-        this.sale.total = null;
-        this.sale.subTotal = null;
-        this.sale.tax = null;
-        this.totalize(sd)
-      });
+      this.sale.total = null;
+      this.sale.subTotal = null;
+      this.sale.tax = null;
+      this.saleDetail.forEach(sd => this.totalize(sd));
     }
   }
 
+/* Discard
   private newTagTicket(){
     window.localStorage.setItem('currentSale', JSON.stringify(this.sale));
     this.router.navigate([]).then(result => window.open( window.location.origin + '/ticket-tag', '_blank'));
   }
+*/
 
   private setClient(result: any): void {
     if( result && result.data ){
@@ -282,7 +303,7 @@ export class SaleComponent implements OnInit {
     }
   }
 
-  pagar(){
+  pay(){
     this.sale.userId = +window.localStorage.getItem("userId");
     if(this.client.id){
       this.sale.clientId = this.client.id;
@@ -293,9 +314,11 @@ export class SaleComponent implements OnInit {
     this.sale.payments = this.salePayment;
     this.apiService.create(this.sale).subscribe( data => {
       this.sale.id = data;
+      this.lastIdSale = this.sale.id;
         //this.openPrintTicket();
         //this.newTagTicket();
       this.alertService.success('Venta completada', alertOptions);
+      this.reset();
       this.checkWithdrall();
     }, error => {
       this.alertService.error('La venta no ha sido registrada: ' + error.error, alertOptions);
@@ -304,11 +327,33 @@ export class SaleComponent implements OnInit {
 
   private reset(): void{
     this.client = new Client();
-    this.product = new Product();
+    this.products = [];
     this.saleForm.reset();
     this.sale = new Sale();
     this.saleDetail = [];
     this.salePayment = [];
     this.saleForm.controls.quantity.setValue(this.quantityDefault);
+    this.totals = [];
+    this.totalAmount = 0;
+    this.productsSelected = null;
+  }
+
+  private addTotal(unity: string, quantity: number){
+    const total = {
+      'unity': unity,
+      'quantity': quantity
+    };
+    this.totals.push(total);
+  }
+
+  private updateTotal(unity: string, quantity: number): boolean{
+    let updated = false;
+    this.totals.forEach( t => {
+      if( t.unity === unity ){
+        t.quantity += quantity;
+        updated = true;
+      }
+    })
+    return updated;
   }
 }

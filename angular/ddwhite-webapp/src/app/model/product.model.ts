@@ -55,4 +55,5 @@ export class Inventory{
 
 export interface ModeProductDialog {
   mode: 'inventory' | 'sale' | 'all';
+  productsSelected: Product[];
 }

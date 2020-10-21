@@ -33,9 +33,4 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 	@Query("UPDATE Session s SET s.outDate = :outDate  WHERE s.id = :id")
 	void updateCloseSession(@Param("id") Long id, @Param("outDate") String outDate);
 	
-	@Modifying
-	@Transactional
-	@Query("UPDATE Session s SET s.withdrawalDate = :withdrawalDate  WHERE s.id = :id")
-	void updateWithdrawalDate(@Param("id") Long id, @Param("withdrawalDate") String withdrawalDate);
-
 }

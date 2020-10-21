@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs/index";
 import { baseUrl, observeResponse } from '../../environments/environment';
-import { Cashout, Withdrawall } from '../model/cashout.model';
+import { Cashout, Withdrawall, Withdrawal } from '../model/cashout.model';
 
 const responseTypeArrayBuffer: any = {responseType: 'arraybuffer'};
 
@@ -48,6 +48,10 @@ export class ApiReportService {
 
   withdrawall(userId: number, denominations: Withdrawall[]) : any {
     return this.http.post(this.context + '/print/withdrawall?userId='+ userId, denominations);
+  }
+
+  currentWithdrawal(userId: number) : Observable<Withdrawal[]> {
+    return this.http.get<Withdrawal[]>(this.context + '/currentWithdrawal?userId='+ userId);
   }
 
 }

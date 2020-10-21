@@ -29,11 +29,21 @@ export class CashoutPayment {
 }
 
 export class Withdrawall {
+	denominationId: number;
 	denomination: string;
 	denominationValue: number;
 	quantity: number;
 	
 	constructor(init?:Partial<Withdrawall>){
+		Object.assign(this, init);
+	}
+}
+
+export class Withdrawal {
+	ammount: number;
+	dateCreated: string;
+
+	constructor(init?:Partial<Withdrawal>){
 		Object.assign(this, init);
 	}
 }

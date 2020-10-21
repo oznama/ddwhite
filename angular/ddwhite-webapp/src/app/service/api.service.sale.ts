@@ -30,4 +30,8 @@ export class ApiSaleService {
     return this.http.get<number>(this.context + '/getChasInRegister?userId='+ userId);
   }
 
+  getLastSaleId() {
+    return this.http.get<number>(this.context + '/getLastSaleId');
+  }
+
 }

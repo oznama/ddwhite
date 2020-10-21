@@ -2,34 +2,34 @@
 
 	<div class="div-sale-child">
 
-		  <div class="div-total">
-		  	<span class="total">Total a pagar</span>
+		<div class="div-total">
+			<span class="total">Total a pagar</span>
 			<span class="total">$ {{sale.total}}</span>
 			<div class="box-payment">
-			  <div id="table-wrapper">
-			    <div id="table-scroll-payment">
-			      <table class="table table-striped">
-			        <thead>
-			        <tr>
-			          <th>Met. de pago</th>
-			          <th>Monto</th>
-			          <th>
-			          	<button mat-fab color="primary" *ngIf="isToPayments()" (click)="openDialogPayments()">
-			          		<mat-icon>money</mat-icon>
-			          	</button>
-			          </th>
-			        </tr>
-			        </thead>
-			        <tbody>
-			        <tr *ngFor="let payment of salePayment">
-			          <td>{{payment.paymentDesc}}</td>
-			          <td>{{payment.amount+payment.comision}}</td>
-			          <td></td>
-			        </tr>
-			        </tbody>
-			      </table>
-			    </div>
-			  </div>
+				<div id="table-wrapper">
+					<div id="table-scroll-payment">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<th>Met. de pago</th>
+									<th>Monto</th>
+									<th>
+										<button mat-fab color="primary" *ngIf="isToPayments()" (click)="openDialogPayments()">
+											<mat-icon>money</mat-icon>
+										</button>
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr *ngFor="let payment of salePayment">
+									<td>{{payment.paymentDesc}}</td>
+									<td>{{payment.amount+payment.comision}}</td>
+									<td></td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+				</div>
 			</div>
 			<div class="box-total-detail">
 				<div class="box-total-detail-arrow">
@@ -42,82 +42,80 @@
 			</div>
 			<div class="box-pay">
 				<button mat-fab color="warn" type="button" (click)="reset()"><mat-icon>clear</mat-icon></button>
-				<button mat-fab color="accent" type="button" *ngIf="hasDiscount && (sale.total || sale.total >0)" (click)="openDiscountDialog()">
+				<button mat-fab color="accent" type="button" *ngIf="hasDiscount" [disabled]="!(sale.total || sale.total >0)" (click)="openDiscountDialog()">
 					<mat-icon>money_off</mat-icon>
 				</button>
-				<button mat-fab class="button-pay" type="button" *ngIf="isToPay()" (click)="pagar()">
+				<button mat-fab class="button-pay" type="button" [disabled]="!isToPay()" (click)="pay()">
 					<mat-icon>attach_money</mat-icon>
 				</button>
 			</div>
-		  </div>
+		</div>
 
-		  <div class="div-container">
+		<div class="div-container">
 
-		  	<span class="spacer"></span>
-		  	<span>Fecha: {{date | date: "dd/mm/yyyy"}} {{date | date: "HH:mm:ss"}}</span>
+			<div class="wrapper">
+				<span>Ult&iacute;mo folio de venta:</span>
+				<span class="text-blue" *ngIf="lastIdSale">{{lastIdSale}}</span>
+				<span class="text-red" *ngIf="!lastIdSale">SIN VENTA REALIZADA</span>
+				<span class="spacer"></span>
+				<span>Fecha: {{date | date: "dd/mm/yyyy"}} {{date | date: "HH:mm:ss"}}</span>				
+			</div>
 
-			  <mat-card class="box-form">
+			<mat-card class="box-form">
+				<mat-card-content>
+					<form [formGroup]="saleForm">
+						<div class="wrapper">
+							<button mat-fab color="primary" (click)="openDialogClientAdd()"><mat-icon>people</mat-icon></button>
+							<span style="font-size: 20px; text-transform: uppercase;">Cliente selecionado: </span>
+							<span class="text-red" *ngIf="!client.id">SIN FACTURA &oacute; click en la lupa para buscar...</span>
+							<span class="text-blue" *ngIf="client.id">{{client.name + ' ' +  client.lastName + ' ' +  client.midleName}}</span>
+							<span class="spacer"></span>
+							<button mat-mini-fab color="primary" (click)="openDialogClientSearch()">
+								<mat-icon>search</mat-icon>
+							</button>
+							<mat-icon *ngIf="client.id" (click)="unSelectClient()">clear</mat-icon>
+						</div>
+			  		</form>
+			  	</mat-card-content>
+			</mat-card>
 
-			    <mat-card-content>
+			<div id="table-wrapper">
+				<div id="table-scroll">
+					<table class="table table-striped">
+						<thead>
+							<tr>
+								<th>Cantidad</th>
+								<th>Producto</th>
+								<th>Precio</th>
+								<th>Total</th>
+								<th>
+									<button mat-mini-fab color="primary" (click)="openDialogProductSearch()">
+										<mat-icon>article</mat-icon>
+									</button>
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr *ngFor="let product of saleDetail">
+								<td>{{product.quantity}} {{product.unityDesc}}</td>
+								<td>{{product.productName}}</td>
+								<td>{{product.price}}</td>
+								<td>{{product.total}}</td>
+								<td>
+									<button mat-mini-fab color="warn" (click)="remove(product)"><mat-icon>clear</mat-icon></button>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
 
-			      <form [formGroup]="saleForm">
+			<div>
+				<span class="text-blue">Monto total: $ {{totalAmount}}</span>
+				[<label *ngFor="let total of totals" class="text-blue">{{total.unity}}: {{total.quantity}} </label>]
+			</div>
 
-			        <div class="wrapper">
-			          <span style="font-size: 20px; text-transform: uppercase;">Cliente selecionado: </span>
-			          <span class="text-red" *ngIf="!client.id">SIN FACTURA &oacute; click en la lupa para buscar...</span>
-			          <span class="text-blue" *ngIf="client.id">{{client.name + ' ' +  client.lastName + ' ' +  client.midleName}}</span>
-			          <mat-icon (click)="openDialogClientSearch()">search</mat-icon>
-			          <mat-icon *ngIf="client.id" (click)="unSelectClient()">clear</mat-icon>
-					  <span class="spacer"></span>
-			          <button mat-fab color="primary" (click)="openDialogClientAdd()"><mat-icon>people</mat-icon></button>
-			        </div>
-			        <div class="wrapper">
-			          <span style="font-size: 20px; text-transform: uppercase;">Producto</span>
-			          <span class="text-red" *ngIf="!product.id">Click en la lupa para buscar producto...</span>
-			          <span class="text-blue" *ngIf="product.id">{{product.sku + ' ' + product.nameLarge}}</span>
-			          <span style="font-size: 20px; text-transform: uppercase;">Precio:</span>
-			  	      <span class="text-blue"> $ {{product.inventory.price}}</span>
-			          <mat-form-field style="width: 10%;">
-			  	    	<input matInput formControlName="quantity" style="text-align:right; padding: 0 10px;" placeholder="Cantidad" maxlength="10" autocomplete="off" required>
-			  	    	<mat-error>Campo incorrecto, solo numeros con maximo 3 decimales opcionales</mat-error>
-			  	      </mat-form-field>
-			  	      <mat-icon (click)="openDialogProductSearch()">search</mat-icon>
-			  	      <span class="spacer"></span>
-			          <button mat-fab type="button" [disabled]="formInvalid()" (click)="agregar()"><mat-icon>add</mat-icon></button>
-			        </div>
-			      </form>
-			    </mat-card-content>
-			  </mat-card>
+		</div>
 
-			  <div id="table-wrapper">
-			    <div id="table-scroll">
-			      <table class="table table-striped">
-			        <thead>
-			        <tr>
-			          <th>Cantidad</th>
-			          <th>Producto</th>
-			          <th>Presentaci&oacute;n</th>
-			          <th>Precio</th>
-			          <th>Total</th>
-			          <th></th>
-			        </tr>
-			        </thead>
-			        <tbody>
-			        <tr *ngFor="let product of saleDetail">
-			          <td>{{product.quantity}}</td>
-			          <td>{{product.productName}}</td>
-			          <td>{{product.unityDesc}}</td>
-			          <td>{{product.price}}</td>
-			          <td>{{product.total}}</td>
-			          <td>
-			            <button mat-mini-fab color="warn" (click)="remove(product)"><mat-icon>clear</mat-icon></button>
-			          </td>
-			        </tr>
-			        </tbody>
-			      </table>
-			    </div>
-			  </div>
-
-			</div>	
-	</div>
+	</div>	
 </div>

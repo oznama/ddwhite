@@ -1,68 +1,138 @@
-<div mat-dialog-content>
+<!--div mat-dialog-content-->
 
-  <!-- Formulario de busqueda -->
-  <div>
-    <mat-card>
-      <mat-card-content>
-        <form [formGroup]="searchForm">
-          <mat-form-field style="width: 20%;">
-            <input matInput formControlName="sku" placeholder="SKU" autocomplete="off" maxlength="15">
-          </mat-form-field>
-          <mat-form-field style="width: 70%;">
-            <input matInput formControlName="name" placeholder="Nombre" autocomplete="off" maxlength="80">
-          </mat-form-field>
-          <mat-icon (click)="doFilter()">search</mat-icon>
-          <!--mat-icon (click)="clearFilter()">clear</mat-icon-->
-        </form>
-      </mat-card-content>
-    </mat-card>
-  </div>
+  <div class="div-parent">
 
-  <!-- Tabla -->
-  <div id="table-wrapper">
-    <div id="table-scroll">
-      <table class="table table-striped">
-        <thead>
-        <tr>
-          <th class="hidden">Id</th>
-          <th>SKU</th>
-          <th>Nombre completo</th>
-          <th *ngIf="data.mode!=='all'">Cantidad</th>
-          <th *ngIf="data.mode!=='all'">Presentaci&oacute;n</th>
-          <th *ngIf="data.mode!=='all'">Piezas</th>
-          <!--th>Costo promed&iacute;o</th>
-          <th>Costo actual</th-->
-          <th *ngIf="data.mode!=='all'">Precio</th>
-          <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let product of products | async">
-          <td class="hidden">{{product.id}}</td>
-          <td>{{product.sku}}</td>
-          <td>{{product.nameLarge}}</td>
-          <td *ngIf="data.mode!=='all'">{{product.inventory.quantity}}</td>
-          <td *ngIf="data.mode!=='all'">{{product.inventory.unityDesc}}</td>
-          <td *ngIf="data.mode!=='all'">{{product.inventory.numPiece ? product.inventory.numPiece : 'N/A'}}</td>
-          <!--td>$ {{product.inventory.averageCost}}</td>
-          <td>$ {{product.inventory.currentCost}}</td-->
-          <td *ngIf="data.mode!=='all'">$ {{product.inventory.price}}</td>
-          <td>
-            <button mat-raised-button color="primary" (click)="select(product)" style="margin-left: 20px;">Seleccionar</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
+    <div class="div-child">
+
+      <div class="div-lateral">
+
+        <div class=wrapper>
+          <button mat-fab type="button" color="primary" [disabled]="!showFinished()" (click)="finish()">
+            <mat-icon>done_all</mat-icon>
+          </button>
+        </div>
+
+        <div id="table-wrapper">
+          <div id="table-scroll">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th></th>
+                <th class="hidden">Id</th>
+                <th *ngIf="data.mode!=='all'">#</th>
+                <th>Producto</th>
+                <th *ngIf="data.mode!=='all'">$</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let c of carrito">
+                <button mat-mini-fab color="warn" (click)="remove(c)">
+                  <mat-icon>clear</mat-icon>
+                </button>
+                <td class="hidden">{{c.id}}</td>
+                <td *ngIf="data.mode!=='all'">{{c.inventory.quantity}}</td>
+                <td>{{c.inventory ? c.nameShort : c.nameLarge}} {{c.inventory ? (' - ' +  c.inventory.unityDesc) : ''}}</td>  
+                <td *ngIf="data.mode!=='all'">{{c.inventory.quantity * c.inventory.price}}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div *ngIf="data.mode=='sale'">
+          <span class="text-blue">Monto total: $ {{totalAmount}}</span>
+          [<label *ngFor="let total of totals" class="text-blue">{{total.unity}}: {{total.quantity}} </label>]
+        </div>
+
+        <!--div class="wrapper">
+          <button mat-fab color="primary" [disabled]="!showFinished()" (click)="finish()">
+            <mat-icon>done_all</mat-icon>
+          </button>
+        </div-->
+
+      </div>
+
+
+      <!-- Formulario de busqueda -->
+      <div class="div-container">
+        <mat-card>
+          <mat-card-content>
+            <form [formGroup]="searchForm">
+              <mat-form-field style="width: 20%;">
+                <input matInput formControlName="sku" placeholder="SKU" autocomplete="off" maxlength="15">
+              </mat-form-field>
+              <mat-form-field style="width: 60%;">
+                <input matInput formControlName="name" placeholder="Nombre" autocomplete="off" maxlength="80">
+              </mat-form-field>
+              <button mat-mini-fab type="button" color="primary" (click)="doFilter()">
+                <mat-icon>search</mat-icon>
+              </button>
+              <!--mat-icon (click)="clearFilter()">clear</mat-icon-->
+            </form>
+          </mat-card-content>
+        </mat-card>
+
+        <!-- Tabla -->
+        <div id="table-wrapper">
+          <div id="table-scroll">
+            <table class="table table-striped">
+              <thead>
+              <tr>
+                <th class="hidden">Id</th>
+                <th>Producto</th>
+                <th class="{{cssClass()}}">Cant</th>
+                <th *ngIf="data.mode!=='all'">#</th>
+                <th *ngIf="data.mode!=='all'">$</th>
+                <th *ngIf="data.mode!=='all'">Pres</th>
+                <th *ngIf="data.mode!=='all'">Pieza</th>
+                <!--th>Costo promed&iacute;o</th>
+                <th>Costo actual</th-->
+                <th>
+                  <!--button mat-mini-fab color="primary" (click)="selectAll()" *ngIf="products">
+                    <mat-icon>select_all</mat-icon>
+                  </button--><!-- No funciono bonitamente -->
+                </th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let product of products | async">
+                <td class="hidden">{{product.id}}</td>
+                <td>{{product.sku + ' ' + product.nameLarge}}</td>
+                <td>
+                  <input #quantity class="{{cssClass()}}" maxlength="10" autocomplete="off" value="1">
+                </td>
+                <td *ngIf="data.mode!=='all'">{{product.inventory.quantity}}</td>
+                <td *ngIf="data.mode!=='all'">{{product.inventory.price}}</td>
+                <td *ngIf="data.mode!=='all'">{{product.inventory.unityDesc}}</td>
+                <td *ngIf="data.mode!=='all'">{{product.inventory.numPiece ? product.inventory.numPiece : 'N/A'}}</td>
+                <!--td>$ {{product.inventory.averageCost}}</td>
+                <td>$ {{product.inventory.currentCost}}</td-->
+                <td>
+                  <button mat-mini-fab color="primary" (click)="add(product, +quantity.value)" 
+                  [disabled]="product.inventory && product.inventory.quantity===0">
+                    <mat-icon>done</mat-icon>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="wrapper" *ngIf="totalPage">
+          <mat-icon (click)="pagination(0)">first_page</mat-icon>
+          <mat-icon (click)="pagination(page-1)">arrow_back</mat-icon>
+          page {{page+1}} of {{totalPage}}
+          <mat-icon (click)="pagination(page+1)">arrow_forward</mat-icon>
+          <mat-icon (click)="pagination(totalPage-1)">last_page</mat-icon>
+        </div>
+
+
+      </div>
+
     </div>
+
   </div>
 
-  <!-- Pagination -->
-  <div class="wrapper">
-    <mat-icon (click)="pagination(0)">first_page</mat-icon>
-    <mat-icon (click)="pagination(page-1)">arrow_back</mat-icon>
-    page {{page+1}} of {{totalPage}}
-    <mat-icon (click)="pagination(page+1)">arrow_forward</mat-icon>
-    <mat-icon (click)="pagination(totalPage-1)">last_page</mat-icon>
-  </div>
-
-</div>
+<!--/div-->

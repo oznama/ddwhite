@@ -74,5 +74,10 @@ public class SaleController implements GenericController<SaleDto> {
 	public BigDecimal getExcedent(@RequestParam(value = "userId", required = true) Long userId) {
 		return service.getExcedent(userId);
 	}
+	
+	@GetMapping("/getLastSaleId")
+	public Long getLastSaleId() {
+		return service.getLastSaleId();
+	}
 
 }

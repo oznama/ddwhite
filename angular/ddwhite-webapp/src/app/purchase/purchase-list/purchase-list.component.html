@@ -22,14 +22,20 @@
             <mat-datepicker #endDate disabled="false"></mat-datepicker>
           </mat-form-field>
 
-          <mat-icon (click)="search()">search</mat-icon>
+          <button mat-mini-fab color="primary" (click)="search()">
+            <mat-icon>search</mat-icon>
+          </button>
 
           <div *ngIf="hasElements">
             <mat-form-field style="width: 90%;">
               <input matInput formControlName="productName" placeholder="Nombre de producto" maxlength="80">
             </mat-form-field>
-            <mat-icon (click)="doFilter()">search</mat-icon>
-            <mat-icon (click)="clearFilter()">clear</mat-icon>
+            <button mat-mini-fab color="primary" (click)="doFilter()">
+              <mat-icon>search</mat-icon>
+            </button>
+            <button mat-mini-fab color="warn" (click)="clearFilter()">
+              <mat-icon>clear</mat-icon>
+            </button>
           </div>
 
         </form>

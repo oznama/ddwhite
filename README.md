@@ -3,6 +3,7 @@ Spring Boot with:
 	- Spring Web
 	- MySql Driver
 	- Spring Data JPA
+		* https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.limit-query-result
 	- DevTools
 
 Android Project with SDK 6

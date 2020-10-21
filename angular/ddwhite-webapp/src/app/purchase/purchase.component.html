@@ -13,17 +13,23 @@
 
       <form [formGroup]="purchaseForm">
 
-        <div fxLayoutAlign="center center">
+        <!--div fxLayoutAlign="center center">
           <button mat-raised-button color="primary" class="midle-width-input" [disabled]="!tableValid()" (click)="builkSave()">Terminar compra</button>
-        </div>
+        </div-->
 
         <div class="wrapper">
           <span style="font-size: 20px; text-transform: uppercase;">Proveedor selecionado: </span>
           <span class="text-red" *ngIf="!provider.id">Click en la lupa para buscar proveedor...</span>
           <span class="text-blue" *ngIf="provider.id">{{provider.bussinesName}}</span>
-          <mat-icon (click)="openDialogProviderSearch()">search</mat-icon>
+          <button mat-mini-fab color="primary" (click)="openDialogProviderSearch()">
+            <mat-icon>search</mat-icon>
+          </button>
+          <span class="spacer"></span>
+          <button mat-fab color="primary" [disabled]="!tableValid()" (click)="builkSave()">
+            <mat-icon>done_all</mat-icon>
+          </button>
         </div>
-        <div class="wrapper">
+        <!--div class="wrapper">
           <span style="font-size: 20px; text-transform: uppercase;">Producto selecionado: </span>
           <span class="text-red" *ngIf="!product.id">Click en la lupa para buscar producto...</span>
           <span class="text-blue" *ngIf="product.id">{{product.sku + ' ' + product.nameLarge}}</span>
@@ -55,8 +61,8 @@
           </mat-form-field>
 
           <button mat-raised-button type="button" [disabled]="formInvalid()" (click)="agregar()">Agregar</button>
-          <!--button mat-raised-button color="primary" [disabled]="purchaseForm.invalid" (click)="onSubmit()">Guardar</button-->
-        </div>
+          <button mat-raised-button color="primary" [disabled]="purchaseForm.invalid" (click)="onSubmit()">Guardar</button>
+        </div-->
 
       </form>
     </mat-card-content>
@@ -67,22 +73,31 @@
       <table class="table table-striped">
         <thead>
         <tr>
-          <th>Proveedor</th>
           <th>Producto</th>
           <th>Cantidad</th>
-          <th>Presetaci&oacute;n</th>
           <th>Precio</th>
+          <th>Presetaci&oacute;n</th>
+          <th class="{{!showNumPiece() ? 'hidden' : ''}}"># Piezas</th>
+          <th>
+            <button mat-mini-fab color="primary" (click)="openDialogProductSearch()" [disabled]="!provider.id">
+              <mat-icon>article</mat-icon>
+            </button>
+          </th>
         </tr>
         </thead>
         <tbody>
         <tr *ngFor="let purchase of purchases">
-          <td>{{purchase.providerName}}</td>
           <td>{{purchase.productName}}</td>
-          <td>{{purchase.quantity}}</td>
-          <td>{{purchase.unityDesc}}</td>
-          <td>{{purchase.cost}}</td>
+          <td><input #quantity class="input-number" maxlength="10" autocomplete="off" value="1"></td>
+          <td><input #cost class="input-number" maxlength="15" autocomplete="off" value="0"></td>
           <td>
-            <button mat-raised-button color="warn" (click)="remove(purchase)">Borrar</button>
+            <select #unity (change)=onChange(+$event.target.value)>
+              <option *ngFor="let item of catalogUnity" [value]="item.id">{{item.name}}</option>
+            </select>
+          </td>
+          <input #numPiece class="{{!showNumPiece() ? 'hidden' : ''}}" maxlength="5" type="number" autocomplete="off" required>
+          <td>
+            <button mat-mini-fab color="warn" (click)="remove(purchase)"><mat-icon>clear</mat-icon></button>
           </td>
         </tr>
         </tbody>

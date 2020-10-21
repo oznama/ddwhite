@@ -55,6 +55,9 @@ public class SaleService {
 	@Autowired
 	private SessionService sessionService;
 	
+	@Autowired
+	private WithdrawalService withdrawalService;
+	
 	public SaleDto save(SaleDto saleDto) throws Throwable {
 		Sale sale = new Sale();
 		BeanUtils.copyProperties(saleDto, sale);
@@ -138,13 +141,18 @@ public class SaleService {
 		Long paymentCashId = catalogService.findByName(GeneralConstants.CATALOG_PAYMENT_METHOD_CASH).getId();
 		BigDecimal currentAmount = new BigDecimal(0);
 		SessionDto currentSession = sessionService.findCurrentSession(userId);
-		List<SaleDto> currentSales = findByRange(currentSession.getWithdrawalDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+		String lastWithdrawal = withdrawalService.getLastDateWithdrawalBySession(currentSession.getId());
+		List<SaleDto> currentSales = findByRange(lastWithdrawal, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 		for(SaleDto sale : currentSales) {
 			List<SalePayment> salePayments = salePaymentRepository.findBySaleAndPayment(sale.getId(), paymentCashId);
 			BigDecimal totalOfSale = salePayments.stream().map(s -> s.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
 			currentAmount = currentAmount.add(totalOfSale.subtract(sale.getChange()));
 		};
 		return currentAmount;
+	}
+	
+	public Long getLastSaleId() {
+		return saleRepository.findTopByOrderByIdDesc().getId();
 	}
 
 	private List<SaleDto> buildSalesDto(final List<Sale> sales) {

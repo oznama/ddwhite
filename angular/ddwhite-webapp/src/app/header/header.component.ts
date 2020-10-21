@@ -109,7 +109,7 @@ export class HeaderComponent implements OnInit {
       if(response && response > 0) {
         const dialogRef = this.dialog.open(WithdrawallDialogComponent, {data: response});
       } else {
-        this.alertService.warn('No existe excedente de efectivo', alertOptions)
+        this.alertService.warn('No cuentas con efectivo en caja', alertOptions)
       }
     });
   }

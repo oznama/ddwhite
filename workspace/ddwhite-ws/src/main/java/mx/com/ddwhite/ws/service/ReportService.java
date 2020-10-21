@@ -16,6 +16,7 @@ import mx.com.ddwhite.ws.dto.ProductInventory;
 import mx.com.ddwhite.ws.dto.SessionDto;
 import mx.com.ddwhite.ws.model.Sale;
 import mx.com.ddwhite.ws.model.SalePayment;
+import mx.com.ddwhite.ws.model.Withdrawal;
 import mx.com.ddwhite.ws.reports.AccountInput;
 import mx.com.ddwhite.ws.reports.AccountInputTotal;
 import mx.com.ddwhite.ws.reports.AccountOutput;
@@ -59,6 +60,9 @@ public class ReportService {
 	
 	@Autowired
 	private SessionService sessionService;
+	
+	@Autowired
+	private WithdrawalService withdrawalService;
 	
 	public ReportGeneral getReportGeneral(String startDate, String endDate){
 		ReportGeneral general = new ReportGeneral();
@@ -176,6 +180,8 @@ public class ReportService {
 			cashout = getCashout(strStartDate, strEndDate);
 		} else {
 			sessionDto = sessionService.findCurrentSession(userId);
+			if( sessionDto.getOutDate() == null )
+				sessionDto.setOutDate(GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 			cashout = getCashout(sessionDto.getInDate(), sessionDto.getOutDate());
 		}
 		cashout.setInitialAmount(sessionDto.getInitialAmount() != null ? sessionDto.getInitialAmount() : BigDecimal.ZERO);
@@ -211,6 +217,10 @@ public class ReportService {
 		StringBuilder builder = new StringBuilder();
 		builder.append( ReportUtils.ExportListToCSV(true, paymentsFinded, Payment.class) );
 		return builder.toString();
+	}
+	
+	public List<Withdrawal> findWithdrawalCurrentSession(Long userId) {
+		return withdrawalService.findWithdrawalCurrentSession(sessionService.findCurrentSession(userId).getId());
 	}
 
 }

@@ -26,7 +26,9 @@
         <td>{{purchase.quantity}}</td>
         <td>{{purchase.numPiece}}</td>
         <td>
-          <button mat-raised-button color="primary" (click)="seleccionar(purchase.id,purchase.product.id, purchase)">Seleccionar</button>
+          <button mat-mini-fab color="primary" (click)="seleccionar(purchase.id,purchase.product.id, purchase)">
+            <mat-icon>done</mat-icon>
+          </button>
         </td>
       </tr>
       </tbody>
@@ -50,7 +52,11 @@
         <th>Producto</th>
         <th>Unidad</th>
         <th>Cantidad</th>
-        <th><button mat-raised-button color="warn" (click)="cancelar()">Cancelar</button></th>
+        <th>
+          <button mat-mini-fab color="warn" (click)="cancelar()">
+            <mat-icon>clear</mat-icon>
+          </button>
+        </th>
       </tr>
       </thead>
       <tbody>
@@ -60,7 +66,9 @@
         <td>{{purchase.unityDesc}}</td>
         <td>{{purchase.quantity}}</td>
         <td>
-          <button mat-raised-button color="primary" *ngIf="+quantity.value>0" (click)="reasign(purchase.id, +quantity.value)">Reasingar</button>
+          <button mat-mini-fab color="primary" *ngIf="+quantity.value>0" (click)="reasign(purchase.id, +quantity.value)">
+            <mat-icon>done</mat-icon>
+          </button>
         </td>
       </tr>
       </tbody>

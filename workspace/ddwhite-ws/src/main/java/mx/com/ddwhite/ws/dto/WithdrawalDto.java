@@ -9,10 +9,19 @@ public class WithdrawalDto implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 4790075124365249067L;
-	
+
+	private Long denominationId;
 	private String denomination;
 	private BigDecimal denominationValue;
 	private int quantity;
+
+	public Long getDenominationId() {
+		return denominationId;
+	}
+
+	public void setDenominationId(Long denominationId) {
+		this.denominationId = denominationId;
+	}
 
 	public String getDenomination() {
 		return denomination;

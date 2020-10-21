@@ -52,6 +52,9 @@ public class SessionService {
 		return sessionDto;
 	}
 	
+	/*
+	 * TODO change to limit
+	 */
 	public SessionDto findByUserIdAndRange(Long userId, String startDate, String endDate) {
 		SessionDto sessionDto = new SessionDto();
 		List<Session> sessions = repository.findByUserIdAndRange(userId, startDate, endDate);
@@ -73,12 +76,6 @@ public class SessionService {
 		String outDate = GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
 		repository.updateCloseSession(id, outDate);
 		return outDate;
-	}
-	
-	public String updateWithdrawalDate(Long id) {
-		String withdrawalDate = GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
-		repository.updateWithdrawalDate(id, withdrawalDate);
-		return withdrawalDate;
 	}
 	
 	private SessionDto getSessionDto(Session session) {

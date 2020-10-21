@@ -34,6 +34,7 @@ export class WithdrawallDialogComponent implements OnInit {
         this.catalogDenominations = response.items;
         this.catalogDenominations.forEach(cD => {
           const denomination = <Withdrawall> {
+            denominationId: cD.id,
             denomination: cD.description,
             denominationValue: +cD.name,
             quantity: 0
@@ -44,7 +45,7 @@ export class WithdrawallDialogComponent implements OnInit {
   }
 
   hideButton(){
-    return this.captured < this.excedent;
+    return this.captured != this.excedent;
   }
 
   add(denomination: string){

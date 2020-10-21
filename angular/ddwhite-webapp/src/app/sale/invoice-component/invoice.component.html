@@ -22,7 +22,9 @@
           <mat-datepicker #endDate disabled="false"></mat-datepicker>
         </mat-form-field>
         
-        <button mat-raised-button color="primary" [disabled]="searchForm.invalid">Filtrar</button>
+        <button mat-mini-fab color="primary" [disabled]="searchForm.invalid">
+          <mat-icon>search</mat-icon>
+        </button>
       </form>
     </mat-card-content>
   </mat-card>
@@ -51,7 +53,9 @@
           <td>{{sale.id}}</td>
           <td>
             {{sale.clientId ? ((sale.clientRfc ? (sale.clientRfc + ' ') : '') + sale.clientName) : 'Sin cliente'}}
-            <mat-icon (click)="openDialogClientSearch(sale.id)">search</mat-icon>
+            <button mat-mini-fab color="primary" (click)="openDialogClientSearch(sale.id)">
+              <mat-icon>search</mat-icon>
+            </button>
           </td>
           <td>$ {{sale.total}}</td>
           <td>{{sale.detail.length}}</td>

@@ -138,6 +138,9 @@ public class PurchaseService {
 		purchaseReasignService.create(purchaseReasignDto);
 	}
 
+	/*
+	 * TODO change to limit
+	 */
 	public BigDecimal getCostByProductAndDate(Long productId, Long unity, String date) {
 		try {
 			return repository.findCosts(productId, unity, date).get(0);

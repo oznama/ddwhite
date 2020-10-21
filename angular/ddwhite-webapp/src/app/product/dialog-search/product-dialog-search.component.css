@@ -1,0 +1,21 @@
+.div-parent{
+  display: flex;
+  border-radius:10px;
+  flex-direction: column;
+  background:#fff;
+  width: 1000px;
+}
+.div-child {
+    overflow: hidden;
+}
+.div-lateral {
+    float: right;
+    width: 400px;
+    padding: 10px;
+    margin: 10px auto;
+}
+.input-quantity {
+  text-align:right; 
+  padding: 0 10px;
+  width: 70px;
+}

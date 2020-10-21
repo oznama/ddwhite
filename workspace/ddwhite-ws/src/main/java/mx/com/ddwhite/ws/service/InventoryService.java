@@ -69,7 +69,6 @@ public class InventoryService extends InventoryUtils {
 	
 	public List<ProductInventory> findWarehouse(Sort sort, String sku, String name){
 		List<ProductInventory> list = findInventory(sku, name);
-		System.out.println("tabla inventario: " + list.size());
 		list.forEach(product -> {
 			Double quantity = product.getInventory().getQuantity();
 			Double saled = sumSaleQuantity(

@@ -23,8 +23,10 @@ export class PurchaseComponent implements OnInit {
   catalogUnity: CatalogItem[];
   purchases: Purchase[] = [];
   provider: Provider = new Provider();
-  product: Product = new Product();
+  //product: Product = new Product();
+  productsSelected: Product[];
   boxId: number;
+  unity: number;
 
   constructor(
   	private formBuilder: FormBuilder,
@@ -49,6 +51,7 @@ export class PurchaseComponent implements OnInit {
     this.router.navigate(['home']);
   }
 
+  /*
   private setPurchase(): Purchase {
     const np = +this.purchaseForm.controls.numPiece.value;
     const currentUnity = +this.purchaseForm.controls.unity.value;
@@ -77,6 +80,7 @@ export class PurchaseComponent implements OnInit {
       }
     );
   }
+  */
 
   private loadCatalogUnity(): void{
   	this.catalogService.getByName(CAT_CONST.UNITIES).subscribe( response => {
@@ -87,6 +91,7 @@ export class PurchaseComponent implements OnInit {
     });
   }
 
+  /*
   formInvalid(){
     return !(this.provider.id && this.product.id && 
             this.purchaseForm.controls.quantity.value &&
@@ -106,9 +111,21 @@ export class PurchaseComponent implements OnInit {
     }
 
     if(isAddeable){*/
-      this.addPurchaseToList(purch);
+      //this.addPurchaseToList(purch);
     //}
     
+  //}
+
+  private setPurchase(product: Product): Purchase {
+    return <Purchase> {
+      productId: product.id,
+      productName: product.nameLarge,
+    };
+  }
+
+  private addPurchase(product: Product){
+    const purchase = this.setPurchase(product);
+    this.addPurchaseToList(purchase);
   }
 
   private addPurchaseToList(purch: Purchase): void {
@@ -137,9 +154,14 @@ export class PurchaseComponent implements OnInit {
     return Array.isArray(this.purchases) && this.purchases.length;
   }
 
+  onChange(unity){
+    this.unity = unity;
+  }
+
+  
   showNumPiece(){
-    const unity = +this.purchaseForm.controls.unity.value;
-    return unity !== 0 && unity === this.boxId;
+    //const unity = +this.purchaseForm.controls.unity.value;
+    return this.unity !== 0 && this.unity === this.boxId;
   }
 
   builkSave(){
@@ -150,9 +172,9 @@ export class PurchaseComponent implements OnInit {
         .subscribe( data => {
           this.alertService.success('Compras registradas', alertOptions);
           this.purchases = [];
-          this.product = new Product();
           this.provider = new Provider();
           this.purchaseForm.reset();
+          this.productsSelected = null;
         }, error => {
           const errMsg = 'Ha ocurrido un error en la transaccion: ';
           console.error(error);
@@ -178,13 +200,18 @@ export class PurchaseComponent implements OnInit {
 
   openDialogProductSearch() {
     //const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'inventory'} });
-    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'all'} });
+    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'all', productsSelected: this.productsSelected} });
     dialogRef.afterClosed().subscribe( result =>{
       if( result && result.data ){
+        /*
         this.product.id = result.data.id;
         this.product.sku = result.data.sku;
         this.product.nameLarge = result.data.nameLarge;
         this.product.inventory.currentCost = result.data.cost;
+        */
+        this.productsSelected = result.data;
+        this.purchases = [];
+        result.data.forEach( p => this.addPurchase(p));
       }
     });
   }
