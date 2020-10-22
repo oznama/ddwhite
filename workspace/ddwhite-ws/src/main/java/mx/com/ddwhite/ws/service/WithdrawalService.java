@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
@@ -23,9 +24,6 @@ public class WithdrawalService {
 	@Autowired
 	private WithdrawalDetailRepository withdrawalDetailRepository;
 	
-	@Autowired
-	private SessionService sessionService;
-	
 	public Long save(Long sessionId, List<WithdrawalDto> denominations) {
 		BigDecimal total = denominations.stream().map(d -> d.getDenominationValue().multiply(BigDecimal.valueOf(d.getQuantity()))).reduce(BigDecimal.ZERO, BigDecimal::add);
 		final Withdrawal withdrawal = new Withdrawal();
@@ -42,25 +40,24 @@ public class WithdrawalService {
 		return withdrawal.getId();
 	}
 	
-	/*
-	 * TODO change to limit
-	 */
-	public String getLastDateWithdrawalBySession(Long sessionId) {
-		List<Withdrawal> withdrawals = withdrawalRepository.findBySession(sessionId);
-		if(!withdrawals.isEmpty()) {
-			return withdrawals.get(0).getDateCreated();
+	public String getLastDateWithdrawalBySession(Long sessionId, String sessionInData) {
+		try {
+			return withdrawalRepository.findTop1BySessionId(sessionId, Sort.by(Sort.Direction.DESC, "dateCreated")).getDateCreated();
+		} catch (NullPointerException e) {
+			return sessionInData;
 		}
-		return sessionService.findCurrentSession(sessionId).getInDate(); 
+	}
+	
+	public List<Withdrawal> findWithdrawallsBySessionAndRange(Long sessionId, String startDate, String endDate) {
+		return withdrawalRepository.findBySessionAndDates(sessionId, startDate, endDate);
 	}
 	
 	public List<Withdrawal> findWithdrawallsByRange(String startDate, String endDate) {
 		return withdrawalRepository.findByDates(startDate, endDate);
 	}
 	
-	public List<Withdrawal> findWithdrawalCurrentSession(Long sessionId) {	
-		return findWithdrawallsByRange(
-			getLastDateWithdrawalBySession(sessionId), 
-			GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME)
+	public List<Withdrawal> findWithdrawalCurrentSession(String sessionInDate) {
+		return findWithdrawallsByRange(sessionInDate, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME)
 		);
 	}
 

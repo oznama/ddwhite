@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {Router} from "@angular/router";
 import {Observable} from 'rxjs';
 import {MatDialog} from '@angular/material/dialog';
@@ -25,14 +24,11 @@ import { Product } from './../model/product.model';
 export class SaleComponent implements OnInit {
 
   date: Date;
-  saleForm: FormGroup;
   client: Client = new Client();
-  products: Product[] = [];
   sale: Sale = new Sale();
   saleDetail: SaleDetail[] = [];
   salePayment: SalePayment[] = [];
   productsSelected: Product[];
-  quantityDefault: string = '1';
   tax: number;
   decimals: number = 2;
   hasDiscount: boolean = false;
@@ -41,7 +37,6 @@ export class SaleComponent implements OnInit {
   lastIdSale: number;
 
   constructor(
-  	private formBuilder: FormBuilder,
   	private apiService: ApiSaleService,
     public catalogService:ApiCatalogService,
     public privileges:Privileges,
@@ -52,9 +47,6 @@ export class SaleComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.saleForm = this.formBuilder.group({
-  		quantity: [this.quantityDefault, [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,3})?")]]
-  	})
     this.loadData();
   }
 
@@ -157,7 +149,6 @@ export class SaleComponent implements OnInit {
   		this.sale.subTotal = this.round(this.sale.subTotal + total);
   		this.sale.total = this.sale.subTotal;
   	}*/
-    this.saleForm.controls.quantity.setValue(this.quantityDefault);
   }
 
   private unTotalize(saleDetail: SaleDetail){
@@ -198,6 +189,7 @@ export class SaleComponent implements OnInit {
   }
 
   openDialogProductSearch() {
+    this.reset(false);
     const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'sale', productsSelected: this.productsSelected} });
     dialogRef.afterClosed().subscribe( result =>{
       if( result && result.data && result.data.length > 0 ){
@@ -318,24 +310,23 @@ export class SaleComponent implements OnInit {
         //this.openPrintTicket();
         //this.newTagTicket();
       this.alertService.success('Venta completada', alertOptions);
-      this.reset();
+      this.reset(true);
       this.checkWithdrall();
     }, error => {
       this.alertService.error('La venta no ha sido registrada: ' + error.error, alertOptions);
     });
   }
 
-  private reset(): void{
-    this.client = new Client();
-    this.products = [];
-    this.saleForm.reset();
+  private reset(complete: boolean): void{
+    if(complete){
+      this.client = new Client();
+      this.productsSelected = null;
+    }
     this.sale = new Sale();
     this.saleDetail = [];
     this.salePayment = [];
-    this.saleForm.controls.quantity.setValue(this.quantityDefault);
     this.totals = [];
     this.totalAmount = 0;
-    this.productsSelected = null;
   }
 
   private addTotal(unity: string, quantity: number){

@@ -37,9 +37,9 @@ public class SessionService {
 		return getSessionDto(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id)));
 	}
 	
-	public SessionDto findSessionById(Long userId) {
+	public SessionDto findSessionByUser(Long userId) {
 		SessionDto sessionDto = new SessionDto();
-		BeanUtils.copyProperties(repository.findSessionByIdAndDate(userId, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME)), sessionDto);
+		BeanUtils.copyProperties(repository.findSessionByUserInDate(userId, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME)), sessionDto);
 		return sessionDto;
 	}
 	
@@ -52,9 +52,6 @@ public class SessionService {
 		return sessionDto;
 	}
 	
-	/*
-	 * TODO change to limit
-	 */
 	public SessionDto findByUserIdAndRange(Long userId, String startDate, String endDate) {
 		SessionDto sessionDto = new SessionDto();
 		List<Session> sessions = repository.findByUserIdAndRange(userId, startDate, endDate);

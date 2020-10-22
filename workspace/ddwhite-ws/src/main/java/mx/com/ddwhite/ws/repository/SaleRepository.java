@@ -22,6 +22,9 @@ public interface SaleRepository extends JpaRepository<Sale, Long> {
 	@Query("SELECT s FROM Sale s WHERE s.dateCreated BETWEEN :start AND :end")
 	List<Sale> findByRange(@Param("start") String start, @Param("end") String end, Pageable pageable);
 	
+	@Query("SELECT s FROM Sale s WHERE s.userId = :userId AND s.dateCreated BETWEEN :start AND :end")
+	List<Sale> findByUserAndRange(@Param("userId") Long userId, @Param("start") String start, @Param("end") String end);
+	
 	@Modifying
 	@Transactional
 	@Query("UPDATE Sale s SET s.invoice=:invoice, s.clientId=:clientId WHERE s.id = :id")

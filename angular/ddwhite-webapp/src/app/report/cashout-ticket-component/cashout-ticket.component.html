@@ -8,7 +8,7 @@
       <mat-card-content>
         <form [formGroup]="searchForm" (ngSubmit)="imprimir()">
 
-          <div *ngIf="privileges.isAdmin()">
+          <div *ngIf="data">
             <mat-form-field class="full-width-input">
               <select matNativeControl formControlName="user" placeholder="Usuario">
                 <option *ngFor="let user of users" [value]="user.id">
@@ -18,7 +18,7 @@
             </mat-form-field>
           </div>
 
-          <div *ngIf="privileges.isAdmin()">
+          <div *ngIf="data">
             <mat-form-field class="midle-width-input">
               <mat-label>Fecha inicial</mat-label>
               <input matInput formControlName="startDate" [matDatepicker]="startDate" autocomplete="off">
@@ -39,6 +39,16 @@
             </mat-form-field>
           </div>
 
+          <div class="wrapper" *ngIf="withdrawals && withdrawals.length > 0">
+            <h3>Retiros</h3>
+            <ul>
+              <li *ngFor="let withdrawal of withdrawals">  
+                <span class="text-blue">{{withdrawal.dateCreated.substring(withdrawal.dateCreated.indexOf(' ')+1)}}</span> 
+                <span>por el monto de:</span> <span class="text-red">$ {{withdrawal.ammount}}</span>
+              </li>  
+            </ul>
+          </div>
+
           <mat-form-field class="full-width-input">
             <input matInput formControlName="amount" style="text-align:right; padding: 0 10px" placeholder="Efectivo en caja" 
             maxlength="15" autocomplete="off" required>
@@ -46,12 +56,6 @@
           </mat-form-field>
 
           <div class="wrapper">
-            <ul>
-              <li *ngFor="let withdrawal of withdrawals">  
-                <span>Retiro hecho:</span> <span class="text-blue">{{withdrawal.dateCreated}}</span> 
-                <span>por el monto de:</span> <span class="text-red">$ {{withdrawal.ammount}}</span>
-              </li>  
-            </ul>
             <button mat-raised-button color="primary" [disabled]="searchForm.invalid">Imprimir</button>
           </div>
         </form>

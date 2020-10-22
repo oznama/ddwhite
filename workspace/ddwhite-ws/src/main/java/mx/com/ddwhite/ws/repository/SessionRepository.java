@@ -16,16 +16,16 @@ import mx.com.ddwhite.ws.model.Session;
 @Transactional
 public interface SessionRepository extends JpaRepository<Session, Long> {
 	
-	@Query("SELECT s FROM Session s WHERE s.inDate < :startDate AND s.outDate < :endDate")
+	@Query("SELECT s FROM Session s WHERE s.inDate >= :startDate AND s.outDate <= :endDate")
 	List<Session> findByRange(@Param("startDate") String startDate, @Param("endDate") String endDate);
 	
 	@Query("SELECT s FROM Session s WHERE s.userId = :userId AND :date BETWEEN s.inDate AND s.outDate")
-	Session findSessionByIdAndDate(@Param("userId") Long userId, @Param("date") String date);
+	Session findSessionByUserInDate(@Param("userId") Long userId, @Param("date") String date);
 	
 	@Query("SELECT s FROM Session s WHERE s.userId = :userId AND s.inDate < :date AND s.outDate IS NULL")
 	Session findCurrentSession(@Param("userId") Long userId, @Param("date") String date);
 	
-	@Query("SELECT s FROM Session s WHERE s.userId = :userId AND s.inDate < :startDate AND s.outDate < :endDate")
+	@Query("SELECT s FROM Session s WHERE s.userId = :userId AND s.inDate >= :startDate AND s.outDate <= :endDate ORDER BY id DESC")
 	List<Session> findByUserIdAndRange(@Param("userId") Long userId, @Param("startDate") String startDate, @Param("endDate") String endDate);
 	
 	@Modifying

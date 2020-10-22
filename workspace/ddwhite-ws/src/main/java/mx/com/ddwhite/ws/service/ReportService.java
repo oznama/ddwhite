@@ -157,10 +157,26 @@ public class ReportService {
 		return ReportUtils.ExportListToCSV(true, getWarehouse(sort), Warehouse.class);
 	}
 	
+	/**
+	 * This method is used by print on server using TicketPrintService class
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
 	public Cashout getCashout(String startDate, String endDate) {
 		return cashoutService.getCashout(startDate, endDate);
 	}
 	
+	public Cashout getCashout(Long userId, String startDate, String endDate) {
+		return cashoutService.getCashout(userId, startDate, endDate);
+	}
+	
+	/**
+	 * This method at the moment is only used by print on client
+	 * @param startDate
+	 * @param endDate
+	 * @return
+	 */
 	public Cashout getCashout(Date startDate, Date endDate) {
 		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
 		endDate = GenericUtils.plusDay(endDate, 1);
@@ -177,7 +193,7 @@ public class ReportService {
 			strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
 			strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
 			sessionDto = sessionService.findByUserIdAndRange(userId, strStartDate, strEndDate);
-			cashout = getCashout(strStartDate, strEndDate);
+			cashout = getCashout(userId, strStartDate, strEndDate);
 		} else {
 			sessionDto = sessionService.findCurrentSession(userId);
 			if( sessionDto.getOutDate() == null )
@@ -188,7 +204,7 @@ public class ReportService {
 		cashout.setCurrentAmount(cashInBox);
 		String fromStartDate = !StringUtils.isEmpty(sessionDto.getInDate()) ? sessionDto.getInDate() : strStartDate;
 		String toEndDate = !StringUtils.isEmpty(strEndDate) ? strEndDate : GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
-		ticketPrintService.cashout(cashout, userId, fromStartDate, toEndDate);
+		ticketPrintService.cashout(cashout, userId, fromStartDate, toEndDate, sessionDto.getId());
 	}
 	
 	public String payments(Long paymentId, Date startDate, Date endDate) {
@@ -220,7 +236,7 @@ public class ReportService {
 	}
 	
 	public List<Withdrawal> findWithdrawalCurrentSession(Long userId) {
-		return withdrawalService.findWithdrawalCurrentSession(sessionService.findCurrentSession(userId).getId());
+		return withdrawalService.findWithdrawalCurrentSession(sessionService.findCurrentSession(userId).getInDate());
 	}
 
 }

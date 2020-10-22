@@ -18,7 +18,8 @@ export class AuthGuard implements CanActivate {
 				if (isLoggedIn) {
 					return true;
 				}
-				window.localStorage.removeItem('sessionStart');
+				//window.localStorage.removeItem('sessionStart');
+				window.localStorage.removeItem('userFullName');
 				window.localStorage.removeItem('userId');
 				this.router.navigate(['/login']);
 				return false;

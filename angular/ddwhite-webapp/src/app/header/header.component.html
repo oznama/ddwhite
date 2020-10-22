@@ -9,7 +9,7 @@
     <button mat-menu-item class="toolbar-button" (click)="reprintTicket()" *ngIf="privileges.showCashout | async">
       <mat-icon>receipt</mat-icon><span>Reimprimir ticket</span>
     </button>
-    <button mat-menu-item class="toolbar-button" (click)="checkWithdrall()()" *ngIf="privileges.showCashout | async">
+    <button mat-menu-item class="toolbar-button" (click)="checkWithdrall()" *ngIf="privileges.showCashout | async">
       <mat-icon>money</mat-icon><span>Retirar efectivo</span>
     </button>
     <button mat-menu-item class="toolbar-button" (click)="makeCashout()" *ngIf="privileges.isRoleAdmin | async">

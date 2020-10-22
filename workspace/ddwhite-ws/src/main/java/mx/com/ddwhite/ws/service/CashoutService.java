@@ -32,9 +32,24 @@ public class CashoutService {
 		bindCashout(startDate, endDate, cashout);
 		return cashout;
 	}
+	
+	public Cashout getCashout(Long userId, String startDate, String endDate) {
+		Cashout cashout = new Cashout();
+		bindCashout(userId, startDate, endDate, cashout);
+		return cashout;
+	}
 
 	private void bindCashout(String startDate, String endDate, Cashout cashout) {
 		List<SaleDto> salesDto = saleService.findByRange(startDate, endDate);
+		salesDto.forEach(saleDto -> {
+			cashout.setTotal(cashout.getTotal().add(saleDto.getTotal()));
+			cashout.setTotalChange(cashout.getTotalChange().add(saleDto.getChange()));
+			bindCashoutTotals(cashout, saleDto);
+		});
+	}
+	
+	private void bindCashout(Long userId, String startDate, String endDate, Cashout cashout) {
+		List<SaleDto> salesDto = saleService.findByUserAndRange(userId, startDate, endDate);
 		salesDto.forEach(saleDto -> {
 			cashout.setTotal(cashout.getTotal().add(saleDto.getTotal()));
 			cashout.setTotalChange(cashout.getTotalChange().add(saleDto.getChange()));

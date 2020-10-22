@@ -33,15 +33,15 @@
 			</div>
 			<div class="box-total-detail">
 				<div class="box-total-detail-arrow">
-					<span class="span-block">Sub total: $ {{sale.subTotal}}</span>
-					<span class="span-block">Iva: $ {{sale.tax}}</span>
-					<span class="span-block">Total: $ {{sale.total}}</span>
-					<span class="span-block">Cambio: $ {{sale.change}}</span>
-					<span class="text-blue" *ngIf="sale.discount">Descuento: {{sale.discount}}%</span>
+					<span class="span-block" style="color: darkgreen;">Sub total: $ {{sale.subTotal}}</span>
+					<span class="span-block" style="color: darkgreen;">Iva: $ {{sale.tax}}</span>
+					<span class="span-block" style="color: darkgreen;">Total: $ {{sale.total}}</span>
+					<span class="span-block" style="color: darkorange;" *ngIf="sale.discount">Descuento: {{sale.discount}}%</span>
+					<span class="span-block" style="color: red;" *ngIf="sale.change">Cambio: $ {{sale.change}}</span>
 				</div>
 			</div>
 			<div class="box-pay">
-				<button mat-fab color="warn" type="button" (click)="reset()"><mat-icon>clear</mat-icon></button>
+				<button mat-fab color="warn" type="button" (click)="reset(true)"><mat-icon>clear</mat-icon></button>
 				<button mat-fab color="accent" type="button" *ngIf="hasDiscount" [disabled]="!(sale.total || sale.total >0)" (click)="openDiscountDialog()">
 					<mat-icon>money_off</mat-icon>
 				</button>
@@ -63,19 +63,17 @@
 
 			<mat-card class="box-form">
 				<mat-card-content>
-					<form [formGroup]="saleForm">
-						<div class="wrapper">
-							<button mat-fab color="primary" (click)="openDialogClientAdd()"><mat-icon>people</mat-icon></button>
-							<span style="font-size: 20px; text-transform: uppercase;">Cliente selecionado: </span>
-							<span class="text-red" *ngIf="!client.id">SIN FACTURA &oacute; click en la lupa para buscar...</span>
-							<span class="text-blue" *ngIf="client.id">{{client.name + ' ' +  client.lastName + ' ' +  client.midleName}}</span>
-							<span class="spacer"></span>
-							<button mat-mini-fab color="primary" (click)="openDialogClientSearch()">
-								<mat-icon>search</mat-icon>
-							</button>
-							<mat-icon *ngIf="client.id" (click)="unSelectClient()">clear</mat-icon>
-						</div>
-			  		</form>
+					<div class="wrapper">
+						<button mat-fab color="primary" (click)="openDialogClientAdd()"><mat-icon>people</mat-icon></button>
+						<span style="font-size: 20px; text-transform: uppercase;">Cliente selecionado: </span>
+						<span class="text-red" *ngIf="!client.id">SIN FACTURA &oacute; click en la lupa para buscar...</span>
+						<span class="text-blue" *ngIf="client.id">{{client.name + ' ' +  client.lastName + ' ' +  client.midleName}}</span>
+						<span class="spacer"></span>
+						<button mat-mini-fab color="primary" (click)="openDialogClientSearch()">
+							<mat-icon>search</mat-icon>
+						</button>
+						<mat-icon *ngIf="client.id" (click)="unSelectClient()">clear</mat-icon>
+					</div>
 			  	</mat-card-content>
 			</mat-card>
 
@@ -97,7 +95,7 @@
 						</thead>
 						<tbody>
 							<tr *ngFor="let product of saleDetail">
-								<td>{{product.quantity}} {{product.unityDesc}}</td>
+								<td>{{product.quantity}} {{product.unityDesc}} {{product.numPiece ? '-' + product.numPiece : ''}}</td>
 								<td>{{product.productName}}</td>
 								<td>{{product.price}}</td>
 								<td>{{product.total}}</td>
@@ -112,7 +110,7 @@
 
 			<div>
 				<span class="text-blue">Monto total: $ {{totalAmount}}</span>
-				[<label *ngFor="let total of totals" class="text-blue">{{total.unity}}: {{total.quantity}} </label>]
+				[<label *ngFor="let total of totals" class="text-blue">{{total.quantity}} {{total.unity}}(s) </label>]
 			</div>
 
 		</div>

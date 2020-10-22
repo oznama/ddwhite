@@ -138,9 +138,6 @@ public class PurchaseService {
 		purchaseReasignService.create(purchaseReasignDto);
 	}
 
-	/*
-	 * TODO change to limit
-	 */
 	public BigDecimal getCostByProductAndDate(Long productId, Long unity, String date) {
 		try {
 			return repository.findCosts(productId, unity, date).get(0);
@@ -175,10 +172,8 @@ public class PurchaseService {
 		purchaseListDto.setUnityDesc(catalogService.findById(purchase.getUnity()).getName());
 		purchaseListDto.setUser(userService.findById(purchase.getUserId()).getFullName());
 		List<SaleDetail> sales = purchase.getNumPiece() != null
-				? saleDetailRepository.findByProductAndUnityWithPieces(purchase.getProduct().getId(),
-						purchase.getUnity(), purchase.getNumPiece())
-				: saleDetailRepository.findByProductAndUnityWithoutPieces(purchase.getProduct().getId(),
-						purchase.getUnity());
+				? saleDetailRepository.findByProductAndUnityWithPieces(purchase.getProduct().getId(),purchase.getUnity(), purchase.getNumPiece())
+				: saleDetailRepository.findByProductAndUnityWithoutPieces(purchase.getProduct().getId(),purchase.getUnity());
 		purchaseListDto.setUsedInSale(!sales.isEmpty());
 		return purchaseListDto;
 	}

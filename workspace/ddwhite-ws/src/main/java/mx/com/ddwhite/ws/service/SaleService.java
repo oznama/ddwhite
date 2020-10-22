@@ -129,6 +129,11 @@ public class SaleService {
 		return new PageImpl<>(buildSalesDto(sales), pageable, saleRepository.findByRange(strStartDate, strEndDate).size());
 	}
 	
+	public List<SaleDto> findByUserAndRange(Long userId, String startDate, String endDate) {
+		List<Sale> sales = saleRepository.findByUserAndRange(userId, startDate, endDate);
+		return buildSalesDto(sales);
+	}
+	
 	public BigDecimal getExcedent(Long userId) {
 		BigDecimal maxAmount = BigDecimal.valueOf(
 				Double.valueOf(catalogService.findByName(GeneralConstants.CATALOG_MAX_AMOUNT_CASH_WITHDRAWAL).getDescription()))
@@ -141,7 +146,7 @@ public class SaleService {
 		Long paymentCashId = catalogService.findByName(GeneralConstants.CATALOG_PAYMENT_METHOD_CASH).getId();
 		BigDecimal currentAmount = new BigDecimal(0);
 		SessionDto currentSession = sessionService.findCurrentSession(userId);
-		String lastWithdrawal = withdrawalService.getLastDateWithdrawalBySession(currentSession.getId());
+		String lastWithdrawal = withdrawalService.getLastDateWithdrawalBySession(currentSession.getId(), currentSession.getInDate());
 		List<SaleDto> currentSales = findByRange(lastWithdrawal, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 		for(SaleDto sale : currentSales) {
 			List<SalePayment> salePayments = salePaymentRepository.findBySaleAndPayment(sale.getId(), paymentCashId);

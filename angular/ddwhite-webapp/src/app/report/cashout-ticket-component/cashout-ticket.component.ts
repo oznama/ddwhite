@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ApiReportService, ApiUserService, Privileges } from '../../service/module.service';
+import { ApiReportService, ApiUserService } from '../../service/module.service';
 import {User} from "../../model/user.model";
 import {Withdrawal} from "../../model/cashout.model";
 import { AlertService, alertOptions } from '../../_alert';
@@ -17,11 +17,11 @@ export class CashoutTicketComponent implements OnInit {
   withdrawals: Withdrawal[];
 
   constructor(public dialogRef: MatDialogRef<CashoutTicketComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: boolean,
     private formBuilder: FormBuilder,
     private reportService: ApiReportService,
     private userService: ApiUserService,
-    public alertService:AlertService,
-    public privileges: Privileges) { }
+    public alertService:AlertService) { }
 
   ngOnInit(): void {
     this.searchForm = this.formBuilder.group({
@@ -41,22 +41,25 @@ export class CashoutTicketComponent implements OnInit {
   }
 
   imprimir(){
-    const userId = this.privileges.isAdmin() ? +this.searchForm.controls.user.value : +window.localStorage.getItem('userId');
-    const startTime = this.privileges.isAdmin() ? this.searchForm.controls.startTime.value : null;
-    var startDate = this.privileges.isAdmin() ? this.searchForm.controls.startDate.value : null;
+    var userId = +window.localStorage.getItem('userId'), startTime = null, startDate = null, endTime = null, endDate = null;
+    if( this.data ) {
+      userId = +this.searchForm.controls.user.value;
+      startTime = this.searchForm.controls.startTime.value;
+      startDate = this.searchForm.controls.startDate.value;
+      endTime = this.searchForm.controls.endTime.value;
+      endDate = this.searchForm.controls.endDate.value;
+    }
     if( startTime && startDate ){
       startDate.setHours(startTime.split(":")[0]);
       startDate.setMinutes(startTime.split(":")[1]);
     }
-    const endTime = this.privileges.isAdmin() ? this.searchForm.controls.endTime.value : null;
-    var endDate = this.privileges.isAdmin() ? this.searchForm.controls.endDate.value : null;
     if( endTime && endDate ){
       endDate.setHours(endTime.split(":")[0]);
       endDate.setMinutes(endTime.split(":")[1]);
     }
     this.reportService.printCashout(userId, startDate, endDate, +this.searchForm.controls.amount.value).subscribe(
       data => {
-        if( !this.privileges.isAdmin() )
+        if( !this.data )
           this.dialogRef.close({ event: 'close' });
       }, error => this.alertService.error('Error al generar corte de caja, error: ' + error.message, alertOptions));
   }

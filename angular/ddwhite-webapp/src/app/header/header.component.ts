@@ -40,7 +40,7 @@ export class HeaderComponent implements OnInit {
       if(response && response > 0) {
         this.alertService.warn('Aun cuentas con $'+ response +' peso(s) de efectivo en caja', alertOptions)
       } else {
-        const dialogRef = this.dialog.open(CashoutTicketComponent, { disableClose: !this.privileges.isAdmin() });
+        const dialogRef = this.dialog.open(CashoutTicketComponent, { data: false, disableClose: !this.privileges.isAdmin() });
         dialogRef.afterClosed().subscribe(result => this.closeSession());
       }
     });
@@ -101,7 +101,7 @@ export class HeaderComponent implements OnInit {
       window.localStorage.setItem('sessionStart', (new Date()).toString());
     });
     */
-    this.dialog.open(CashoutTicketComponent);
+    this.dialog.open(CashoutTicketComponent, {data: true});
   }
 
   checkWithdrall() {

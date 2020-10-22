@@ -39,8 +39,7 @@ public interface PurchaseRepository extends JpaRepository<Purchase, Long> {
 	List<Long> findTypesProduct(@Param("productId") Long productId);
 
 	@Query("SELECT p.cost FROM Purchase p WHERE p.product.id = :productId AND p.unity = :unity AND p.dateCreated < :date ORDER BY p.dateCreated DESC")
-	List<BigDecimal> findCosts(@Param("productId") Long productId, @Param("unity") Long unity,
-			@Param("date") String date);
+	List<BigDecimal> findCosts(@Param("productId") Long productId, @Param("unity") Long unity,@Param("date") String date);
 
 	@Modifying
 	@Transactional
