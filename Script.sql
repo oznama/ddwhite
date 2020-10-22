@@ -347,6 +347,11 @@ insert into catalogos(nombre, descripcion, catalogo_padre) values ('200', '200 P
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('500', '500 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
 
 
+## ALTERS 20/10/2020
+## CREATES DE RETIROS
+alter table sesion drop column retiro;
+
+
 truncate sesion;
 select * from sesion;
 update sesion set salida = null where id = 1;
@@ -373,7 +378,15 @@ truncate venta_total ;
 update venta_total set descuento = null where descuento = 0;
 
 insert into sesion (id_usuario, entrada, monto_inicial, retiro) values (2, '2020-10-09 09:27:33.0', 500, '2020-10-09 09:27:33.0');
-update sesion set salida = null where id = 4;
-update sesion set salida = null, retiro = '2020-10-09 09:27:33.0' where id = 4;
+update sesion set salida = null where id = 9;
 
 truncate sesion;
+
+SELECT default_character_set_name FROM information_schema.SCHEMATA WHERE schema_name = 'ddwhite';
+
+SELECT T.table_name, CCSA.character_set_name
+FROM information_schema.`TABLES` T, information_schema.`COLLATION_CHARACTER_SET_APPLICABILITY` CCSA 
+WHERE CCSA.collation_name = T.table_collation AND T.table_schema = 'ddwhite'
+
+update venta_pago set forma_pago = 5, folio_voucher = null, comision = null where id = 26;
+update compras set cantidad = 600 where unidad = 76;

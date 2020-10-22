@@ -9,6 +9,8 @@ drop table if exists compras_reasingadas;
 drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
+drop table if exists retiro_detalle;
+drop table if exists retiros;
 drop table if exists sesion;
 drop table if exists usuarios;
 drop table if exists roles_privilegios;
@@ -189,7 +191,25 @@ create table if not exists sesion(
 	entrada datetime default current_timestamp,
 	salida datetime,
 	monto_inicial decimal(10,4) not null,
-	retiro datetime default current_timestamp,
 	primary key(id)
 );
 alter table sesion add constraint foreign key (id_usuario) references usuarios (id);
+
+create table if not exists retiros(
+	id bigint not null auto_increment,
+	id_sesion bigint not null,
+	monto_total decimal(20,2) not null,
+	fecha_registro datetime default current_timestamp,
+	primary key(id)
+);
+alter table retiros add constraint foreign key (id_sesion) references sesion (id);
+
+create table if not exists retiro_detalle(
+	id bigint not null auto_increment,
+	id_retiro bigint not null,
+	denominacion bigint not null,
+	cantidad int not null,
+	primary key(id)
+);
+alter table retiro_detalle add constraint foreign key (id_retiro) references retiros (id);
+alter table retiro_detalle add constraint foreign key (denominacion) references catalogos (id);
