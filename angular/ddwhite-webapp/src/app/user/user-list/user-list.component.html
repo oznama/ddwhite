@@ -34,12 +34,7 @@
           <th>Nombre completo</th>
           <th>Username</th>
           <th>Role</th>
-          <th>
-            <div class="wrapper">
-              <span class="spacer"></span>
-              <button mat-raised-button color="primary" style="width:100px" *ngIf="privileges.canCreate()" (click)="add()">Nuevo</button>
-            </div>
-          </th>
+          <th><button mat-mini-fab color="primary" *ngIf="privileges.canCreate()" (click)="add()"><mat-icon>add</mat-icon></button></th>
         </tr>
         </thead>
         <tbody>
@@ -49,8 +44,8 @@
           <td>{{user.username}}</td>
           <td class="input-uppercase">{{user.roleName}}</td>
           <td>
-          	<button mat-raised-button color="warn" *ngIf="canRemove(user.id)" (click)="delete(user)">Borrar</button>
-            <button mat-raised-button color="primary" *ngIf="canEdit(user.id)" (click)="edit(user)" style="margin-left: 20px;">Modificar</button>
+          	<button mat-mini-fab color="warn" *ngIf="canRemove(user.id)" (click)="delete(user)"><mat-icon>clear</mat-icon></button>
+            <button mat-mini-fab color="primary" *ngIf="canEdit(user.id)" (click)="edit(user)"><mat-icon>edit</mat-icon></button>
           </td>
         </tr>
         </tbody>

@@ -2,23 +2,26 @@
 
   <div style="height: 80%">
 
-    <p><span class="text-red">Efectivo en caja: $ {{excedent}}</span></p>
+    <p>
+      <span class="text-red">Efectivo en caja: $ {{excedent}}</span>
+      <br>
+      <span class="text-blue">Acumulado: $ {{captured}}</span>
+    </p>
 
     <div class="wrapper">
-      <button mat-raised-button color="primary" type="button" [disabled]="hideButton()" (click)="withdrwall()">Retirar</button>
+      <button mat-raised-button color="primary" type="button" [disabled]="hideButton()" (click)="withdrawall()">Retirar</button>
     </div>
 
     <div *ngFor="let denomination of catalogDenominations">
       <button mat-mini-fab color="warn" (click)="substract(denomination.description)">
         <mat-icon>exposure_neg_1</mat-icon>
       </button>
-      <button mat-raised-button color="warn" [disabled]="!hideButton()" (click)="add(denomination.description)">
+      <button mat-raised-button color="warn" [disabled]="hideButtons()" (click)="add(denomination.description)">
         {{denomination.description}}
       </button>
       <span class="spacer"></span>
       <span class="text-blue">{{getQuantity(denomination.description)}}</span>
     </div>
-    <p><span class="text-blue">Acumulado: $ {{captured}}</span></p>
 
   </div>
 

@@ -2,7 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {CatalogItem} from '../../model/catalog.model';
 import {Withdrawall} from '../../model/cashout.model';
-import { ApiReportService, ApiCatalogService, CAT_CONST } from '../../service/module.service';
+import { ApiReportService, ApiCatalogService, Privileges, CAT_CONST } from '../../service/module.service';
 import { AlertService, alertOptions } from '../../_alert';
 
 @Component({
@@ -14,13 +14,15 @@ export class WithdrawallDialogComponent implements OnInit {
   captured: number = 0;
   catalogDenominations: CatalogItem[];
   denominations: Withdrawall[] = [];
+  private decimals: number = 2;
   
   constructor(
     public dialogRef: MatDialogRef<WithdrawallDialogComponent>, 
     @Inject(MAT_DIALOG_DATA) public data: number,
     private catalogService: ApiCatalogService,
     private reportService: ApiReportService,
-    public alertService:AlertService) {
+    public alertService:AlertService,
+    public privileges:Privileges) {
   }
 
   ngOnInit() {
@@ -45,14 +47,26 @@ export class WithdrawallDialogComponent implements OnInit {
   }
 
   hideButton(){
-    return this.captured != this.excedent;
+    if(this.privileges.isAdmin())
+      return this.captured <= 0;
+    else
+      return this.captured != this.excedent;
   }
+
+  hideButtons(){
+    if(!this.privileges.isAdmin())
+      return this.captured == this.excedent;
+    return false;
+  }
+
+
 
   add(denomination: string){
     this.denominations.find( d => {
       if(d.denomination === denomination){
         d.quantity = d.quantity+1;
         this.captured += d.denominationValue;
+        this.captured = Number(this.captured.toFixed(this.decimals));
       }
     });
   }
@@ -62,6 +76,7 @@ export class WithdrawallDialogComponent implements OnInit {
       if(d.denomination === denomination && d.quantity > 0){
         d.quantity = d.quantity-1;
         this.captured -= d.denominationValue;
+        this.captured = Number(this.captured.toFixed(this.decimals));
       }
     });
   }
@@ -71,8 +86,8 @@ export class WithdrawallDialogComponent implements OnInit {
       return d.quantity;
   }
 
-  withdrwall(){
-    this.reportService.withdrawall(+window.localStorage.getItem("userId"), this.denominations).subscribe(
+  withdrawall(){
+    this.reportService.withdrawall(+window.localStorage.getItem("userId"), this.denominations.filter( d => d.quantity > 0)).subscribe(
       response => this.dialogRef.close({ event: 'close' }),
       error => this.alertService.error('Error generando retiro, error:' + error.error, alertOptions)
     );

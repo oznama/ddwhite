@@ -49,8 +49,12 @@
           <td>{{client.phone}}</td>
           <td>{{client.email}}</td>
           <td>
-          	<button mat-raised-button color="warn" *ngIf="privileges.canRemove()" (click)="delete(client)">Borrar</button>
-            <button mat-raised-button color="primary" *ngIf="privileges.canEdit()" (click)="edit(client)" style="margin-left: 20px;">Modificar</button>
+          	<button mat-mini-fab color="warn" *ngIf="privileges.canRemove()" (click)="delete(client)">
+              <mat-icon>clear</mat-icon>
+            </button>
+            <button mat-mini-fab color="primary" *ngIf="privileges.canEdit()" (click)="edit(client)" style="margin-left: 20px;">
+              <mat-icon>edit</mat-icon>
+            </button>
           </td>
         </tr>
         </tbody>

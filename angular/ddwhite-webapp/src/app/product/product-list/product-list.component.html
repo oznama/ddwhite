@@ -35,12 +35,7 @@
           <th>Nombre completo</th>
           <th>Grupo</th>
           <th>% ganancia</th>
-          <th>
-            <div class="wrapper">
-              <span class="spacer"></span>
-              <button mat-raised-button color="primary" style="width:100px" *ngIf="privileges.canCreate()" (click)="add()">Nuevo</button>
-            </div>
-          </th>
+          <th><button mat-mini-fab color="primary" *ngIf="privileges.canCreate()" (click)="add()"><mat-icon>add</mat-icon></button></th>
         </tr>
         </thead>
         <tbody>
@@ -51,8 +46,8 @@
           <td>{{product.groupDesc}}</td>
           <td>{{product.percentage}}%</td>
           <td>
-          	<button mat-raised-button color="warn" *ngIf="privileges.canRemove()" (click)="delete(product)">Borrar</button>
-            <button mat-raised-button color="primary" *ngIf="privileges.canEdit()" (click)="edit(product)" style="margin-left: 20px;">Modificar</button>
+          	<button mat-mini-fab color="warn" *ngIf="privileges.canRemove()" (click)="delete(product)"><mat-icon>clear</mat-icon></button>
+            <button mat-mini-fab color="primary" *ngIf="privileges.canEdit()" (click)="edit(product)"><mat-icon>edit</mat-icon></button>
           </td>
         </tr>
         </tbody>

@@ -145,15 +145,24 @@ public class SaleService {
 	public BigDecimal getChasInRegister(Long userId) {
 		Long paymentCashId = catalogService.findByName(GeneralConstants.CATALOG_PAYMENT_METHOD_CASH).getId();
 		BigDecimal currentAmount = new BigDecimal(0);
-		SessionDto currentSession = sessionService.findCurrentSession(userId);
-		String lastWithdrawal = withdrawalService.getLastDateWithdrawalBySession(currentSession.getId(), currentSession.getInDate());
-		List<SaleDto> currentSales = findByRange(lastWithdrawal, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+		SessionDto currentSession = sessionService.findCurrentSession(userId);		
+		// Below, I get all sales FROM session inDate or last withdrawal TO now
+		//String lastWithdrawal = withdrawalService.getLastDateWithdrawalBySession(currentSession.getId(), currentSession.getInDate());
+		//List<SaleDto> currentSales = findByRange(lastWithdrawal, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+		/*
+		 * 2020-20-26
+		 * Now, I get only, sales FROM session inDate TO now
+		 * and then, I substract the withdrawals
+		 * for get the real current cash in register
+		 */
+		List<SaleDto> currentSales = findByRange(currentSession.getInDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 		for(SaleDto sale : currentSales) {
 			List<SalePayment> salePayments = salePaymentRepository.findBySaleAndPayment(sale.getId(), paymentCashId);
 			BigDecimal totalOfSale = salePayments.stream().map(s -> s.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
 			currentAmount = currentAmount.add(totalOfSale.subtract(sale.getChange()));
 		};
-		return currentAmount;
+		BigDecimal withdwaraled = withdrawalService.getWithdrawnBySessionAndRange(currentSession.getId(), currentSession.getInDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+		return currentAmount.subtract(withdwaraled);
 	}
 	
 	public Long getLastSaleId() {

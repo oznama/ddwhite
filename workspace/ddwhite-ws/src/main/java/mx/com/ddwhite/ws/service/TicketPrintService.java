@@ -263,17 +263,17 @@ public class TicketPrintService {
 		// Columns
 		String hdCant = buildLine("CANT", AlignedEmun.CENTERED, columnCantSize * 2);
 		String hdDesc = buildLine("ARTICULO", AlignedEmun.CENTERED, columnProdSize);
-		String hdPU = buildLine("P.U.", AlignedEmun.CENTERED, columnAmouSize);
-		String hdTotal = buildLine("TOTAL", AlignedEmun.CENTERED, columnAmouSize);
+		String hdPU = buildLine("P.U.", AlignedEmun.RIGHT, columnAmouSize);
+		String hdTotal = buildLine("TOTAL", AlignedEmun.RIGHT, columnAmouSize);
 		content.append(hdCant).append(hdDesc).append(hdPU).append(hdTotal).append(GeneralConstants.LINE_BREAK);
 		content.append(lineFormatted(separator(null), AlignedEmun.CENTERED));
 		// Rows
 		saleDto.getDetail().forEach(detail -> {
-			StringBuffer line = new StringBuffer(buildLine(detail.getQuantity().toString(), AlignedEmun.LEFT, columnCantSize));
-			line.append(buildLine(catalogService.findById(detail.getUnity()).getName().toUpperCase(), AlignedEmun.LEFT, columnCantSize));
+			StringBuffer line = new StringBuffer(buildLine(detail.getQuantity().toString(), AlignedEmun.LEFT, columnCantSize+1));
+			line.append(buildLine(catalogService.findById(detail.getUnity()).getName().toUpperCase(), AlignedEmun.LEFT, columnCantSize-1));
 			line.append(buildLine(productService.findById(detail.getProductId()).getNameShort().toUpperCase(),AlignedEmun.CENTERED, columnProdSize));
-			line.append(buildLine("$" + detail.getPrice(), AlignedEmun.CENTERED, columnAmouSize));
-			line.append(buildLine("$" + detail.getPrice().multiply(BigDecimal.valueOf(detail.getQuantity())),AlignedEmun.CENTERED, columnAmouSize));
+			line.append(buildLine("$" + detail.getPrice().setScale(0,RoundingMode.UP), AlignedEmun.RIGHT, columnAmouSize));
+			line.append(buildLine("$" + detail.getPrice().multiply(BigDecimal.valueOf(detail.getQuantity())).setScale(0,RoundingMode.UP),AlignedEmun.RIGHT, columnAmouSize));
 			content.append(padding()).append(line.toString()).append(GeneralConstants.LINE_BREAK);
 		});
 		content.append(lineFormatted(separator(null), AlignedEmun.CENTERED));

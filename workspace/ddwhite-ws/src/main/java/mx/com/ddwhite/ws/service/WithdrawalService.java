@@ -60,5 +60,9 @@ public class WithdrawalService {
 		return findWithdrawallsByRange(sessionInDate, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME)
 		);
 	}
+	
+	public BigDecimal getWithdrawnBySessionAndRange(Long sessionId, String startDate, String endDate) {
+		return findWithdrawallsBySessionAndRange(sessionId, startDate, endDate).stream().map(w -> w.getAmmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
+	}
 
 }

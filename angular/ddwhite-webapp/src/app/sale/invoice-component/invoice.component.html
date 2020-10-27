@@ -43,9 +43,7 @@
           <th>Total</th>
           <th>No Artic</th>
           <th>Factura</th>
-          <th>
-            <button mat-raised-button type="button" (click)="openDialogClientAdd()">Registrar cliente</button>
-          </th>
+          <th><button mat-fab [disabled]="!sales" (click)="openDialogClientAdd()"><mat-icon>people</mat-icon></button></th>
         </tr>
         </thead>
         <tbody>
@@ -53,9 +51,7 @@
           <td>{{sale.id}}</td>
           <td>
             {{sale.clientId ? ((sale.clientRfc ? (sale.clientRfc + ' ') : '') + sale.clientName) : 'Sin cliente'}}
-            <button mat-mini-fab color="primary" (click)="openDialogClientSearch(sale.id)">
-              <mat-icon>search</mat-icon>
-            </button>
+            <button mat-mini-fab color="primary" (click)="openDialogClientSearch(sale.id)"><mat-icon>search</mat-icon></button>
           </td>
           <td>$ {{sale.total}}</td>
           <td>{{sale.detail.length}}</td>

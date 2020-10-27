@@ -25,9 +25,9 @@
         </mat-form-field>
 
         <div class="wrapper">
+          <button mat-mini-fab color="primary" (click)="add(ciName.value, ciDescription.value)"><mat-icon>add</mat-icon></button>
           <span class="spacer"></span>
-          <button mat-raised-button type="button" type="button" (click)="add(ciName.value, ciDescription.value)">Agregar</button>
-          <button mat-raised-button color="primary" style="width:100px" type="button" [disabled]="!tableValid()" (click)="builkSave()">Guardar</button>
+          <button mat-mini-fab color="primary" [disabled]="!tableValid()" (click)="builkSave()"><mat-icon>save</mat-icon></button>
         </div>
     </mat-card-content>
   </mat-card>
@@ -49,10 +49,13 @@
           <td class="midle-width-input"><input #ciNameU maxlength="20" autocomplete="off" [disabled]="nameDissabled()" value="{{item.name}}"></td>
           <td class="midle-width-input"><input #ciDescU maxlength="50" autocomplete="off" value="{{item.description}}"></td>
           <td>
-          	<button *ngIf="item.id" mat-raised-button 
-          		[disabled]="!isUpdatable(item.id, ciNameU.value, ciDescU.value)" 
-          		(click)="update(item.id, ciNameU.value, ciDescU.value)">Modificar</button>
-            <button *ngIf="!item.id" mat-raised-button color="warn" (click)="remove(ciNameU.value, ciDescU.value)">Borrar</button>
+          	<button mat-mini-fab color="primary" *ngIf="item.id" [disabled]="!isUpdatable(item.id, ciNameU.value, ciDescU.value)" 
+          		(click)="update(item.id, ciNameU.value, ciDescU.value)">
+              <mat-icon>edit</mat-icon>
+            </button>
+            <button mat-mini-fab color="warn" *ngIf="!item.id" (click)="remove(ciNameU.value, ciDescU.value)">
+              <mat-icon>clear</mat-icon>
+            </button>
           </td>
         </tr>
         </tbody>

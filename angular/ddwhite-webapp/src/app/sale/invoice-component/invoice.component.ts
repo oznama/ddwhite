@@ -53,8 +53,8 @@ export class InvoiceSaleComponent implements OnInit {
       } else{
         this.page = 0;
         this.totalPage = 0;
-        this.sales = of([]);
-        this.primSales = [];
+        this.sales = null;
+        this.primSales = null;
         this.alertService.warn('No hay ventas en el periodo selecionado', alertOptions);
       }
     }, error => {

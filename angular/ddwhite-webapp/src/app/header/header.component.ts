@@ -35,13 +35,14 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout(){
-
     this.saleService.getChasInRegister(+window.localStorage.getItem("userId")).subscribe( response => {
       if(response && response > 0) {
         this.alertService.warn('Aun cuentas con $'+ response +' peso(s) de efectivo en caja', alertOptions)
       } else {
         const dialogRef = this.dialog.open(CashoutTicketComponent, { data: false, disableClose: !this.privileges.isAdmin() });
-        dialogRef.afterClosed().subscribe(result => this.closeSession());
+        dialogRef.afterClosed().subscribe(result => {
+          if( result ) this.closeSession();
+        });
       }
     });
   }

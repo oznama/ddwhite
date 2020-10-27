@@ -30,7 +30,7 @@ export class SaleComponent implements OnInit {
   salePayment: SalePayment[] = [];
   productsSelected: Product[];
   tax: number;
-  decimals: number = 2;
+  private decimals: number = 2;
   hasDiscount: boolean = false;
   totals= [];
   totalAmount: number = 0;

@@ -34,12 +34,7 @@
           <th>Nombre</th>
           <th>Direccion</th>
           <th>Telefono</th>
-          <th>
-            <div class="wrapper">
-              <span class="spacer"></span>
-              <button mat-raised-button color="primary" style="width:100px" *ngIf="privileges.canCreate()" (click)="add()">Nuevo</button>
-            </div>
-          </th>
+          <th><button mat-mini-fab color="primary" *ngIf="privileges.canCreate()" (click)="add()"><mat-icon>add</mat-icon></button></th>
         </tr>
         </thead>
         <tbody>
@@ -49,8 +44,8 @@
           <td>{{provider.address}}</td>
           <td>{{provider.phone}}</td>
           <td>
-          	<button mat-raised-button color="warn" *ngIf="privileges.canRemove()" (click)="delete(provider)">Borrar</button>
-            <button mat-raised-button color="primary" *ngIf="privileges.canEdit()" (click)="edit(provider)" style="margin-left: 20px;">Modificar</button>
+          	<button mat-mini-fab color="warn" *ngIf="privileges.canRemove()" (click)="delete(provider)"><mat-icon>clear</mat-icon></button>
+            <button mat-mini-fab color="primary" *ngIf="privileges.canEdit()" (click)="edit(provider)"><mat-icon>edit</mat-icon></button>
           </td>
         </tr>
         </tbody>
