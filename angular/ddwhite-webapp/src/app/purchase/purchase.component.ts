@@ -24,9 +24,9 @@ export class PurchaseComponent implements OnInit {
   purchases: Purchase[] = [];
   provider: Provider = new Provider();
   //product: Product = new Product();
-  productsSelected: Product[];
-  boxId: number;
-  unity: number;
+  purchasesOk: boolean[] = [];
+  private pzId: number;
+  private boxId: number;
 
   constructor(
   	private formBuilder: FormBuilder,
@@ -85,7 +85,8 @@ export class PurchaseComponent implements OnInit {
   private loadCatalogUnity(): void{
   	this.catalogService.getByName(CAT_CONST.UNITIES).subscribe( response => {
     	this.catalogUnity = response.items;
-      this.boxId = this.catalogUnity.find( ci => ci.name.toUpperCase() === 'CAJA' ).id;
+      this.pzId = this.catalogUnity.find( ci => ci.name.toUpperCase() === CAT_CONST.UNITY_PZA ).id;
+      this.boxId = this.catalogUnity.find( ci => ci.name.toUpperCase() === CAT_CONST.UNITY_BOX ).id;
     }, error =>{
     	console.error(error);
     });
@@ -120,6 +121,10 @@ export class PurchaseComponent implements OnInit {
     return <Purchase> {
       productId: product.id,
       productName: product.nameLarge,
+      providerId: this.provider.id,
+      providerName: this.provider.bussinesName,
+      unity: this.pzId,
+      unityDesc: this.catalogUnity.find(c => c.id === this.pzId).name
     };
   }
 
@@ -130,38 +135,62 @@ export class PurchaseComponent implements OnInit {
 
   private addPurchaseToList(purch: Purchase): void {
     let finded = false;
-    this.purchases.forEach( item => {
-      if(item.providerId === purch.providerId && 
-          item.productId === purch.productId && 
-          item.cost === purch.cost){
-        finded = true;
-        item.quantity += purch.quantity;
-      }
-    } );
-    if(!finded)
+    this.purchases.find(item => finded = item.providerId === purch.providerId && item.productId === purch.productId);
+    if(!finded){
       this.purchases.push(purch);
-    //else
-      //this.alertService.error('Ya existe un producto registrado con SKU: ' + sku, alertOptions);
+      this.purchasesOk.push(false);
+    }
   }
 
   remove(purch: Purchase){
-    this.purchases = this.purchases.filter(item => !(item.providerId === purch.providerId && 
-                                                  item.productId === purch.productId && 
-                                                  item.cost === purch.cost));
+    this.purchases = this.purchases.filter(item => !(
+      item.providerId === purch.providerId && 
+      item.productId === purch.productId && 
+      item.cost === purch.cost && 
+      item.unity === purch.unity
+    ));
+    this.purchasesOk.pop();
+  }
+
+  duplicate(purch: Purchase){
+    const pDuplicated = <Purchase> {
+      productId: purch.productId,
+      productName: purch.productName,
+      providerId: purch.providerId,
+      providerName: purch.providerName,
+      unity: purch.unity,
+      unityDesc: purch.unityDesc
+    }
+    this.purchases.push(pDuplicated);
+    this.purchasesOk.push(false);
   }
 
   tableValid(){
-    return Array.isArray(this.purchases) && this.purchases.length;
+    return Array.isArray(this.purchases) && this.purchases.length && 
+      this.purchases.length === this.purchasesOk.filter( pOk => pOk).length;
   }
 
-  onChange(unity){
-    this.unity = unity;
+  isUpdatable(i: number, q: number, c:number, u: number, np: number): boolean{
+    const purch = this.purchases[i];
+    let updated = purch.quantity !== q || purch.cost !== c || purch.unity !== u;
+    if(u === this.boxId)
+      updated = updated || purch.numPiece !== np;
+    this.purchasesOk[i] = !updated;
+    return updated;
   }
 
+  update(i: number, q: number, c:number, u: number, np: number){
+    const purch = this.purchases[i];
+    purch.quantity = q;
+    purch.cost = c;
+    purch.unity = u;
+    purch.unityDesc = this.catalogUnity.find(c => c.id === u).name;
+    purch.numPiece = (np === 0 || u !== this.boxId) ? null : np;
+    this.purchasesOk[i] = true;
+  }
   
-  showNumPiece(){
-    //const unity = +this.purchaseForm.controls.unity.value;
-    return this.unity !== 0 && this.unity === this.boxId;
+  showNumPiece(unity: number){
+    return unity === this.boxId;
   }
 
   builkSave(){
@@ -174,7 +203,6 @@ export class PurchaseComponent implements OnInit {
           this.purchases = [];
           this.provider = new Provider();
           this.purchaseForm.reset();
-          this.productsSelected = null;
         }, error => {
           const errMsg = 'Ha ocurrido un error en la transaccion: ';
           console.error(error);
@@ -200,7 +228,7 @@ export class PurchaseComponent implements OnInit {
 
   openDialogProductSearch() {
     //const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'inventory'} });
-    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'all', productsSelected: this.productsSelected} });
+    const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'all'} });
     dialogRef.afterClosed().subscribe( result =>{
       if( result && result.data ){
         /*
@@ -209,8 +237,7 @@ export class PurchaseComponent implements OnInit {
         this.product.nameLarge = result.data.nameLarge;
         this.product.inventory.currentCost = result.data.cost;
         */
-        this.productsSelected = result.data;
-        this.purchases = [];
+        //this.purchases = [];
         result.data.forEach( p => this.addPurchase(p));
       }
     });

@@ -46,20 +46,9 @@ export class WithdrawallDialogComponent implements OnInit {
       }, error => console.error(error));
   }
 
-  hideButton(){
-    if(this.privileges.isAdmin())
-      return this.captured <= 0;
-    else
-      return this.captured != this.excedent;
+  isDisabledButton(){
+    return this.privileges.isAdmin() ? (this.captured <= 0 || this.captured > this.excedent) : this.captured != this.excedent;
   }
-
-  hideButtons(){
-    if(!this.privileges.isAdmin())
-      return this.captured == this.excedent;
-    return false;
-  }
-
-
 
   add(denomination: string){
     this.denominations.find( d => {

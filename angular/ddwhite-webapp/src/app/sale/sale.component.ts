@@ -9,12 +9,11 @@ import { ProductDialogSearchComponent } from './../product/dialog-search/product
 import { ClientAddComponent } from './../client/client-add/client-add.component';
 import { ClientDialogSearchComponent } from './../client/dialog-search/client-dialog-search.component';
 import { PaymentDialogComponent } from './payment-dialog-component/payment-dialog.component';
-//import { TicketComponent } from './ticket-component/ticket.component';
 import { DiscountDialogComponent } from './discount-dialog-component/discount-dialog.component';
 import { WithdrawallDialogComponent } from './withdrawall-dialog-component/withdrawall-dialog.component';
-
 import { Client } from './../model/client.model';
 import { Product } from './../model/product.model';
+//import { TicketComponent } from './ticket-component/ticket.component';
 
 @Component({
   selector: 'app-sale',
@@ -76,8 +75,6 @@ export class SaleComponent implements OnInit {
     };
   }
 
-
-
   isToPay(){
     let totalPayment = this.salePayment ? 
       this.salePayment.reduce(function(total, currentItem){return total + (currentItem.amount + currentItem.comision);}, 0) : 0;
@@ -97,16 +94,6 @@ export class SaleComponent implements OnInit {
     this.totalAmount += product.inventory.quantity * product.inventory.price;
   }
 
-  /*
-  private checkQuantity(quantity: number): boolean{
-    if(quantity > this.product.inventory.quantity){
-      this.alertService.error('No hay suficientes productos en existencia', alertOptions);
-      return false;
-    }
-    return true;
-  }
-  */
-
   private round(n: number): number {
     return Number(n.toFixed(this.decimals));
   }
@@ -114,18 +101,16 @@ export class SaleComponent implements OnInit {
   private addProductToList(saleDetail: SaleDetail): void {
     let finded = false;
     this.saleDetail.forEach( item => {
-      if(item.productId === saleDetail.productId && item.unity === saleDetail.unity){
+      if(item.productId === saleDetail.productId && item.unity === saleDetail.unity && item.numPiece === saleDetail.numPiece){
         finded = true;
         const quantity = item.quantity + saleDetail.quantity;
-        //if(this.checkQuantity(quantity)){
-          item.quantity = quantity;
-          item.total = this.round(item.quantity * item.price);
-          saleDetail.total = this.round(saleDetail.quantity * saleDetail.price);
-          this.totalize(saleDetail);
-        //}
+        item.quantity = quantity;
+        item.total = this.round(item.quantity * item.price);
+        saleDetail.total = this.round(saleDetail.quantity * saleDetail.price);
+        this.totalize(saleDetail);
       }
     } );
-    if(!finded /*&& this.checkQuantity(saleDetail.quantity)*/){
+    if(!finded){
       saleDetail.total = this.round(saleDetail.quantity * saleDetail.price);
       this.saleDetail.push(saleDetail);
       this.totalize(saleDetail);
@@ -174,9 +159,12 @@ export class SaleComponent implements OnInit {
   }
 
   remove(saleDetail: SaleDetail){
-    this.unTotalize(this.saleDetail.find(item => item.productId === saleDetail.productId && item.unity === saleDetail.unity));
-    this.saleDetail = this.saleDetail.filter(item => !(item.productId === saleDetail.productId && item.unity === saleDetail.unity));
-    this.productsSelected = this.productsSelected.filter(product => !(product.id === saleDetail.productId && product.inventory.unity === saleDetail.unity));
+    this.unTotalize(this.saleDetail.find(item => 
+      item.productId === saleDetail.productId && item.unity === saleDetail.unity && item.numPiece === saleDetail.numPiece));
+    this.saleDetail = this.saleDetail.filter(item => 
+      !(item.productId === saleDetail.productId && item.unity === saleDetail.unity && item.numPiece === saleDetail.numPiece));
+    this.productsSelected = this.productsSelected.filter(product => 
+      !(product.id === saleDetail.productId && product.inventory.unity === saleDetail.unity && product.inventory.numPiece === saleDetail.numPiece));
     this.totals.forEach( t => {
       if( t.unity === saleDetail.unityDesc ) t.quantity -= saleDetail.quantity;
     });
@@ -193,18 +181,6 @@ export class SaleComponent implements OnInit {
     const dialogRef = this.dialog.open(ProductDialogSearchComponent, { data: { mode: 'sale', productsSelected: this.productsSelected} });
     dialogRef.afterClosed().subscribe( result =>{
       if( result && result.data && result.data.length > 0 ){
-        /*
-        this.product.id = result.data.id;
-        this.product.sku = result.data.sku;
-        this.product.nameLarge = result.data.nameLarge;
-        this.product.nameShort = result.data.nameShort;
-        //this.product.inventory.currentCost = result.inventory.currentCost;
-        this.product.inventory.price = result.data.inventory.price;
-        this.product.inventory.quantity = result.data.inventory.quantity;
-        this.product.inventory.unity = result.data.inventory.unity;
-        this.product.inventory.unityDesc = result.data.inventory.unityDesc;
-        this.product.inventory.numPiece = result.data.inventory.numPiece;
-        */
         this.productsSelected = result.data;
         this.saleDetail = [];
         result.data.forEach( p => this.addProduct(p) );
@@ -234,16 +210,6 @@ export class SaleComponent implements OnInit {
       });
     }
   }
-
-/* Discard
-  openPrintTicket() {
-    const dialogRef = this.dialog.open(TicketComponent, {data: this.sale});
-    dialogRef.afterClosed().subscribe(result =>{
-      this.reset(); 
-      this.alertService.success('Venta completada', alertOptions);
-    });
-  }
-*/
 
   openDiscountDialog(){
     this.removeDiscount();
@@ -278,13 +244,6 @@ export class SaleComponent implements OnInit {
     }
   }
 
-/* Discard
-  private newTagTicket(){
-    window.localStorage.setItem('currentSale', JSON.stringify(this.sale));
-    this.router.navigate([]).then(result => window.open( window.location.origin + '/ticket-tag', '_blank'));
-  }
-*/
-
   private setClient(result: any): void {
     if( result && result.data ){
       this.client.id = result.data.id;
@@ -316,6 +275,21 @@ export class SaleComponent implements OnInit {
       this.alertService.error('La venta no ha sido registrada: ' + error.error, alertOptions);
     });
   }
+
+/* Discard
+  openPrintTicket() {
+    const dialogRef = this.dialog.open(TicketComponent, {data: this.sale});
+    dialogRef.afterClosed().subscribe(result =>{
+      this.reset(); 
+      this.alertService.success('Venta completada', alertOptions);
+    });
+  }
+
+  private newTagTicket(){
+    window.localStorage.setItem('currentSale', JSON.stringify(this.sale));
+    this.router.navigate([]).then(result => window.open( window.location.origin + '/ticket-tag', '_blank'));
+  }
+*/
 
   private reset(complete: boolean): void{
     if(complete){

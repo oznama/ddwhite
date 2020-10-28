@@ -122,7 +122,7 @@ export class ProductDialogSearchComponent implements OnInit {
     if(this.data.mode === 'sale' && this.products && this.carrito){
       this.products.forEach( items => items.forEach( product => {
         this.carrito.forEach( pAdded => {
-          if( product.id === pAdded.id && product.group === pAdded.group ){
+          if( product.id === pAdded.id && product.inventory.unity === pAdded.inventory.unity && product.inventory.numPiece === pAdded.inventory.numPiece ){
             product.inventory.quantity -= pAdded.inventory.quantity;
           }
         })
@@ -172,7 +172,7 @@ export class ProductDialogSearchComponent implements OnInit {
   private addProductSale(product: Product, quantity: number){
     let finded = false;
     this.carrito.forEach( p => {
-      if(p.id === product.id && p.group === product.group){
+      if(p.id === product.id && p.inventory.unity === product.inventory.unity && p.inventory.numPiece === product.inventory.numPiece){
         finded = true;
         p.inventory.quantity = p.inventory.quantity + quantity;
         this.updateTotal(p.inventory.unityDesc, quantity)
@@ -188,14 +188,14 @@ export class ProductDialogSearchComponent implements OnInit {
   }
 
   private addProductPurchase(product: Product, quantity: number){
-    const finded = this.carrito.find( p => (p.id === product.id && p.group === product.group));
+    const finded = this.carrito.find( p => p.id === product.id);
     if( !finded )
       this.carrito.push(this.getProduct(product, quantity));
   }
 
   remove(product: Product){
-    this.carrito = this.carrito.filter( p => !(p.id === product.id && p.group === product.group));
     if(this.data.mode==='sale'){
+      this.carrito = this.carrito.filter( p => !(p.id === product.id && p.inventory.unity === product.inventory.unity && p.inventory.numPiece === product.inventory.numPiece));
       this.totals.forEach( t => {
         if( t.unity === product.inventory.unityDesc ) t.quantity -= product.inventory.quantity;
       });
@@ -203,10 +203,12 @@ export class ProductDialogSearchComponent implements OnInit {
       this.totalAmount -= product.inventory.quantity * product.inventory.price;
       this.products.forEach(items => {
         items.forEach( item => {
-          if(item.id === product.id && item.group === product.group)
+          if(item.id === product.id && item.inventory.unity === product.inventory.unity && item.inventory.numPiece === product.inventory.numPiece)
             item.inventory.quantity += product.inventory.quantity;
         })
       });
+    } else {
+      this.carrito = this.carrito.filter( p => p.id !== product.id);
     }
   }
 

@@ -10,7 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "compras_reasingadas")
+@Table(name = "compras_reasignadas")
 public class PurchaseReasign implements Serializable {
 
 	/**

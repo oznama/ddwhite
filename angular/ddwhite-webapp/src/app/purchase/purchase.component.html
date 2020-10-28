@@ -6,7 +6,7 @@
 
   <mat-card class="box-form">
     <mat-card-header>
-      <mat-card-title>Realizar compra</mat-card-title>
+      <mat-card-title>Registrar compra</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
@@ -73,11 +73,13 @@
       <table class="table table-striped">
         <thead>
         <tr>
-          <th>Producto</th>
-          <th>Cantidad</th>
-          <th>Precio</th>
-          <th>Presetaci&oacute;n</th>
-          <th class="{{!showNumPiece() ? 'hidden' : ''}}"># Piezas</th>
+          <th></th>
+          <th>Prod</th>
+          <th>Prov</th>
+          <th>Cant</th>
+          <th>Costo</th>
+          <th>Uni</th>
+          <th>#PZA</th>
           <th>
             <button mat-mini-fab color="primary" (click)="openDialogProductSearch()" [disabled]="!provider.id">
               <mat-icon>article</mat-icon>
@@ -86,17 +88,25 @@
         </tr>
         </thead>
         <tbody>
-        <tr *ngFor="let purchase of purchases">
+        <tr *ngFor="let purchase of purchases; let i = index">
+          <td><button mat-mini-fab (click)="duplicate(purchase)"><mat-icon>content_copy</mat-icon></button></td>
           <td>{{purchase.productName}}</td>
-          <td><input #quantity class="input-number" maxlength="10" autocomplete="off" value="1"></td>
-          <td><input #cost class="input-number" maxlength="15" autocomplete="off" value="0"></td>
+          <td>{{purchase.providerName}}</td>
+          <td><input #quantity class="input-number-custom" maxlength="10" autocomplete="off" value="1"></td>
+          <td><input #cost class="input-number-custom" maxlength="15" autocomplete="off" value="0"></td>
           <td>
-            <select #unity (change)=onChange(+$event.target.value)>
+            <select #unity>
               <option *ngFor="let item of catalogUnity" [value]="item.id">{{item.name}}</option>
             </select>
           </td>
-          <input #numPiece class="{{!showNumPiece() ? 'hidden' : ''}}" maxlength="5" type="number" autocomplete="off" required>
+          <td><input #numPiece class="input-number" maxlength="5" type="number" required [disabled]="!showNumPiece(+unity.value)"></td>
           <td>
+            <!-- [disabled]="!isUpdatable(i, +quantity.value, +cost.value, +unity.value, +numPiece.value)" -->
+            <button mat-mini-fab color="primary" 
+              [disabled]="!isUpdatable(i, +quantity.value, +cost.value, +unity.value, +numPiece.value)" 
+              (click)="update(i, +quantity.value, +cost.value, +unity.value, +numPiece.value)">
+              <mat-icon>done</mat-icon>
+            </button>
             <button mat-mini-fab color="warn" (click)="remove(purchase)"><mat-icon>clear</mat-icon></button>
           </td>
         </tr>

@@ -26,9 +26,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let c of carrito">
-                <button mat-mini-fab color="warn" (click)="remove(c)">
-                  <mat-icon>clear</mat-icon>
-                </button>
+                <button mat-mini-fab color="warn" (click)="remove(c)"><mat-icon>clear</mat-icon></button>
                 <td class="hidden">{{c.id}}</td>
                 <td *ngIf="data.mode!=='all'">{{c.inventory.quantity}}</td>
                 <td>{{c.nameLarge}} {{c.inventory ? (' - ' +  c.inventory.unityDesc) : ''}}</td>  
@@ -64,9 +62,7 @@
               <mat-form-field style="width: 60%;">
                 <input matInput formControlName="name" placeholder="Nombre" autocomplete="off" maxlength="80">
               </mat-form-field>
-              <button mat-mini-fab type="button" color="primary" (click)="doFilter()">
-                <mat-icon>search</mat-icon>
-              </button>
+              <button mat-mini-fab type="button" color="primary" (click)="doFilter()"><mat-icon>search</mat-icon></button>
               <!--mat-icon (click)="clearFilter()">clear</mat-icon-->
             </form>
           </mat-card-content>
@@ -80,7 +76,7 @@
               <tr>
                 <th class="hidden">Id</th>
                 <th>Producto</th>
-                <th class="data.mode!=='sale' ? 'hidden' : ''">Cant</th>
+                <th>{{data.mode!=='sale' ? '' : 'Cant'}}</th>
                 <th *ngIf="data.mode!=='all'">#</th>
                 <th *ngIf="data.mode!=='all'">$</th>
                 <th *ngIf="data.mode!=='all'"></th>

@@ -54,10 +54,10 @@
           <th>Producto</th>
           <th>Fecha compra</th>
           <th>Compras asociadas?</th>
-          <th>Cantidad</th>
-          <th>Unidad</th>
-          <th>Costo</th>
-          <th>Piezas</th>
+          <th>#</th>
+          <th>Uni</th>
+          <th>$</th>
+          <th>#PZA</th>
           <th></th>
         </tr>
         </thead>
@@ -69,9 +69,7 @@
           <td>{{purchase.product}}</td>
           <td>{{purchase.dateCreated}}</td>
           <td>{{purchase.usedInSale? 'SI' : 'NO'}}</td>
-          <td>
-            <input #quantity style="text-align:right; padding: 0 10px;" maxlength="10" autocomplete="off" value="{{purchase.quantity}}">
-          </td>
+          <td><input #quantity class="input-number-custom" maxlength="10" autocomplete="off" value="{{purchase.quantity}}"></td>
           <td>
             <select #unity>
               <option *ngFor="let item of catalogUnity" [value]="item.id" [selected]="item.id===purchase.unity">
@@ -79,15 +77,13 @@
               </option>
             </select>
           </td>
+          <td><input #cost class="input-number-custom" maxlength="15" autocomplete="off"  value="{{purchase.cost}}"></td>
+          <td><input #numPiece class="input-number" maxlength="5" type="number" autocomplete="off" value="{{purchase.numPiece}}"></td>
           <td>
-            <input #cost style="text-align:right; padding: 0 10px" maxlength="15" autocomplete="off"  value="{{purchase.cost}}">
-          </td>
-          <td>
-            <input #numPiece maxlength="5" type="number" autocomplete="off" value="{{purchase.numPiece}}">
-          </td>
-          <td>
-            <button mat-raised-button color="primary" *ngIf="privileges.canEdit()" style="margin-left: 20px;"
-            (click)="modify(purchase.id, +quantity.value, +unity.value, +cost.value, +numPiece.value)">Modificar</button>
+            <button mat-mini-fab color="primary" *ngIf="privileges.canEdit()" 
+            (click)="modify(purchase.id, +quantity.value, +unity.value, +cost.value, +numPiece.value)">
+              <mat-icon>done</mat-icon>
+            </button>
           </td>
         </tr>
         </tbody>

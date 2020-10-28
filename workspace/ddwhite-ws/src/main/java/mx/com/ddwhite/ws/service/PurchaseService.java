@@ -115,17 +115,10 @@ public class PurchaseService {
 			PurchaseDto purchaseDto = setPurchaseDto(purchase);
 			PurchaseDto purchaseAlreadyInList = findInList(purchaseDto, purchasesDto);
 			if (purchaseAlreadyInList != null) {
-				purchaseDto.setQuantity(purchaseDto.getQuantity() + purchaseAlreadyInList.getQuantity());
+				purchaseDto.setQuantity(purchaseDto.getQuantity() + purchaseAlreadyInList.getQuantity() + getQuantitySales(purchaseDto, purchase.getId()));
 				purchasesDto.remove(purchaseAlreadyInList);
-			} else {
-				Double saled = sumSaleQuantity(purchaseDto.getNumPiece() != null
-						? saleDetailRepository.findByProductAndUnityWithPieces(purchaseDto.getProduct().getId(),
-								purchaseDto.getUnity(), purchaseDto.getNumPiece())
-						: saleDetailRepository.findByProductAndUnityWithoutPieces(purchaseDto.getProduct().getId(),
-								purchaseDto.getUnity()));
-				Double reasigned = sumPurchasesReasign(purchaseReasignService.findByOrigin(purchase.getId()));
-				purchaseDto.setQuantity(purchaseDto.getQuantity() - saled - reasigned);
 			}
+			purchaseDto.setQuantity( purchaseDto.getQuantity() - getQuantityReasigned(purchaseDto, purchase.getId()));
 			purchasesDto.add(purchaseDto);
 //			}
 		});
@@ -192,6 +185,19 @@ public class PurchaseService {
 						&& p.getUnity().equals(purchaseDto.getUnity())
 						&& p.getNumPiece().equals(purchaseDto.getNumPiece()))
 				.findAny().orElse(null);
+	}
+	
+	private Double getQuantitySales(PurchaseDto purchaseDto, Long purchaseId) {
+		Double saled = sumSaleQuantity(purchaseDto.getNumPiece() != null
+				? saleDetailRepository.findByProductAndUnityWithPieces(purchaseDto.getProduct().getId(),
+						purchaseDto.getUnity(), purchaseDto.getNumPiece())
+				: saleDetailRepository.findByProductAndUnityWithoutPieces(purchaseDto.getProduct().getId(),
+						purchaseDto.getUnity()));
+		return saled;
+	}
+	
+	private Double getQuantityReasigned(PurchaseDto purchaseDto, Long purchaseId) {
+		return sumPurchasesReasign(purchaseReasignService.findByOrigin(purchaseId)) + getQuantitySales(purchaseDto, purchaseId);
 	}
 
 	private Double sumSaleQuantity(List<SaleDetail> salesDetail) {

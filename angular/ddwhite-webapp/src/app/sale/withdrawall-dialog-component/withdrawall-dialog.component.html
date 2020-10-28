@@ -9,14 +9,14 @@
     </p>
 
     <div class="wrapper">
-      <button mat-raised-button color="primary" type="button" [disabled]="hideButton()" (click)="withdrawall()">Retirar</button>
+      <button mat-raised-button color="primary" type="button" [disabled]="isDisabledButton()" (click)="withdrawall()">Retirar</button>
     </div>
 
     <div *ngFor="let denomination of catalogDenominations">
-      <button mat-mini-fab color="warn" (click)="substract(denomination.description)">
+      <button mat-mini-fab color="warn" [disabled]="captured<=0" (click)="substract(denomination.description)">
         <mat-icon>exposure_neg_1</mat-icon>
       </button>
-      <button mat-raised-button color="warn" [disabled]="hideButtons()" (click)="add(denomination.description)">
+      <button mat-raised-button color="warn" [disabled]="captured===excedent" (click)="add(denomination.description)">
         {{denomination.description}}
       </button>
       <span class="spacer"></span>

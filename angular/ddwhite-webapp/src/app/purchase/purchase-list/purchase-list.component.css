@@ -1,0 +1,8 @@
+.input-number,.input-number-custom {
+	width: 80;
+	max-width: 80px;
+}
+.input-number-custom {
+	text-align:right; 
+	padding: 0 10px;
+}

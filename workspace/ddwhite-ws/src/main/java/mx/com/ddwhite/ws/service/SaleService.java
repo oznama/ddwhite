@@ -166,7 +166,11 @@ public class SaleService {
 	}
 	
 	public Long getLastSaleId() {
-		return saleRepository.findTopByOrderByIdDesc().getId();
+		try {
+			return saleRepository.findTopByOrderByIdDesc().getId();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 
 	private List<SaleDto> buildSalesDto(final List<Sale> sales) {

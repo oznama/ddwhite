@@ -46,9 +46,7 @@
           <td>{{client.rfc}}</td>
           <td>{{client.name}} {{client.lastName}} {{client.midleName}}</td>
           <td>{{client.address}}</td>
-          <td>
-            <button mat-raised-button color="primary" (click)="select(client)" style="margin-left: 20px;">Seleccionar</button>
-          </td>
+          <td><button mat-mini-fab color="primary" (click)="select(client)"><mat-icon>done</mat-icon></button></td>
         </tr>
         </tbody>
       </table>

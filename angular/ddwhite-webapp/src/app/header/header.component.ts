@@ -42,6 +42,7 @@ export class HeaderComponent implements OnInit {
         const dialogRef = this.dialog.open(CashoutTicketComponent, { data: false, disableClose: !this.privileges.isAdmin() });
         dialogRef.afterClosed().subscribe(result => {
           if( result ) this.closeSession();
+          else this.apiService.logout();
         });
       }
     });

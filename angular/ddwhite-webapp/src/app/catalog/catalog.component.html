@@ -46,12 +46,12 @@
         <tbody>
         <tr *ngFor="let item of catalogItems">
           <td class="hidden">{{item.id}}</td>
-          <td class="midle-width-input"><input #ciNameU maxlength="20" autocomplete="off" [disabled]="nameDissabled()" value="{{item.name}}"></td>
+          <td class="midle-width-input"><input #ciNameU maxlength="20" autocomplete="off" [disabled]="nameDissabled(item.name)" value="{{item.name}}"></td>
           <td class="midle-width-input"><input #ciDescU maxlength="50" autocomplete="off" value="{{item.description}}"></td>
           <td>
           	<button mat-mini-fab color="primary" *ngIf="item.id" [disabled]="!isUpdatable(item.id, ciNameU.value, ciDescU.value)" 
           		(click)="update(item.id, ciNameU.value, ciDescU.value)">
-              <mat-icon>edit</mat-icon>
+              <mat-icon>done</mat-icon>
             </button>
             <button mat-mini-fab color="warn" *ngIf="!item.id" (click)="remove(ciNameU.value, ciDescU.value)">
               <mat-icon>clear</mat-icon>

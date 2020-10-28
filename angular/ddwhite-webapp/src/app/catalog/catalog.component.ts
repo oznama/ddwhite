@@ -51,10 +51,6 @@ export class CatalogComponent implements OnInit {
   	return updetable;
   }
 
-  nameDissabled(){
-    return this.catalogSelected.name === CAT_CONST.CONST || this.catalogSelected.name === CAT_CONST.PAYMENT_METHOD;
-  }
-
   update(id: number, n:string, d:string){
   	this.catalogItems.find( catalogItem => {
   		if(catalogItem.id === id){
@@ -75,7 +71,13 @@ export class CatalogComponent implements OnInit {
   		this.catalogItems = this.catalogSelected.items;
   }
 
-  tableValid(){
+  nameDissabled(name: string): boolean {
+    return this.catalogSelected.name === CAT_CONST.CONST || 
+      this.catalogSelected.name === CAT_CONST.PAYMENT_METHOD ||
+      (this.catalogSelected.name === CAT_CONST.UNITIES && (name === CAT_CONST.UNITY_PZA || name === CAT_CONST.UNITY_BOX));
+  }
+
+  tableValid() {
     return Array.isArray(this.catalogItems) && this.catalogItems.length;
   }
 

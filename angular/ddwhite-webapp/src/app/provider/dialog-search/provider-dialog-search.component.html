@@ -34,9 +34,7 @@
         <tr *ngFor="let provider of providersFiltred$ | async">
           <td class="hidden">{{provider.id}}</td>
           <td>{{provider.bussinesName}}</td>
-          <td>
-            <button mat-raised-button color="primary" (click)="select(provider)" style="margin-left: 20px;">Seleccionar</button>
-          </td>
+          <td><button mat-mini-fab color="primary" (click)="select(provider)"><mat-icon>done</mat-icon></button></td>
         </tr>
         </tbody>
       </table>
