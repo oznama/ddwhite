@@ -8,7 +8,8 @@
       </mat-card-header>
 
       <mat-card-content>
-        <form [formGroup]="searchForm" (ngSubmit)="search()">
+        <!-- (ngSubmit)="search()" -->
+        <form [formGroup]="searchForm">
 
           <mat-form-field class="full-width-input">
             <select matNativeControl formControlName="report" (change)=onChange($event.target.value) placeholder="Reporte">
@@ -43,7 +44,9 @@
           </mat-form-field>
 
           <div class="wrapper">
-            <button mat-raised-button color="primary">Filtrar</button>
+            <button mat-fab type="button" *ngIf="reportSelected==='Ventas'" (click)="print()"><mat-icon>receipt</mat-icon></button>
+            <span class="spacer"></span>
+            <button mat-fab color="primary" type="button" *ngIf="reportSelected" (click)="search()"><mat-icon>text_snippet</mat-icon></button>
           </div>
         </form>
       </mat-card-content>

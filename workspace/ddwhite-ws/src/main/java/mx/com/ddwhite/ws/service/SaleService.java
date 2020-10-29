@@ -2,6 +2,7 @@ package mx.com.ddwhite.ws.service;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -116,6 +117,14 @@ public class SaleService {
 		return bindSale(saleRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id)));
 	}
 	
+	public Page<SaleDto> findById(Long id, Pageable pageable) {
+		return new PageImpl<>(Arrays.asList(findById(id)), pageable, 1);
+	}
+	
+	public Page<SaleDto> findAll(Pageable pageable) {
+		return new PageImpl<>(buildSalesDto(saleRepository.findAll(pageable).getContent()), pageable, saleRepository.count());
+	}
+	
 	public List<SaleDto> findByRange(String startDate, String endDate) {
 		List<Sale> sales = saleRepository.findByRange(startDate, endDate);
 		return buildSalesDto(sales);
@@ -126,6 +135,14 @@ public class SaleService {
 		endDate = GenericUtils.plusDay(endDate, 1);
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
 		List<Sale> sales = saleRepository.findByRange(strStartDate, strEndDate, pageable);
+		return new PageImpl<>(buildSalesDto(sales), pageable, saleRepository.findByRange(strStartDate, strEndDate).size());
+	}
+	
+	public Page<SaleDto> findByIdAndRange(Long id, Date startDate, Date endDate, Pageable pageable) {
+		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
+		endDate = GenericUtils.plusDay(endDate, 1);
+		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
+		List<Sale> sales = saleRepository.findByIdAndRange(id, strStartDate, strEndDate, pageable);
 		return new PageImpl<>(buildSalesDto(sales), pageable, saleRepository.findByRange(strStartDate, strEndDate).size());
 	}
 	

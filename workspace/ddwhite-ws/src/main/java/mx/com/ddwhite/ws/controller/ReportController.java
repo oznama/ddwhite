@@ -102,7 +102,7 @@ public class ReportController {
 			@RequestParam(value = "userId", required = true) Long userId,
 			@RequestBody List<WithdrawalDto> denominations) {
 		try {
-			ticketPrintService.printWithdrawall(userId, denominations);
+			ticketPrintService.withdrawall(userId, denominations);
 			return ResponseEntity.ok().build();
 		}catch (Exception e) {
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
@@ -112,6 +112,19 @@ public class ReportController {
 	@GetMapping("/currentWithdrawal")
 	public List<Withdrawal> findWithdrawalCurrentSession(@RequestParam(value = "userId", required = true) Long userId){
 		return service.findWithdrawalCurrentSession(userId);
+	}
+	
+	@GetMapping("/print/general")
+	public ResponseEntity<?> printGeneral(@RequestParam(value = "userId", required = true) Long userId,
+			@RequestParam(value = "startDate", required = true) Date startDate, 
+			@RequestParam(value = "endDate", required = true) Date endDate) {
+		try {
+			service.printGeneral(userId, startDate, endDate);
+			return ResponseEntity.ok().build();
+		}catch (Exception e) {
+			e.printStackTrace();
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 
 }

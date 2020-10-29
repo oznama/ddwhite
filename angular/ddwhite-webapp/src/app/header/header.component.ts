@@ -65,30 +65,7 @@ export class HeaderComponent implements OnInit {
   }
 
   openDialogReport() {
-    const dialogRef = this.dialog.open(ReportFilterDialogComponent, { data: 'datefilter' });
-    dialogRef.afterClosed().subscribe( result =>{
-      if(result && result.data){
-        const startDate = result.data.startDate;
-        const endDate = result.data.endDate;
-        const report = result.data.report;
-        const saleId = result.data.saleId;
-        const payment = result.data.payment;
-        switch (report) {
-          case "Compras":
-            this.reportService.getPurchasesCSV(startDate, endDate).subscribe(data => exportFile(data, 'compras_', CSV_EXTENSION));
-            break;
-          case "Ventas":
-            this.reportService.getSalesCSV(startDate, endDate).subscribe(data => exportFile(data, 'ventas_', CSV_EXTENSION));
-            break;
-          case "Pagos":
-            this.reportService.payments(payment, startDate, endDate).subscribe(data => exportFile(data, 'pagos_', CSV_EXTENSION));
-              break;
-          default:
-            this.reportService.getGeneralCSV(startDate, endDate).subscribe(data => exportFile(data, 'general_', CSV_EXTENSION));
-            break;
-        }
-      }
-    });
+    this.dialog.open(ReportFilterDialogComponent);
   }
 
   reprintTicket(){

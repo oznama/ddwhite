@@ -28,7 +28,7 @@ public class SaleController implements GenericController<SaleDto> {
 
 	@Override
 	public Page<SaleDto> findAll(Pageable pageable) {
-		return null;
+		return service.findAll(pageable);
 	}
 
 	@Override
@@ -60,9 +60,21 @@ public class SaleController implements GenericController<SaleDto> {
 		return null;
 	}
 
-	@GetMapping("/find/bydates")
-	public Page<SaleDto> findByRange(@RequestParam("start") Date start, @RequestParam("end") Date end,Pageable pageable) {
-		return service.findByRange(start, end, pageable);
+//	@GetMapping("/find/bydates")
+//	public Page<SaleDto> findByRange(@RequestParam("start") Date start, @RequestParam("end") Date end,Pageable pageable) {
+//		return service.findByRange(start, end, pageable);
+//	}
+	
+	@GetMapping("/find/byIdAndDates")
+	public Page<SaleDto> findSaleIdAndDates(
+			@RequestParam(value = "id", required = false) Long id, 
+			@RequestParam(value = "start", required = false) Date start, 
+			@RequestParam(value = "end", required = false) Date end,
+			Pageable pageable) {
+		if( id != null && start != null && end != null ) return service.findByIdAndRange(id, start, end, pageable);
+		else if (id != null) return service.findById(id, pageable);
+		else if (start != null && end != null) return service.findByRange(start, end, pageable);
+		return null;
 	}
 	
 	@GetMapping("/getChasInRegister")

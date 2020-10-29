@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -213,9 +214,7 @@ public class ReportService {
 			String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
 			endDate = GenericUtils.plusDay(endDate, 1);
 			String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
-			List<Sale> sales = saleRepository.findByRange(strStartDate, strEndDate);
-			final List<SalePayment> listPaymentsAux = new ArrayList<>();
-			sales.forEach(sale -> listPaymentsAux.addAll( salePaymentRepository.findBySale(sale.getId()) ));
+			final List<SalePayment> listPaymentsAux = getPaymentsByDate(strStartDate, strEndDate);
 			if( paymentId != null )
 				listPayments = listPaymentsAux.stream().filter( p -> p.getPayment() == paymentId ).collect(Collectors.toList());
 		} else if (paymentId != null)
@@ -237,6 +236,43 @@ public class ReportService {
 	
 	public List<Withdrawal> findWithdrawalCurrentSession(Long userId) {
 		return withdrawalService.findWithdrawalCurrentSession(sessionService.findCurrentSession(userId).getInDate());
+	}
+	
+	public void printGeneral(Long userId, Date startDate, Date endDate) {
+		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
+		endDate = GenericUtils.plusDay(endDate, 1);
+		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
+		BigDecimal change = saleRepository.findByRange(strStartDate, strEndDate).stream().map( s -> s.getChange() ).reduce(BigDecimal.ZERO, BigDecimal::add);
+		ticketPrintService.general(userId, 
+			GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE), 
+			GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE),
+			getReportGeneral(strStartDate, strEndDate).getTotalIn(), 
+			groupPayments(getPaymentsByDate(strStartDate, strEndDate), change), 
+			outService.getPurchases(strStartDate, strEndDate),
+			outService.getExpenses(strStartDate, strEndDate)
+		);
+	}
+	
+	private List<SalePayment> getPaymentsByDate(String strStartDate, String strEndDate){
+		final List<SalePayment> listPayments = new ArrayList<>();
+		List<Sale> sales = saleRepository.findByRange(strStartDate, strEndDate);
+		sales.forEach(sale -> listPayments.addAll( salePaymentRepository.findBySale(sale.getId()) ));
+		return listPayments;
+	}
+	
+	private List<Payment> groupPayments(List<SalePayment> payments, BigDecimal change){
+		List<Payment> grouped = new ArrayList<>();
+		Map<Long, List<SalePayment>> collect = payments.stream().collect(Collectors.groupingBy(SalePayment::getPayment));
+		collect.forEach( (p, list) -> {
+			Payment payment = new Payment();
+			payment.setPayment(catalogService.findById(p).getName());
+			payment.setAmount(list.stream().map(d -> d.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add));
+			if(payment.getPayment().equals(GeneralConstants.CATALOG_PAYMENT_METHOD_CASH))
+				payment.setAmount(payment.getAmount().subtract(change));
+			payment.setComision(list.stream().map(d -> d.getComision() != null ? d.getComision() : BigDecimal.ZERO).reduce(BigDecimal.ZERO, BigDecimal::add));
+			grouped.add(payment);
+		} );
+		return grouped;
 	}
 
 }

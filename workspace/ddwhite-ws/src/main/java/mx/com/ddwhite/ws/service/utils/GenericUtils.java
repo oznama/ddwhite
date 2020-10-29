@@ -70,7 +70,5 @@ public class GenericUtils {
 	public static BigDecimal getValueOfPercentage(BigDecimal value) {
 		return value.divide(GeneralConstants.ONE_HUNDER).add(BigDecimal.ONE);
 	}
-	
-	
 
 }

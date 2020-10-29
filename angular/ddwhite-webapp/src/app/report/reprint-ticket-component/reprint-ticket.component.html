@@ -11,12 +11,12 @@
         <form [formGroup]="searchForm" (ngSubmit)="reprint()">
 
           <mat-form-field class="full-width-input">
-            <input matInput type="number" min="1" formControlName="saleId" placeholder="Folio de la compra" autocomplete="off"><br>
+            <input matInput type="number" min="1" formControlName="saleId" placeholder="Folio de la compra" autocomplete="off">
             <mat-error>Folio de la venta requerido</mat-error>
           </mat-form-field>
 
           <div class="wrapper">
-            <button mat-raised-button color="primary" [disabled]="searchForm.invalid">Imprimir</button>
+            <button mat-fab color="primary" [disabled]="searchForm.invalid"><mat-icon>receipt</mat-icon></button>
           </div>
         </form>
       </mat-card-content>

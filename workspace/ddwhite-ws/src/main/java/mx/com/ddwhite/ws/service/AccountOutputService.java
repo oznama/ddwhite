@@ -34,17 +34,25 @@ public class AccountOutputService {
 	private ExpenseRepository expenseRep;
 	
 	public List<AccountOutput> getOutputs(String startDate, String endDate) {
+		List<AccountOutput> lstAccOut = new ArrayList<>();
+		lstAccOut.addAll(getPurchases(startDate, endDate));
+		lstAccOut.addAll(getExpenses(startDate, endDate));
+		return lstAccOut;
+	}
+	
+	public List<AccountOutput> getPurchases(String startDate, String endDate) {
 		final List<AccountOutput> lstAccOut = new ArrayList<>();
 		// Loading purchases
 		List<Purchase> purchases = purchaseRep.findByDates(startDate, endDate);
-		purchases.forEach( p -> {
-			lstAccOut.add(getAccountOutput(p));
-		});
+		purchases.forEach( p -> lstAccOut.add(getAccountOutput(p)));
+		return lstAccOut;
+	}
+	
+	public List<AccountOutput> getExpenses(String startDate, String endDate) {
+		final List<AccountOutput> lstAccOut = new ArrayList<>();
 		// Loading expenses
 		List<Expense> expenses = expenseRep.findByDate(startDate, endDate);
-		expenses.forEach(e -> {
-			lstAccOut.add(getAccountOutput(e));
-		});
+		expenses.forEach(e -> lstAccOut.add(getAccountOutput(e)));
 		return lstAccOut;
 	}
 	

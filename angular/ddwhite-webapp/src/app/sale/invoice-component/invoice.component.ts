@@ -35,26 +35,42 @@ export class InvoiceSaleComponent implements OnInit {
 
   ngOnInit() {
     this.searchForm = this.formBuilder.group({
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
+      startDate: [],
+      endDate: [],
+      saleId: []
     });
     this.searchForm.controls.startDate.disable;
     this.searchForm.controls.endDate.disable;
   }
 
+  private clearPagElems(){
+    this.page = 0;
+    this.totalPage = 0;
+    this.sales = null;
+    this.primSales = null;
+  }
+
+  clearFilter(){
+    this.searchForm.controls.saleId.setValue(null);
+    this.searchForm.controls.startDate.setValue(null);
+    this.searchForm.controls.endDate.setValue(null);
+    this.clearPagElems();
+  }
+
   search(page: number) {
+    const saleId = +this.searchForm.controls.saleId.value;
+    const startDate = this.searchForm.controls.startDate.value;
+    const endDate = this.searchForm.controls.endDate.value;
     this.page = page;
-    this.apiService.get(this.searchForm.controls.startDate.value, this.searchForm.controls.endDate.value, this.page, pageSize, this.sort)
+    //this.apiService.get(startDate, endDate, this.page, pageSize, this.sort)
+    this.apiService.getByIdAndRange(saleId, startDate, endDate, this.page, pageSize, this.sort)
     .subscribe( data => {
       if( data.content.length > 0 ){
         this.totalPage = data.totalPages;
         this.primSales = data.content;
         this.sales = of(data.content);
       } else{
-        this.page = 0;
-        this.totalPage = 0;
-        this.sales = null;
-        this.primSales = null;
+        this.clearPagElems();
         this.alertService.warn('No hay ventas en el periodo selecionado', alertOptions);
       }
     }, error => {

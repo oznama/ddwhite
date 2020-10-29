@@ -54,4 +54,8 @@ export class ApiReportService {
     return this.http.get<Withdrawal[]>(this.context + '/currentWithdrawal?userId='+ userId);
   }
 
+  printGeneral(userId: number, startDate: string, endDate: string) : any {
+    return this.http.get(this.context + '/print/general?userId='+ userId + '&startDate='+ startDate +'&endDate='+ endDate);
+  }
+
 }

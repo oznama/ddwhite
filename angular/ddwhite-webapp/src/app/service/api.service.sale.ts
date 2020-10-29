@@ -10,8 +10,16 @@ export class ApiSaleService {
   constructor(private http: HttpClient) { }
   context: string = baseUrl + '/sale';
 
-  get(startDate: string, endDate: string, page: number, size: number, sort: string) : Observable<SalePageable> {
+  getByDates(startDate: string, endDate: string, page: number, size: number, sort: string) : Observable<SalePageable> {
     return this.http.get<SalePageable>(this.context + '/find/bydates?start='+ startDate +'&end='+ endDate + '&page='+page+'&size='+size+'&sort='+sort);
+  }
+
+  getByIdAndRange(id: number, startDate: string, endDate: string, page: number, size: number, sort: string) : Observable<any> {
+    var urlQuery = id ? 'id='+ id : null;
+    urlQuery = urlQuery && startDate && endDate ? '&start='+ startDate +'&end='+ endDate : ( startDate && endDate ? 'start='+ startDate +'&end='+ endDate : urlQuery );
+    if(urlQuery)
+      return this.http.get<any>(this.context + '/find/byIdAndDates?'+ urlQuery + '&page='+page+'&size='+size+'&sort='+sort);
+    return this.http.get<any>(this.context + '/find?page='+page+'&size='+size+'&sort='+sort);
   }
 
   create(sale: Sale): Observable<any> {

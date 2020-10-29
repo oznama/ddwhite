@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CatalogItem} from './../model/catalog.model';
-import { ApiCatalogService, CAT_CONST } from './../service/api.service.catalog';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ApiCatalogService, ApiReportService, CAT_CONST, exportFile, CSV_EXTENSION } from './../service/module.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'dialog-report-filter',
@@ -16,10 +16,10 @@ export class ReportFilterDialogComponent implements OnInit {
   catalogPayment: CatalogItem[];
   
   constructor(
-    public dialogRef: MatDialogRef<ReportFilterDialogComponent>, 
-    @Inject(MAT_DIALOG_DATA) public data: string,
+    public dialogRef: MatDialogRef<ReportFilterDialogComponent>,
     private formBuilder: FormBuilder,
-    private catalogService: ApiCatalogService,) {
+    private catalogService: ApiCatalogService,
+    private reportService: ApiReportService) {
   }
 
   ngOnInit() {
@@ -56,7 +56,32 @@ export class ReportFilterDialogComponent implements OnInit {
   }
 
   search() {
-    this.dialogRef.close({ event: 'close', data: this.searchForm.value });
+    //this.dialogRef.close({ event: 'close', data: this.searchForm.value });
+    const startDate = this.searchForm.controls.startDate.value;
+    const endDate = this.searchForm.controls.endDate.value;
+    const report = this.searchForm.controls.report.value;
+    const payment = this.searchForm.controls.payment.value;
+    switch (report) {
+      case "Compras":
+        this.reportService.getPurchasesCSV(startDate, endDate).subscribe(data => exportFile(data, 'compras_', CSV_EXTENSION));
+        break;
+      case "Ventas":
+        this.reportService.getSalesCSV(startDate, endDate).subscribe(data => exportFile(data, 'ventas_', CSV_EXTENSION));
+        break;
+      case "Pagos":
+        this.reportService.payments(payment, startDate, endDate).subscribe(data => exportFile(data, 'pagos_', CSV_EXTENSION));
+          break;
+      default:
+        this.reportService.getGeneralCSV(startDate, endDate).subscribe(data => exportFile(data, 'general_', CSV_EXTENSION));
+        break;
+    }
+  }
+
+  print(){
+    const userId = +window.localStorage.getItem("userId");
+    const startDate = this.searchForm.controls.startDate.value;
+    const endDate = this.searchForm.controls.endDate.value;
+    this.reportService.printGeneral(userId, startDate, endDate).subscribe(data => {}, error => console.log(error));
   }
 
 }

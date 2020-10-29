@@ -9,22 +9,25 @@
       <form [formGroup]="searchForm" (ngSubmit)="search(0)">
 
         <mat-form-field appearance="fill">
+          <input matInput formControlName="saleId" type="number" min="1" placeholder="Folio" autocomplete="off">
+        </mat-form-field>
+
+        <mat-form-field appearance="fill">
           <mat-label>Fecha inicial</mat-label>
-          <input matInput formControlName="startDate" [matDatepicker]="startDate" required>
+          <input matInput formControlName="startDate" [matDatepicker]="startDate">
           <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
           <mat-datepicker #startDate disabled="false"></mat-datepicker>
         </mat-form-field>
 
         <mat-form-field appearance="fill">
           <mat-label>Fecha Final</mat-label>
-          <input matInput formControlName="endDate" [matDatepicker]="endDate" required="">
+          <input matInput formControlName="endDate" [matDatepicker]="endDate">
           <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
           <mat-datepicker #endDate disabled="false"></mat-datepicker>
         </mat-form-field>
         
-        <button mat-mini-fab color="primary" [disabled]="searchForm.invalid">
-          <mat-icon>search</mat-icon>
-        </button>
+        <button mat-fab color="primary"><mat-icon>search</mat-icon></button>
+        <button mat-fab color="warn" type="button" (click)="clearFilter()"><mat-icon>clear</mat-icon></button>
       </form>
     </mat-card-content>
   </mat-card>
@@ -59,8 +62,8 @@
             <input #invoiceCaptured maxlength="100" autocomplete="off" value="{{sale.invoice}}"> <!-- formControlName="invoice" -->
           </td>
           <td>
-            <button mat-raised-button color="primary" type="button" [disabled]="!rowValid(sale.id, invoiceCaptured.value, sale.clientId)" 
-            (click)="update(sale.id, invoiceCaptured.value, sale.clientId)">Actualizar</button>
+            <button mat-mini-fab color="primary" type="button" [disabled]="!rowValid(sale.id, invoiceCaptured.value, sale.clientId)" 
+            (click)="update(sale.id, invoiceCaptured.value, sale.clientId)"><mat-icon>save</mat-icon></button>
           </td>
         </tr>
         </tbody>
