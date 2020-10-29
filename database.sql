@@ -5,7 +5,7 @@ drop table if exists venta_detalle;
 drop table if exists venta_total;
 drop table if exists clientes;
 drop table if exists gastos;
-drop table if exists compras_reasingadas;
+drop table if exists compras_reasignadas;
 drop table if exists compras;
 drop table if exists productos;
 drop table if exists proveedores;
@@ -124,7 +124,7 @@ create table if not exists clientes(
 	ap_materno char(50) not null,
 	domicilio_particular char(80) not null,
 	telefono char(20) not null,
-	email char(30),
+	email char(80),
 	rfc char(20),
 	domicilio_fiscal char(80),
 	telefono_fiscal char(20),
@@ -175,15 +175,15 @@ create table if not exists venta_pago(
 alter table venta_pago add constraint foreign key (id_venta) references venta_total (id);
 alter table venta_pago add constraint foreign key (forma_pago) references catalogos (id);
 
-create table if not exists compras_reasingadas(
+create table if not exists compras_reasignadas(
 	id bigint not null auto_increment,
 	id_compra_origen bigint not null,
 	id_compra_destino bigint not null,
 	cantidad decimal(10,4) not null,
 	primary key(id)
 );
-alter table compras_reasingadas add constraint foreign key (id_compra_origen) references compras (id);
-alter table compras_reasingadas add constraint foreign key (id_compra_destino) references compras (id);
+alter table compras_reasignadas add constraint foreign key (id_compra_origen) references compras (id);
+alter table compras_reasignadas add constraint foreign key (id_compra_destino) references compras (id);
 
 create table if not exists sesion(
 	id bigint not null auto_increment,
@@ -191,6 +191,7 @@ create table if not exists sesion(
 	entrada datetime default current_timestamp,
 	salida datetime,
 	monto_inicial decimal(10,4) not null,
+	monto_final decimal(10,4),
 	primary key(id)
 );
 alter table sesion add constraint foreign key (id_usuario) references usuarios (id);

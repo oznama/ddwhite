@@ -215,7 +215,7 @@ public class TicketPrintService {
 		});
 		content.append(lineFormatted(separator(null), AlignedEmun.CENTERED));
 		// Retiros
-		List<Withdrawal> withdrawals = withdrawalService.findWithdrawallsBySessionAndRange(sessionId, start, end);
+		List<Withdrawal> withdrawals = withdrawalService.findBySessionAndRange(sessionId, start, end);
 		hdGroup = buildLine("RETIROS", AlignedEmun.LEFT, COLUMN_20_SIZE);
 		hdTotal = buildLine("MONTO", AlignedEmun.RIGHT, COLUMN_12_SIZE);
 		content.append(hdGroup).append(hdTotal).append(GeneralConstants.LINE_BREAK);

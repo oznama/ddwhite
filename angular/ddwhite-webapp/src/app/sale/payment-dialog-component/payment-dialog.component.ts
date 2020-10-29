@@ -54,6 +54,10 @@ export class PaymentDialogComponent implements OnInit {
     return +this.paymentForm.controls.payment.value !== this.efectivoId;
   }
 
+  showComision(){
+    return this.catalogPayment.find( p => p.id === +this.paymentForm.controls.payment.value ).description === CAT_CONST.PAYMENT_METHOD_COM;
+  }
+
   private round(n: number): number {
     return Number(n.toFixed(this.decimals));
   }
@@ -76,7 +80,7 @@ export class PaymentDialogComponent implements OnInit {
     const voucherFolio: string = this.paymentForm.controls.voucherFolio.value;
     const comisionId: number = +this.paymentForm.controls.comision.value;
     var $comision = 0;
-    if( this.showCreditDataExtra() ){
+    if( this.showComision() ){
       const comision = this.catalogComisiones.find(item => item.id === comisionId).description;
       const comisions = comision.split('%+');
       comisions.forEach(c => $comision = $comision + ((c === 'IVA') ? 

@@ -22,12 +22,6 @@ export class ProviderEditComponent implements OnInit {
   }
 
   ngOnInit(): void {
-  	let editProviderId = window.localStorage.getItem("editProviderId");
-    if(!editProviderId) {
-      alert("Invalid action.")
-      this.cancelar();
-      return;
-    }
   	this.editForm = this.formBuilder.group({
       id: [],
       bussinesName: ['', Validators.required],
@@ -40,11 +34,8 @@ export class ProviderEditComponent implements OnInit {
     });
     this.editForm.controls.userId.disable();
     this.editForm.controls.dateCreated.disable();
-    this.apiService.getById(+editProviderId)
-      .subscribe( data => {
-        this.editForm.setValue(data);
-      }
-    );
+    let editProviderId = window.localStorage.getItem("editProviderId");
+    this.apiService.getById(+editProviderId).subscribe( data => this.editForm.setValue(data));
   }
 
   onSubmit() {

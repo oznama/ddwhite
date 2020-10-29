@@ -72,6 +72,8 @@ import { ReprintTicketDialogComponent } from './report/reprint-ticket-component/
 import { CashoutTicketComponent } from './report/cashout-ticket-component/cashout-ticket.component';
 import { DatabaseComponent } from './management/database/database.component';
 import { WithdrawallDialogComponent } from './sale/withdrawall-dialog-component/withdrawall-dialog.component';
+import { SessionListComponent } from './login/session/session-list/session-list.component';
+import { SessionEditComponent } from './login/session/session-edit/session-edit.component';
 
 @NgModule({
   declarations: [
@@ -115,7 +117,9 @@ import { WithdrawallDialogComponent } from './sale/withdrawall-dialog-component/
     ReprintTicketDialogComponent,
     CashoutTicketComponent,
     DatabaseComponent,
-    WithdrawallDialogComponent
+    WithdrawallDialogComponent,
+    SessionListComponent,
+    SessionEditComponent
   ],
   imports: [
     BrowserModule,

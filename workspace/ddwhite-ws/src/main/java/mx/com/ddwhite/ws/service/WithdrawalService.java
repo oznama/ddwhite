@@ -48,21 +48,25 @@ public class WithdrawalService {
 		}
 	}
 	
-	public List<Withdrawal> findWithdrawallsBySessionAndRange(Long sessionId, String startDate, String endDate) {
+	public List<Withdrawal> findBySession(Long sessionId) {
+		return withdrawalRepository.findBySession(sessionId);
+	}
+	
+	public List<Withdrawal> findBySessionAndRange(Long sessionId, String startDate, String endDate) {
 		return withdrawalRepository.findBySessionAndDates(sessionId, startDate, endDate);
 	}
 	
-	public List<Withdrawal> findWithdrawallsByRange(String startDate, String endDate) {
+	public List<Withdrawal> findByRange(String startDate, String endDate) {
 		return withdrawalRepository.findByDates(startDate, endDate);
 	}
 	
-	public List<Withdrawal> findWithdrawalCurrentSession(String sessionInDate) {
-		return findWithdrawallsByRange(sessionInDate, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME)
+	public List<Withdrawal> findCurrentSession(String sessionInDate) {
+		return findByRange(sessionInDate, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME)
 		);
 	}
 	
-	public BigDecimal getWithdrawnBySessionAndRange(Long sessionId, String startDate, String endDate) {
-		return findWithdrawallsBySessionAndRange(sessionId, startDate, endDate).stream().map(w -> w.getAmmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
+	public BigDecimal getAmountBySessionAndRange(Long sessionId, String startDate, String endDate) {
+		return findBySessionAndRange(sessionId, startDate, endDate).stream().map(w -> w.getAmmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
 	}
 
 }

@@ -41,17 +41,17 @@ export class HeaderComponent implements OnInit {
       } else {
         const dialogRef = this.dialog.open(CashoutTicketComponent, { data: false, disableClose: !this.privileges.isAdmin() });
         dialogRef.afterClosed().subscribe(result => {
-          if( result ) this.closeSession();
+          if( result && result.data ) this.closeSession(result.data);
           else this.apiService.logout();
         });
       }
     });
   }
 
-  private closeSession(){
+  private closeSession(finalAmmount: number){
     this.sessionService.getCurrentSession(+window.localStorage.getItem("userId")).subscribe(data => {
       if (data && data.id) {
-        this.sessionService.update(data.id).subscribe(data => {
+        this.sessionService.close(data.id, finalAmmount).subscribe(data => {
           this.apiService.logout();
         }, error => this.alertService.error('No se ha podido cerrar sesion, error: ' + error.error, alertOptions));
       } else {

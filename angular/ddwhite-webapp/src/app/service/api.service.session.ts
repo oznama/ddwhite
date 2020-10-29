@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import {Observable} from "rxjs/index";
 import { baseUrl, observeResponse } from './../../environments/environment';
 import {Session} from "../model/user.model";
+import {Withdrawal} from "../model/cashout.model";
 
 @Injectable()
 export class ApiSessionService {
@@ -27,8 +28,16 @@ export class ApiSessionService {
 		return this.http.post<any>(this.context + '/save', session);
 	}
 
-	update(id: number): Observable<any> {
-		return this.http.put<any>(this.context + '/close?id=' + id, observeResponse);
+	close(id: number, finalAmount: number): Observable<any> {
+		return this.http.put<any>(this.context + '/close?id=' + id + '&finalAmount=' + finalAmount, observeResponse);
+	}
+
+	getWithdrawals(id: number): Observable<Withdrawal[]> {
+		return this.http.get<Withdrawal[]>(this.context + '/withdrawals?id=' + id);
+	}
+
+	updateAmounts(session: Session): Observable<any> {
+		return this.http.put<any>(this.context + '/updateAmounts', session);
 	}
 
 }

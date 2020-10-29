@@ -12,9 +12,11 @@ public class SessionDto implements Serializable {
 
 	private Long id;
 	private Long userId;
+	private String userFullname;
 	private String inDate;
 	private String outDate;
 	private BigDecimal initialAmount;
+	private BigDecimal finalAmount;
 
 	public Long getId() {
 		return id;
@@ -30,6 +32,14 @@ public class SessionDto implements Serializable {
 
 	public void setUserId(Long userId) {
 		this.userId = userId;
+	}
+
+	public String getUserFullname() {
+		return userFullname;
+	}
+
+	public void setUserFullname(String userFullname) {
+		this.userFullname = userFullname;
 	}
 
 	public String getInDate() {
@@ -54,6 +64,14 @@ public class SessionDto implements Serializable {
 
 	public void setInitialAmount(BigDecimal initialAmount) {
 		this.initialAmount = initialAmount;
+	}
+
+	public BigDecimal getFinalAmount() {
+		return finalAmount;
+	}
+
+	public void setFinalAmount(BigDecimal finalAmount) {
+		this.finalAmount = finalAmount;
 	}
 
 }

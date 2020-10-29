@@ -17,6 +17,9 @@ public interface WithdrawalRepository extends JpaRepository<Withdrawal, Long> {
 	
 	Withdrawal findTop1BySessionId(Long sessionId, Sort sort);
 	
+	@Query("SELECT w FROM Withdrawal w WHERE w.sessionId = :sessionId")
+	List<Withdrawal> findBySession(@Param("sessionId") Long sessionId);
+	
 	@Query("SELECT w FROM Withdrawal w WHERE w.dateCreated BETWEEN :startDate AND :endDate")
 	List<Withdrawal> findByDates(@Param("startDate") String startDate, @Param("endDate") String endDate);
 	

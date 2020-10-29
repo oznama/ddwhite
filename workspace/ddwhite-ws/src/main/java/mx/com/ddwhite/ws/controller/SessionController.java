@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.controller;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -12,12 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import mx.com.ddwhite.ws.dto.SessionDto;
 import mx.com.ddwhite.ws.service.SessionService;
+import mx.com.ddwhite.ws.service.WithdrawalService;
 
 @RestController
 @CrossOrigin(allowedHeaders = "*", origins = "*")
@@ -26,6 +29,9 @@ public class SessionController implements GenericController<SessionDto> {
 	
 	@Autowired
 	private SessionService service;
+	
+	@Autowired
+	private WithdrawalService withdawallService;
 
 	@Override
 	public Page<SessionDto> findAll(Pageable pageable) {
@@ -59,9 +65,11 @@ public class SessionController implements GenericController<SessionDto> {
 	}
 	
 	@PutMapping("/close")
-	public ResponseEntity<?> updateCloseSession(@RequestParam(value = "id", required = true) Long id) {
+	public ResponseEntity<?> updateCloseSession(
+			@RequestParam(value = "id", required = true) Long id, 
+			@RequestParam(value = "finalAmount", required = true) BigDecimal finalAmount) {
 		try {
-			service.updateCloseSession(id);
+			service.updateCloseSession(id, finalAmount);
 			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
@@ -77,6 +85,26 @@ public class SessionController implements GenericController<SessionDto> {
 	@GetMapping("/findCurrentSession")
 	public SessionDto findCurrentSession(@RequestParam(value = "userId", required = true) Long userId) {
 		return service.findCurrentSession(userId);
+	}
+	
+	@GetMapping("/withdrawals")
+	public ResponseEntity<?> updateCloseSession(
+			@RequestParam(value = "id", required = true) Long id) {
+		try {
+			return ResponseEntity.ok().body(withdawallService.findBySession(id));
+		} catch (DataAccessException e) {
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}
+	}
+	
+	@PutMapping("/updateAmounts")
+	public ResponseEntity<?> updateAmounts(@RequestBody SessionDto sessionDto) {
+		try {
+			service.updateAmounts(sessionDto);
+			return ResponseEntity.ok().build();
+		} catch (DataAccessException e) {
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}
 	}
 
 }

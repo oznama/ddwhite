@@ -30,7 +30,7 @@ export class CashoutTicketComponent implements OnInit {
       startTime: [],
       endDate: [],
       endTime: [],
-      amount: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
+      amount: [, [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
     });
     this.loadData();
   }
@@ -60,7 +60,7 @@ export class CashoutTicketComponent implements OnInit {
     this.reportService.printCashout(userId, startDate, endDate, +this.searchForm.controls.amount.value).subscribe(
       data => {
         if( !this.data )
-          this.dialogRef.close({ event: 'close' });
+          this.dialogRef.close({ event: 'close', data: +this.searchForm.controls.amount.value });
       }, error => this.alertService.error('Error al generar corte de caja, error: ' + error.message, alertOptions));
   }
 

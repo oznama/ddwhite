@@ -178,7 +178,7 @@ public class SaleService {
 			BigDecimal totalOfSale = salePayments.stream().map(s -> s.getAmount()).reduce(BigDecimal.ZERO, BigDecimal::add);
 			currentAmount = currentAmount.add(totalOfSale.subtract(sale.getChange()));
 		};
-		BigDecimal withdwaraled = withdrawalService.getWithdrawnBySessionAndRange(currentSession.getId(), currentSession.getInDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
+		BigDecimal withdwaraled = withdrawalService.getAmountBySessionAndRange(currentSession.getId(), currentSession.getInDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 		return currentAmount.subtract(withdwaraled);
 	}
 	

@@ -33,14 +33,10 @@ export class ProviderAddComponent implements OnInit {
   onSubmit() {
   	var body = this.addForm.value;
   	body.userId = window.localStorage.getItem("userId");
-    this.apiService.create(body)
-      .subscribe( data => {
-        this.alertService.success('Proveedor guardado', alertOptions);
-        this.cancelar();
-      }, error => {
-        this.alertService.error('El registro no ha sido guardado: ' + error.error, alertOptions);
-      }
-    );
+    this.apiService.create(body).subscribe( data => {
+      this.alertService.success('Proveedor guardado', alertOptions);
+      this.cancelar();
+    }, error => this.alertService.error('El registro no ha sido guardado: ' + error.error, alertOptions));
   }
 
   cancelar(){

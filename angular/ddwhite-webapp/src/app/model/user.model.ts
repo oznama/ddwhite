@@ -35,9 +35,11 @@ export class User {
 export class Session {
 	id: number;
 	userId: number;
+	userFullname: string;
 	inDate: string;
 	outDate: string;
 	initialAmount: number;
+	finalAmount: number;
 
 	constructor(init?:Partial<Session>){
 		Object.assign(this, init);

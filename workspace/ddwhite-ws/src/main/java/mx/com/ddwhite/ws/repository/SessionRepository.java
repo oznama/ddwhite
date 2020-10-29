@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -30,7 +31,12 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 	
 	@Modifying
 	@Transactional
-	@Query("UPDATE Session s SET s.outDate = :outDate  WHERE s.id = :id")
-	void updateCloseSession(@Param("id") Long id, @Param("outDate") String outDate);
+	@Query("UPDATE Session s SET s.outDate = :outDate, s.finalAmount = :finalAmount  WHERE s.id = :id")
+	void updateCloseSession(@Param("id") Long id, @Param("outDate") String outDate, @Param("finalAmount") BigDecimal finalAmount);
+	
+	@Modifying
+	@Transactional
+	@Query("UPDATE Session s SET s.initialAmount = :initialAmount, s.finalAmount = :finalAmount  WHERE s.id = :id")
+	void updateAmounts(@Param("id") Long id, @Param("initialAmount") BigDecimal initialAmount, @Param("finalAmount") BigDecimal finalAmount);
 	
 }

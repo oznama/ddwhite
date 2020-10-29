@@ -1,0 +1,79 @@
+<div class="div-container">
+
+  <div>
+    <mat-card class="box-form">
+      <mat-card-header>
+        <mat-card-title>Registro de sesiones</mat-card-title>
+      </mat-card-header>
+
+      <mat-card-content class="wrapper">
+        <form [formGroup]="searchForm">
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha inicial</mat-label>
+            <input matInput formControlName="startDate" [matDatepicker]="startDate">
+            <mat-datepicker-toggle matSuffix [for]="startDate"></mat-datepicker-toggle>
+            <mat-datepicker #startDate disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha Final</mat-label>
+            <input matInput formControlName="endDate" [matDatepicker]="endDate">
+            <mat-datepicker-toggle matSuffix [for]="endDate"></mat-datepicker-toggle>
+            <mat-datepicker #endDate disabled="false"></mat-datepicker>
+          </mat-form-field>
+
+          <button mat-mini-fab color="primary" (click)="search()">
+            <mat-icon>search</mat-icon>
+          </button>
+
+          <div *ngIf="hasElements">
+            <mat-form-field style="width: 90%;">
+              <input matInput formControlName="userFullname" placeholder="Nombre de usuario" maxlength="100">
+            </mat-form-field>
+            <button mat-mini-fab color="primary" (click)="doFilter()">
+              <mat-icon>search</mat-icon>
+            </button>
+            <button mat-mini-fab color="warn" (click)="clearFilter()">
+              <mat-icon>clear</mat-icon>
+            </button>
+          </div>
+
+        </form>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div id="table-wrapper">
+    <div id="table-scroll">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th class="hidden">Id</th>
+          <th>Usuario</th>
+          <th>Entrada</th>
+          <th>Salida</th>
+          <th>$ apertura</th>
+          <th>$ cierre</th>
+          <th></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let session of sessionFiltred | async">
+          <td class="hidden">{{session.id}}</td>
+          <td>{{session.userFullname}}</td>
+          <td>{{session.inDate}}</td>
+          <td>{{session.outDate}}</td>
+          <td>{{session.initialAmount}}</td>
+          <td>{{session.finalAmount}}</td>
+          <td>
+            <button mat-mini-fab color="primary" *ngIf="privileges.canEdit()" (click)="edit(session.id)">
+              <mat-icon>attach_money</mat-icon>
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>

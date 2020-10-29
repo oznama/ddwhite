@@ -99,8 +99,8 @@ insert into catalogos(nombre, descripcion) values('GRUPOPROD', 'GRUPOS DE PRODUC
 -- METODOS DE PAGO
 insert into catalogos(nombre, descripcion) values('METODPAG', 'METODOS DE PAGO');
 insert into catalogos(nombre, catalogo_padre) values ('EFECTIVO', (select id from (select id from catalogos where nombre = 'METODPAG') as id_catalog_parent));
-insert into catalogos(nombre, catalogo_padre) values ('TARJETA DEBITO', (select id from (select id from catalogos where nombre = 'METODPAG') as id_catalog_parent));
-insert into catalogos(nombre, catalogo_padre) values ('TARJETA CREDITO', (select id from (select id from catalogos where nombre = 'METODPAG') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('TARJETA DEBITO', 'COMISION', (select id from (select id from catalogos where nombre = 'METODPAG') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('TARJETA CREDITO', 'COMISION', (select id from (select id from catalogos where nombre = 'METODPAG') as id_catalog_parent));
 
 
 insert into catalogos(nombre, descripcion , catalogo_padre) values ('NOMBRE', 'Deposito Dental Santa Agata', (select id from (select id from catalogos where nombre = 'COMPANY') as id_catalog_parent));
@@ -112,7 +112,7 @@ insert into catalogos(nombre, descripcion , catalogo_padre) values ('EMAIL', 'ch
 insert into catalogos(nombre, descripcion , catalogo_padre) values ('NOMBRE_FISCAL', 'Christian Gutierrez Limon', (select id from (select id from catalogos where nombre = 'COMPANY') as id_catalog_parent));
 insert into catalogos(nombre, descripcion , catalogo_padre) values ('RFC', 'GULC970210ER3', (select id from (select id from catalogos where nombre = 'COMPANY') as id_catalog_parent));
 
-insert into catalogos(nombre, descripcion, catalogo_padre) values ('PIEZA', 'UNIDAD MINIMA UNITARIA', (select id from (select id from catalogos where nombre = 'UNIDADES') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('PZA', 'UNIDAD MINIMA UNITARIA', (select id from (select id from catalogos where nombre = 'UNIDADES') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('CAJA', 'CAJA CON PIEZAS', (select id from (select id from catalogos where nombre = 'UNIDADES') as id_catalog_parent));
 
 
@@ -120,39 +120,52 @@ insert into catalogos(nombre, catalogo_padre) values ('CONSUMIBLES', (select id 
 insert into catalogos(nombre, catalogo_padre) values ('ACIDOS GRABADORES', (select id from (select id from catalogos where nombre = 'GRUPOPROD') as id_catalog_parent));
 insert into catalogos(nombre, catalogo_padre) values ('ADESIVOS/BOND', (select id from (select id from catalogos where nombre = 'GRUPOPROD') as id_catalog_parent));
 
-
+alter table retiro_detalle drop foreign key retiro_detalle_ibfk_1;
+alter table retiro_detalle drop foreign key retiro_detalle_ibfk_2;
+alter table retiros drop foreign key retiros_ibfk_1;
+alter table sesion drop foreign key sesion_ibfk_1;
 alter table venta_pago drop foreign key venta_pago_ibfk_1;
 alter table venta_pago drop foreign key venta_pago_ibfk_2;
 alter table venta_detalle drop foreign key venta_detalle_ibfk_1;
 alter table venta_detalle drop foreign key venta_detalle_ibfk_2;
 alter table venta_total drop foreign key venta_total_ibfk_1;
 alter table venta_total drop foreign key venta_total_ibfk_2;
+alter table compras_reasignadas drop foreign key compras_reasignadas_ibfk_1;
+alter table compras_reasignadas drop foreign key compras_reasignadas_ibfk_2;
 alter table compras drop foreign key compras_ibfk_1;
 alter table compras drop foreign key compras_ibfk_2;
 alter table compras drop foreign key compras_ibfk_3;
 alter table compras drop foreign key compras_ibfk_4;
-alter table productos drop foreign key productos_ibfk_1;
+#alter table productos drop foreign key productos_ibfk_1;
+truncate compras_reasignadas;
 truncate compras;
-truncate venta_pago ;
-truncate venta_detalle ;
-truncate venta_total ;
-truncate productos;
-alter table venta_detalle add constraint foreign key (id_venta) references venta_total (id);
-alter table venta_pago add constraint foreign key (id_venta) references venta_total (id);
-alter table proveedores add constraint foreign key (id_usuario) references usuarios (id);
-alter table productos add constraint foreign key (id_usuario) references usuarios (id);
-alter table gastos add constraint foreign key (id_usuario) references usuarios (id);
+truncate venta_pago;
+truncate venta_detalle;
+truncate venta_total;
+truncate retiro_detalle;
+truncate retiros;
+truncate sesion;
+#truncate productos;
+#alter table proveedores add constraint foreign key (id_usuario) references usuarios (id);
+#alter table productos add constraint foreign key (id_usuario) references usuarios (id);
+#alter table gastos add constraint foreign key (id_usuario) references usuarios (id);
+alter table compras_reasignadas add constraint foreign key (id_compra_origen) references compras (id);
+alter table compras_reasignadas add constraint foreign key (id_compra_destino) references compras (id);
 alter table compras add constraint foreign key (id_usuario) references usuarios (id);
 alter table compras add constraint foreign key (id_proveedor) references proveedores (id);
 alter table compras add constraint foreign key (id_producto) references productos (id);
 alter table compras add constraint foreign key (unidad) references catalogos (id);
-alter table clientes add constraint foreign key (id_usuario) references usuarios (id);
+#alter table clientes add constraint foreign key (id_usuario) references usuarios (id);
 alter table venta_total add constraint foreign key (id_usuario) references usuarios (id);
 alter table venta_total add constraint foreign key (id_cliente) references clientes (id);
 alter table venta_detalle add constraint foreign key (id_venta) references venta_total (id);
 alter table venta_detalle add constraint foreign key (id_producto) references productos (id);
 alter table venta_pago add constraint foreign key (id_venta) references venta_total (id);
 alter table venta_pago add constraint foreign key (forma_pago) references catalogos (id);
+alter table retiro_detalle add constraint foreign key (id_retiro) references retiros (id);
+alter table retiro_detalle add constraint foreign key (denominacion) references catalogos (id);
+alter table retiros add constraint foreign key (id_sesion) references sesion (id);
+alter table sesion add constraint foreign key (id_usuario) references usuarios (id);
 
 
 
@@ -186,128 +199,12 @@ alter table productos drop column costo;
 alter table compras modify column cantidad decimal(10,4) not null;
 alter table venta_detalle modify column cantidad decimal(10,4) not null;
 
-select id, nombre_largo , porcentaje_ganancia from productos;
-update productos set porcentaje_ganancia=55 where id between 8 and 107;
 
 
-######### Reportes #############
-
-# Compras en un rango
-select u.nombre_completo as usuario, 
-	pr.razon_social as proveedor, 
-	p.nombre_largo as producto, cg.nombre as grupo, 
-	c.cantidad, c.costo, 
-	(c.cantidad * c.costo) as total, round(((c.cantidad * c.costo)/1.16),2) as subtotal, round( ((c.cantidad * c.costo) - ((c.cantidad * c.costo)/1.16)),2 ) as iva, 
-	c.fecha_registro 
-from compras c
-inner join productos p on p.id = c.id_producto
-inner join proveedores pr on pr.id = c.id_proveedor
-inner join usuarios u on u.id = c.id_usuario
-inner join catalogos cg on cg.id = p.grupo
-where c.fecha_registro  between '2020-08-01 00:00:00' and '2020-08-31 11:59:59';
-
--- Total
-select sum(c.cantidad) productos_comprados, sum(c.costo) as costo_total, 
-	sum(c.cantidad * c.costo) as total, sum(round(((c.cantidad * c.costo)/1.16),2)) as subtotal, sum(round( ((c.cantidad * c.costo) - ((c.cantidad * c.costo)/1.16)),2 )) as iva, 
-	c.fecha_registro 
-from compras c
-where c.fecha_registro  between '2020-08-01 00:00:00' and '2020-08-31 11:59:59';
-
-	## Gastos separados
-	select u.nombre_completo as usuario, '', g.descripcion as gasto, 'Gastos' as grupo, 1, g.monto,
-		g.monto, round((g.monto/1.16),2) as subtotal, round( (g.monto - (g.monto/1.16)),2 ) as iva, 
-		g.fecha_registro 
-	from gastos g
-	inner join usuarios u on u.id = g.id_usuario ;
-
-# Ventas en un rango
-select vt.id as id_venta, u.nombre_completo as usuario,
-	upper(concat(c.rfc, ' ', c.nombre, ' ', c.ap_paterno, ' ', c.ap_materno )) as cliente,
-	p.nombre_largo as producto,
-	vd.cantidad, vd.precio,
-	(vd.cantidad * vd.precio) as total, round(((vd.cantidad * vd.precio)/1.16),2) as subtotal, round( ((vd.cantidad * vd.precio) - ((vd.cantidad * vd.precio)/1.16)),2 ) as iva, 
-	vt.fecha_registro 
-from venta_detalle vd
-inner join venta_total vt on vt.id = vd.id_venta 
-inner join productos p on p.id = vd.id_producto 
-left outer join clientes c on c.id = vt.id_cliente 
-inner join usuarios u on u.id = vt.id_usuario 
-where vt.fecha_registro  between '2020-08-01 00:00:00' and '2020-08-31 11:59:59';
-
-# Ventas agrupadas
-select vt.id as id_venta, u.nombre_completo as usuario,
-	upper(concat(c.rfc, ' ', c.nombre, ' ', c.ap_paterno, ' ', c.ap_materno )) as cliente,
-	p.nombre_largo as producto,
-	sum(vd.cantidad) as cantidad, sum(vd.precio) as precio,
-	sum(vd.cantidad * vd.precio) as total, sum(round(((vd.cantidad * vd.precio)/1.16),2)) as subtotal, sum(round( ((vd.cantidad * vd.precio) - ((vd.cantidad * vd.precio)/1.16)),2 )) as iva, 
-	vt.fecha_registro 
-from venta_detalle vd
-inner join venta_total vt on vt.id = vd.id_venta 
-inner join productos p on p.id = vd.id_producto 
-left outer join clientes c on c.id = vt.id_cliente 
-inner join usuarios u on u.id = vt.id_usuario 
-where vt.fecha_registro  between '2020-08-01 00:00:00' and '2020-08-31 11:59:59'
-group by vt.id;
-
--- Total por detalle
-select sum(vd.cantidad) as productos_vendidos, sum(vd.precio) as precio_total,
-	sum(vd.cantidad * vd.precio) as total, sum(round(((vd.cantidad * vd.precio)/1.16),2)) as subtotal, sum(round( ((vd.cantidad * vd.precio) - ((vd.cantidad * vd.precio)/1.16)),2 )) as iva 
-from venta_detalle vd
-inner join venta_total vt on vt.id = vd.id_venta 
-where vt.fecha_registro  between '2020-08-01 00:00:00' and '2020-08-31 11:59:59';
-
--- Total general
-select sum(vt.total-vt.cambio) as ttotal, sum(vt.sub_total) as tsubtotal, sum(vt.iva) as tiva
-from venta_total vt
-where vt.fecha_registro  between '2020-08-01 00:00:00' and '2020-08-31 11:59:59';
-
-
-select p.id, p.nombre_largo, c.unidad, ct.nombre, sum(c.cantidad) as existencia, c.num_piezas #, p.costo, c.costo 
-from productos p
-inner join compras c on c.id_producto = p.id
-inner join catalogos ct on ct.id = c.unidad
-group by p.id, p.nombre_largo, c.unidad, ct.nombre, c.num_piezas #, p.costo, c.costo
-order by p.id;
-
-select p.id, p.nombre_largo, c.unidad, ct.nombre, c.cantidad 
-from productos p
-inner join compras c on c.id_producto = p.id
-inner join catalogos ct on ct.id = c.unidad
-order by p.id;
-
-select * from compras where num_piezas is not null;
-select distinct unidad, num_piezas from compras where id_producto = 8;
-
-select * from venta_detalle where id_producto = 8 and unidad = 2 and num_piezas == null;
-
-delete from venta_detalle  where id_venta  = 18;
-
-update venta_detalle set unidad = 2 where unidad is null;
-delete from venta_pago where id_venta = 18;
-delete from venta_total where id = 18;
-
-
-select num_piezas from compras where unidad = 2;
-update compras set num_piezas = null where unidad = 2;
-
-select num_piezas from venta_detalle where unidad = 2;
-update venta_detalle set num_piezas = null where unidad = 2;
-
-select fecha_registro from venta_total where id = 15; ## 2020-09-16 20:33:55.0
-select * from venta_detalle where id_venta  = 15;
-
-select * from 
-
-##select id_venta from venta_detalle where id_producto = 8;
-
-select id, costo, unidad from compras where id_producto = 8  order by fecha_registro desc;
-select id, costo, unidad from compras where id_producto = 8 and fecha_registro < '2020-09-16 20:33:55.0' order by fecha_registro desc;
-
-##############################################
-##############################################
+################################################
+################################################
 ## ALTERS NUEVA VERSION PRECIOSO 05/10/2020
-##############################################
-##############################################
+################################################
 alter table venta_pago add column folio_voucher char(99);
 alter table venta_pago add column comision decimal(10,2);
 insert into catalogos(nombre, descripcion) values('CONST', 'CONSTANTES');
@@ -345,48 +242,24 @@ insert into catalogos(nombre, descripcion, catalogo_padre) values ('50', '50 PES
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('100', '100 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('200', '200 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('500', '500 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
-
+################################################
 
 ## ALTERS 20/10/2020
 ## CREATES DE RETIROS
 alter table sesion drop column retiro;
+################################################
 
+## ALTERS 20/10/2020
+## CREATES DE RETIROS
+alter table clientes modify column email char(80);
+rename table compras_reasingadas to compras_reasignadas;
+alter table sesion add column monto_final decimal(10,4);
+update catalogos set descripcion = 'COMISION' where id in (6,7);
+################################################
 
-truncate sesion;
-select * from sesion;
-update sesion set salida = null where id = 1;
-
-select * from venta_total;
-update venta_total set id_cliente = null, folio_factura = null where id = 1;
-
-
-select total, sub_total, iva from venta_total where id = 2;
-select * from venta_detalle where id_venta = 2;
-select * from venta_pago where id_venta = 2;
-
-update venta_detalle set cantidad = 1 where id = 3;
-
-update venta_total set total = 218, sub_total = 183.12, iva = 34.88 where id = 2;
-update venta_pago set monto = 218 where id = 2;
-
-select * from venta_pago;
-
-truncate venta_pago ;
-truncate venta_detalle ;
-truncate venta_total ;
-
-update venta_total set descuento = null where descuento = 0;
-
-insert into sesion (id_usuario, entrada, monto_inicial, retiro) values (2, '2020-10-09 09:27:33.0', 500, '2020-10-09 09:27:33.0');
-update sesion set salida = null where id = 9;
-
-truncate sesion;
-
-SELECT default_character_set_name FROM information_schema.SCHEMATA WHERE schema_name = 'ddwhite';
-
-SELECT T.table_name, CCSA.character_set_name
-FROM information_schema.`TABLES` T, information_schema.`COLLATION_CHARACTER_SET_APPLICABILITY` CCSA 
-WHERE CCSA.collation_name = T.table_collation AND T.table_schema = 'ddwhite'
-
-update venta_pago set forma_pago = 5, folio_voucher = null, comision = null where id = 26;
-update compras set cantidad = 600 where unidad = 76;
+################################################
+################################################
+################################################
+################################################
+################################################
+################################################

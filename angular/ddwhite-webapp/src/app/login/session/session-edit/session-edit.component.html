@@ -1,0 +1,60 @@
+<div class="div-container">
+
+  <mat-card class="box-form">
+    <mat-card-header>
+      <mat-card-title>Sesion</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content class="wrapper">
+      <form [formGroup]="editForm" (ngSubmit)="onSubmit()">
+
+        <mat-form-field [hidden]="true"><input matInput formControlName="id"></mat-form-field>
+
+        <mat-form-field class="full-width-input">
+          <input matInput formControlName="userFullname" placeholder="Usuario">
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="inDate" placeholder="Entrada">
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="outDate" placeholder="Salida">
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="initialAmount" style="text-align:right; padding: 0 10px" 
+          placeholder="Monto de apertura" maxlength="15" autocomplete="off" required>
+          <mat-error>Campo incorrecto, solo monto con maximo 2 decimales opcionales</mat-error>
+        </mat-form-field>
+
+        <mat-form-field class="midle-width-input">
+          <input matInput formControlName="finalAmount" style="text-align:right; padding: 0 10px" 
+          placeholder="Monto de cierre" maxlength="15" autocomplete="off" required>
+          <mat-error>Campo incorrecto, solo monto con maximo 2 decimales opcionales</mat-error>
+        </mat-form-field>
+
+        <mat-form-field [hidden]="true"><input matInput formControlName="userId"></mat-form-field>
+
+        <div class="wrapper">
+          <button mat-raised-button color="warn" type="button" (click)="regresar()">Regresar</button>
+          <span class="spacer"></span>
+          <button mat-raised-button color="primary" [disabled]="editForm.invalid">Actualizar</button>
+        </div>
+        
+      </form>
+
+      <div class="wrapper" *ngIf="withdrawals && withdrawals.length > 0">
+        <h3>Retiros</h3>
+        <ul>
+          <li *ngFor="let withdrawal of withdrawals">  
+            <span class="text-blue">{{withdrawal.dateCreated.substring(withdrawal.dateCreated.indexOf(' ')+1)}}</span> 
+            <span>por el monto de:</span> <span class="text-red">$ {{withdrawal.ammount}}</span>
+          </li>  
+        </ul>
+      </div>
+
+    </mat-card-content>
+  </mat-card>
+
+</div>

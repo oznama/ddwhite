@@ -235,7 +235,7 @@ public class ReportService {
 	}
 	
 	public List<Withdrawal> findWithdrawalCurrentSession(Long userId) {
-		return withdrawalService.findWithdrawalCurrentSession(sessionService.findCurrentSession(userId).getInDate());
+		return withdrawalService.findCurrentSession(sessionService.findCurrentSession(userId).getInDate());
 	}
 	
 	public void printGeneral(Long userId, Date startDate, Date endDate) {

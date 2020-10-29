@@ -1,5 +1,6 @@
 package mx.com.ddwhite.ws.service;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -22,6 +23,9 @@ public class SessionService {
 	
 	@Autowired
 	private SessionRepository repository;
+	
+	@Autowired
+	private UserService userService;
 	
 	public List<SessionDto> findByRange(Date startDate, Date endDate) {
 		final List<SessionDto> sessionsDto = new ArrayList<>();
@@ -69,16 +73,22 @@ public class SessionService {
 		return sessionDto;
 	}
 	
-	public String updateCloseSession(Long id) {
+	public String updateCloseSession(Long id, BigDecimal finalAmount) {
 		String outDate = GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
-		repository.updateCloseSession(id, outDate);
+		repository.updateCloseSession(id, outDate, finalAmount);
 		return outDate;
 	}
 	
 	private SessionDto getSessionDto(Session session) {
 		SessionDto sessionDto = new SessionDto();
-		BeanUtils.copyProperties(sessionDto, session);
+		BeanUtils.copyProperties(session, sessionDto);
+		sessionDto.setUserFullname(userService.findById(sessionDto.getUserId()).getFullName());
 		return sessionDto;
+	}
+	
+	public void updateAmounts(SessionDto sessionDto) {
+		System.out.printf("Updating session amounts, id: %d, initial: %s, final: %s\n", sessionDto.getId(), sessionDto.getInitialAmount(), sessionDto.getFinalAmount());
+		repository.updateAmounts(sessionDto.getId(), sessionDto.getInitialAmount(), sessionDto.getFinalAmount());
 	}
 
 }
