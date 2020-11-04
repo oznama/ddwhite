@@ -1,7 +1,5 @@
 package mx.com.ddwhite.ws.controller;
 
-import java.time.LocalDateTime;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -27,10 +25,7 @@ public class ExpenseController implements GenericController<Expense> {
 
 	@Override
 	public Page<Expense> findAll(Pageable pageable) {
-		LocalDateTime now = LocalDateTime.now();
-		String startDate = now.withDayOfMonth(1).toString();
-		String endDate = now.withDayOfMonth(now.getDayOfMonth()).toString();
-		return repository.findByDatePageable(startDate, endDate, pageable);
+		return repository.findAll(pageable);
 	}
 
 	@Override

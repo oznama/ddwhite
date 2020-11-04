@@ -13,7 +13,8 @@ export class ApiSessionService {
 	constructor(private http: HttpClient) { }
 
 	getByRange(startDate: Date, endDate: Date) : Observable<Session[]> {
-		return this.http.get<Session[]>(this.context + '/findByRange?startDate='+ startDate +'&endDate='+ endDate);
+		const queryParam = startDate && endDate ? '?startDate='+ startDate +'&endDate='+ endDate : '';
+		return this.http.get<Session[]>(this.context + '/findByRange' + queryParam);
 	}
 
 	getById(id: number): Observable<Session> {

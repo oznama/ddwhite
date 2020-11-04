@@ -240,8 +240,7 @@ public class ReportService {
 	
 	public void printGeneral(Long userId, Date startDate, Date endDate) {
 		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
-		endDate = GenericUtils.plusDay(endDate, 1);
-		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
+		String strEndDate = GenericUtils.dateToString(GenericUtils.plusDay(endDate, 1), GeneralConstants.FORMAT_DATE_TIME);
 		BigDecimal change = saleRepository.findByRange(strStartDate, strEndDate).stream().map( s -> s.getChange() ).reduce(BigDecimal.ZERO, BigDecimal::add);
 		ticketPrintService.general(userId, 
 			GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE), 

@@ -10,6 +10,11 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+import org.springframework.util.StringUtils;
+
+import mx.com.ddwhite.ws.constants.GeneralConstants;
+import mx.com.ddwhite.ws.service.utils.GenericUtils;
+
 @Entity
 @Table(name = "gastos")
 public class Expense implements Serializable {
@@ -32,7 +37,7 @@ public class Expense implements Serializable {
 	private Boolean taxeable;
 	@Column(name = "folio_factura")
 	private String invoice;
-	@Column(name = "fecha_registro", insertable = false, updatable = false)
+	@Column(name = "fecha_registro")
 	private String dateCreated;
 
 	public Long getId() {
@@ -84,6 +89,9 @@ public class Expense implements Serializable {
 	}
 
 	public String getDateCreated() {
+		System.out.printf("DateCreated: %s\n", dateCreated);
+		if(StringUtils.isEmpty(dateCreated))
+			dateCreated = GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
 		return dateCreated;
 	}
 

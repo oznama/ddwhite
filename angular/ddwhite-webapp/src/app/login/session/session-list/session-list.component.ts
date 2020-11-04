@@ -29,12 +29,15 @@ export class SessionListComponent implements OnInit {
       endDate: [],
       userFullname: []
     });
+    /*
     var now = new Date();
     now.setHours(0,0,0,0);
-    this.loadSessionToday(now, now);
+    this.loadSessionByDates(now, now);
+    */
+    this.loadSession();
   }
 
-  private loadSessionToday(startDate: Date, endDate: Date){
+  private loadSessionByDates(startDate: Date, endDate: Date){
   	this.apiService.getByRange(startDate, endDate).subscribe(response => {
     	this.sessions = of(response);
       this.sessionFiltred = of(response);
@@ -42,8 +45,16 @@ export class SessionListComponent implements OnInit {
     }, error => this.hasElements = false);
   }
 
+  private loadSession(){
+    this.apiService.getByRange(null, null).subscribe(response => {
+      this.sessions = of(response);
+      this.sessionFiltred = of(response);
+      this.hasElements = true;
+    }, error => this.hasElements = false);
+  }
+
   search() {
-    this.loadSessionToday(this.searchForm.controls.startDate.value, this.searchForm.controls.endDate.value);
+    this.loadSessionByDates(this.searchForm.controls.startDate.value, this.searchForm.controls.endDate.value);
   }
 
   edit(sessionId: number){

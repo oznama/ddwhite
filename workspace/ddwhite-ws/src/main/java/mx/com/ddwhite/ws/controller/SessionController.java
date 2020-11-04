@@ -1,6 +1,8 @@
 package mx.com.ddwhite.ws.controller;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -77,8 +79,13 @@ public class SessionController implements GenericController<SessionDto> {
 	}
 	
 	@GetMapping("/findByRange")
-	public List<SessionDto> findByRange(@RequestParam(value = "startDate", required = true) Date startDate, 
-			@RequestParam(value = "endDate", required = true) Date endDate) {
+	public List<SessionDto> findByRange(
+			@RequestParam(value = "startDate", required = false) Date startDate, 
+			@RequestParam(value = "endDate", required = false) Date endDate) {
+		if( startDate == null || endDate == null ) {
+			startDate = Date.from(LocalDate.now().withDayOfMonth(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+			endDate = Date.from(LocalDate.now().plusMonths(1).withDayOfMonth(1).minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant());
+		}
 		return service.findByRange(startDate, endDate);
 	}
 	

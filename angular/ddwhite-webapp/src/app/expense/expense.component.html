@@ -16,19 +16,24 @@
           <input matInput formControlName="invoice" placeholder="Folio de factura" maxlength="100" autocomplete="off">
         </mat-form-field>
 
-        <mat-form-field class="midle-width-input">
+        <mat-form-field class="quart-width-input">
           <input matInput formControlName="description" placeholder="Motivo del gasto" maxlength="100" required>
           <mat-error>Campo obligatorio</mat-error>
         </mat-form-field>
 
-		    <mat-form-field class="midle-width-input">
+		    <mat-form-field class="quart-width-input">
 	  	    <input matInput formControlName="amount" style="text-align:right; padding: 0 10px" placeholder="Monto" maxlength="15" autocomplete="off" required>
 	  	    <mat-error>Campo incorrecto, solo monto con maximo 2 decimales opcionales</mat-error>
 	  	  </mat-form-field>
 
-        <div class="wrapper">
-          <button mat-fab color="primary" [disabled]="expenseForm.invalid" (click)="save()"><mat-icon>save</mat-icon></button>
-        </div>
+        <mat-form-field class="quart-width-input">
+          <mat-label>Fecha del gasto</mat-label>
+          <input matInput formControlName="dateCreated" [matDatepicker]="dateCreated">
+          <mat-datepicker-toggle matSuffix [for]="dateCreated"></mat-datepicker-toggle>
+          <mat-datepicker #dateCreated disabled="false"></mat-datepicker>
+        </mat-form-field>
+
+        <button mat-fab color="primary" [disabled]="expenseForm.invalid" (click)="save()"><mat-icon>save</mat-icon></button>
       </form>
     </mat-card-content>
 
@@ -59,6 +64,7 @@
       <table class="table table-striped">
         <thead>
         <tr>
+          <th>Fecha</th>
           <th>Quien realizo</th>
           <th>Motivo del gasto</th>
           <th>Monto</th>
@@ -67,6 +73,7 @@
         </thead>
         <tbody>
         <tr *ngFor="let expense of expensesFiltred$ | async">
+          <td>{{expense.dateCreated.substring(0,expense.dateCreated.indexOf(' '))}}</td>
           <td>{{expense.userName}}</td>
           <td>{{expense.description}}</td>
           <td>{{expense.amount}}</td>

@@ -72,8 +72,7 @@ export class CatalogComponent implements OnInit {
   }
 
   nameDissabled(name: string): boolean {
-    return this.catalogSelected.name === CAT_CONST.CONST || 
-      this.catalogSelected.name === CAT_CONST.PAYMENT_METHOD ||
+    return this.catalogSelected.name === CAT_CONST.CONST || name === CAT_CONST.PAYMENT_METHOD_CASH ||
       (this.catalogSelected.name === CAT_CONST.UNITIES && (name === CAT_CONST.UNITY_PZA || name === CAT_CONST.UNITY_BOX));
   }
 

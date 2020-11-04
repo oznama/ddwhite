@@ -21,7 +21,7 @@ export class ExpenseComponent implements OnInit {
   expensesFiltred$: Observable<Expense[]>;
 
   page: number = 0;
-  sort: string = 'amount,desc';
+  sort: string = 'dateCreated,desc';
   totalPage: number;
 
   constructor(
@@ -37,7 +37,9 @@ export class ExpenseComponent implements OnInit {
   		description: ['', Validators.required],
   		amount: ['', [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
       invoice: [''],
-      taxeable: [false]
+      taxeable: [false],
+      dateCreated: [new Date()]
+      
   	});
   	this.searchForm = this.formBuilder.group({
       userFullName: [],
@@ -83,13 +85,20 @@ export class ExpenseComponent implements OnInit {
 	return expenses;
   }
 
+  private getDateInFormat(date: Date): string {
+    const month = (date.getMonth()+1);
+    const strMonth = (month < 10 ? '0' : '') + month;
+    return date.getFullYear() + '-' + strMonth + '-' + date.getDate();
+  }
+
   save() {
-  	const body = this.expenseForm.value;
+  	var body = this.expenseForm.value;
+    body.dateCreated = this.getDateInFormat(this.expenseForm.controls.dateCreated.value);
   	body.userId = +window.localStorage.getItem("userId");
     this.apiService.create(body)
       .subscribe( data => {
         this.alertService.success('Gasto registrado', alertOptions);
-        this.expenseForm.reset();
+        //this.expenseForm.reset();
         this.loadExpenses(this.page);
       }, error => {
         this.alertService.error('El gasto no ha sido guardado: ' + error.error, alertOptions);
