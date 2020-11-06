@@ -95,8 +95,7 @@ public class SessionController implements GenericController<SessionDto> {
 	}
 	
 	@GetMapping("/withdrawals")
-	public ResponseEntity<?> updateCloseSession(
-			@RequestParam(value = "id", required = true) Long id) {
+	public ResponseEntity<?> updateCloseSession(@RequestParam(value = "id", required = true) Long id) {
 		try {
 			return ResponseEntity.ok().body(withdawallService.findBySession(id));
 		} catch (DataAccessException e) {

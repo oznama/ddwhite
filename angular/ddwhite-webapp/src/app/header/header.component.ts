@@ -35,9 +35,11 @@ export class HeaderComponent implements OnInit {
   }
 
   onLogout(){
-    this.saleService.getChasInRegister(+window.localStorage.getItem("userId")).subscribe( response => {
+    //this.saleService.getChasInRegister(+window.localStorage.getItem("userId")).subscribe( response => {
+    this.saleService.getExcedent(+window.localStorage.getItem("userId")).subscribe( response => {
       if(response && response > 0) {
-        this.alertService.warn('Aun cuentas con $'+ response +' peso(s) de efectivo en caja', alertOptions)
+        //this.alertService.warn('Aun cuentas con $'+ response +' peso(s) de efectivo en caja', alertOptions)
+        this.alertService.warn('Cuentas con efectivo excedente en caja', alertOptions)
       } else {
         const dialogRef = this.dialog.open(CashoutTicketComponent, { data: false, disableClose: !this.privileges.isAdmin() });
         dialogRef.afterClosed().subscribe(result => {
@@ -84,11 +86,11 @@ export class HeaderComponent implements OnInit {
   }
 
   checkWithdrall() {
-    this.saleService.getChasInRegister(+window.localStorage.getItem("userId")).subscribe( response => {
+    this.saleService.getExcedent(+window.localStorage.getItem("userId")).subscribe( response => {
       if(response && response > 0) {
         const dialogRef = this.dialog.open(WithdrawallDialogComponent, {data: response});
       } else {
-        this.alertService.warn('No cuentas con efectivo en caja', alertOptions)
+        this.alertService.warn('No cuentas con efectivo excedente en caja', alertOptions)
       }
     });
   }

@@ -55,7 +55,9 @@ export class PaymentDialogComponent implements OnInit {
   }
 
   showComision(){
-    return this.catalogPayment.find( p => p.id === +this.paymentForm.controls.payment.value ).description === CAT_CONST.PAYMENT_METHOD_COM;
+    if(this.catalogPayment)
+      return this.catalogPayment.find( p => p.id === +this.paymentForm.controls.payment.value ).description === CAT_CONST.PAYMENT_METHOD_COM;
+    return false;
   }
 
   private round(n: number): number {

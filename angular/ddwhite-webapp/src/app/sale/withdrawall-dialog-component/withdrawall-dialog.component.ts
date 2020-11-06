@@ -15,6 +15,7 @@ export class WithdrawallDialogComponent implements OnInit {
   catalogDenominations: CatalogItem[];
   denominations: Withdrawall[] = [];
   private decimals: number = 2;
+  multiple: number = 0;
   
   constructor(
     public dialogRef: MatDialogRef<WithdrawallDialogComponent>, 
@@ -27,10 +28,10 @@ export class WithdrawallDialogComponent implements OnInit {
 
   ngOnInit() {
     this.excedent = this.data;
-    this.loadDiscounts();
+    this.loadCatalogs();
   }
 
-  private loadDiscounts(): void{
+  private loadCatalogs(): void{
     this.catalogService.getByName(CAT_CONST.DENOMINATION).subscribe(
       response => {
         this.catalogDenominations = response.items;
@@ -44,10 +45,15 @@ export class WithdrawallDialogComponent implements OnInit {
           this.denominations.push(denomination);
         })
       }, error => console.error(error));
+    this.catalogService.getByName(CAT_CONST.WITHDRAWAL_MULT).subscribe(response => this.multiple = +response.description);
   }
 
   isDisabledButton(){
-    return this.privileges.isAdmin() ? (this.captured <= 0 || this.captured > this.excedent) : this.captured != this.excedent;
+    const rule00 = this.captured > 0;
+    const rule01 = this.captured === this.excedent; //this.privileges.isAdmin() ? this.captured <= this.excedent : this.captured === this.excedent;
+    const rule02 = this.captured%this.multiple === 0 && this.captured < this.excedent;;
+    const enabled = rule00 && (rule01 || rule02);
+    return !enabled;
   }
 
   add(denomination: string){

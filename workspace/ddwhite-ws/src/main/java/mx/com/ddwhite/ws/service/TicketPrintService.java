@@ -188,9 +188,8 @@ public class TicketPrintService {
 		content.append(lineFormatted("A: " + end, AlignedEmun.CENTERED));
 		content.append(lineFormatted("Abierta con: $" + cashout.getInitialAmount().setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN), AlignedEmun.CENTERED));
 		content.append(lineFormatted("Cerrada con: $" + cashout.getCurrentAmount().setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN), AlignedEmun.CENTERED));
-		content.append(lineFormatted("Con diferencia de: $" + cashout.getCurrentAmount()
-				.subtract(cashout.getInitialAmount()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN), 
-				AlignedEmun.CENTERED));
+		BigDecimal diff = cashout.getCurrentAmount().subtract(cashout.getInitialAmount()).setScale(GeneralConstants.BIG_DECIMAL_ROUND, BigDecimal.ROUND_HALF_EVEN);
+		content.append(lineFormatted( diff.compareTo(BigDecimal.ZERO) == 0 ? "Efectivo balanceado" : (diff.compareTo(BigDecimal.ZERO) == 1 ? "Ganancia" : "Diferencia") +" de: $" + diff, AlignedEmun.CENTERED));	
 		content.append(GeneralConstants.LINE_BREAK);
 		content.append(lineFormatted(separator(null), AlignedEmun.CENTERED));
 		// Groups

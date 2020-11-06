@@ -93,7 +93,7 @@ create table if not exists gastos(
 	id_usuario bigint not null,
 	descripcion char(255) not null,
 	monto decimal(20,4) not null,
-	fecha_registro datetime default current_timestamp,
+	fecha_registro datetime not null,
 	deducible bit(1) not null,
 	folio_factura char(100),
 	primary key(id)

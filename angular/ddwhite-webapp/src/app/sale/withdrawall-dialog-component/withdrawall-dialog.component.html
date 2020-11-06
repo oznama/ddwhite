@@ -1,28 +1,30 @@
 <div mat-dialog-content>
 
-  <div style="height: 80%">
+  <div class="wrapper">
+    <span class="text-red">Efectivo en caja: $ {{excedent}}</span>
+    <span class="spacer"></span>
+    <span class="text-blue">Acumulado: $ {{captured}}</span>
+  </div><br>
 
-    <p>
-      <span class="text-red">Efectivo en caja: $ {{excedent}}</span>
-      <br>
-      <span class="text-blue">Acumulado: $ {{captured}}</span>
-    </p>
+  <div class="wrapper">
+    <button mat-raised-button color="primary" type="button" [disabled]="isDisabledButton()" (click)="withdrawall()">Retirar</button>
+  </div><br>
 
-    <div class="wrapper">
-      <button mat-raised-button color="primary" type="button" [disabled]="isDisabledButton()" (click)="withdrawall()">Retirar</button>
+  <div class="row">
+    <div class="col-3" *ngFor="let denomination of catalogDenominations">
+      <div class="wrapper">
+        <button mat-mini-fab color="warn" [disabled]="getQuantity(denomination.description)<=0" (click)="substract(denomination.description)">
+          <mat-icon>exposure_neg_1</mat-icon>
+        </button>
+        <button mat-raised-button color="warn" [disabled]="captured>=excedent" (click)="add(denomination.description)">
+          {{denomination.description}}
+        </button>
+        <span class="spacer"></span>
+        <span class="text-blue" style="font-size: 20px;">{{getQuantity(denomination.description)}}</span>
+      </div>
     </div>
+  </div><br>
 
-    <div *ngFor="let denomination of catalogDenominations">
-      <button mat-mini-fab color="warn" [disabled]="captured<=0" (click)="substract(denomination.description)">
-        <mat-icon>exposure_neg_1</mat-icon>
-      </button>
-      <button mat-raised-button color="warn" [disabled]="captured===excedent" (click)="add(denomination.description)">
-        {{denomination.description}}
-      </button>
-      <span class="spacer"></span>
-      <span class="text-blue">{{getQuantity(denomination.description)}}</span>
-    </div>
-
-  </div>
+  <span class="text-blue">Puedes realizar efectivo multiplo en {{multiple}} pesos</span>
 
 </div>

@@ -59,6 +59,7 @@ truncate table catalogos;
 insert into catalogos(nombre, descripcion) values('CONST', 'CONSTANTES');
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('MONTO_MIN_CAJA', '200', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('MONTO_MAX_CAJA', '500', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('RETIRO_MULTIPLO', '500', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('IVA', '16', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('DESCUENTO_ACTIVO', 'SI', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('MYSQL_PATH', 'C:\\Program Files\\MySQL\\MySQL Server 5.7', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
@@ -79,6 +80,7 @@ insert into catalogos(nombre, descripcion, catalogo_padre) values ('50%', '50', 
 
 insert into catalogos(nombre, descripcion) values('DENOMINACION', 'DENOMINACIONES DE EFECTIVO');
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('0.10', '10 CENTAVOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('0.20', '20 CENTAVOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('0.50', '50 CENTAVOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('1', '1 PESO', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
 insert into catalogos(nombre, descripcion, catalogo_padre) values ('2', '2 PESOS', (select id from (select id from catalogos where nombre = 'DENOMINACION') as id_catalog_parent));
@@ -256,10 +258,14 @@ rename table compras_reasingadas to compras_reasignadas;
 alter table sesion add column monto_final decimal(10,4);
 update catalogos set descripcion = 'COMISION' where id in (6,7);
 ################################################
+alter table gastos modify column fecha_registro datetime not null;
+################################################
+## ALTERS 05/11/2020
+insert into catalogos(nombre, descripcion, catalogo_padre) values ('RETIRO_MULTIPLO', '500', (select id from (select id from catalogos where nombre = 'CONST') as id_catalog_parent));
+################################################
+################################################
+################################################
+################################################
+################################################
 
-################################################
-################################################
-################################################
-################################################
-################################################
-################################################
+
