@@ -60,7 +60,7 @@ export class CashoutTicketComponent implements OnInit {
     this.reportService.printCashout(userId, startDate, endDate, +this.searchForm.controls.amount.value).subscribe(
       data => {
         if( !this.data )
-          this.dialogRef.close({ event: 'close', data: +this.searchForm.controls.amount.value });
+          this.dialogRef.close({ event: 'close', data: +this.searchForm.controls.amount.value});
       }, error => this.alertService.error('Error al generar corte de caja, error: ' + error.message, alertOptions));
   }
 

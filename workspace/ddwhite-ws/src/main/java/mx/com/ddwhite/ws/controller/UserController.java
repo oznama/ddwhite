@@ -1,5 +1,7 @@
 package mx.com.ddwhite.ws.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Page;
@@ -19,7 +21,8 @@ import mx.com.ddwhite.ws.service.UserService;
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/user")
 public class UserController implements GenericController<UserDto> {
-
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 	
 	@Autowired
 	private UserService service;
@@ -69,9 +72,11 @@ public class UserController implements GenericController<UserDto> {
 
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@RequestBody UserDto userDto) {
+		LOGGER.info("Logging user {}", userDto.getUsername());
 		try {
 			return ResponseEntity.ok(service.login(userDto));
 		} catch (Exception e) {
+			LOGGER.error("Impossible login, cause: {}", e.getMessage());
 			return ResponseEntity.status(HttpStatus.FORBIDDEN).body(e.getMessage());
 		}
 	}

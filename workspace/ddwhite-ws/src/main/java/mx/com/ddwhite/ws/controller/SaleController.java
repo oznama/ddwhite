@@ -3,6 +3,8 @@ package mx.com.ddwhite.ws.controller;
 import java.math.BigDecimal;
 import java.util.Date;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -22,6 +24,8 @@ import mx.com.ddwhite.ws.service.SaleService;
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/sale")
 public class SaleController implements GenericController<SaleDto> {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(SaleController.class);
 
 	@Autowired
 	private SaleService service;
@@ -41,6 +45,7 @@ public class SaleController implements GenericController<SaleDto> {
 		try {
 			return ResponseEntity.ok(service.save(entity).getId());
 		} catch (Throwable e) {
+			LOGGER.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getMessage());
 		}
 	}

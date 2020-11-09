@@ -89,7 +89,6 @@ public class Expense implements Serializable {
 	}
 
 	public String getDateCreated() {
-		System.out.printf("DateCreated: %s\n", dateCreated);
 		if(StringUtils.isEmpty(dateCreated))
 			dateCreated = GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME);
 		return dateCreated;

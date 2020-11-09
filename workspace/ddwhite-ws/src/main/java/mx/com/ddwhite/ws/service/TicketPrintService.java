@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +30,8 @@ import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class TicketPrintService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(TicketPrintService.class);
 
 	@Autowired
 	private CustomPrintUtils printUtil;
@@ -57,7 +61,7 @@ public class TicketPrintService {
 	private final int COLUMN_12_SIZE = 12;
 
 	public void test() {
-		System.out.println(printUtil.getPrinters());
+		LOGGER.debug(printUtil.getPrinters().toString());
 		// print some stuff
 		printUtil.printString(CustomPrintUtils.PRINTER,
 				"\n12345678901234567890123456789012345678901234567890123456789012345678901234567890\n");
@@ -67,8 +71,7 @@ public class TicketPrintService {
 	public void ticket(SaleDto saleDto) {
 		try {
 			String content = buildTicket(saleDto);
-			System.out.println(content);
-			System.out.println(separator('^'));
+			LOGGER.info(content);
 			printUtil.printString(CustomPrintUtils.PRINTER, content);
 			printUtil.printBytes(CustomPrintUtils.PRINTER, CustomPrintUtils.CUT_P);
 		} catch (Exception e) {
@@ -83,8 +86,7 @@ public class TicketPrintService {
 	public void cashout(Cashout cashout, Long userId, String start, String end, Long sessionId) {
 		try {
 			String content = buildCashout(cashout, userId, start, end, sessionId);
-			System.out.println(content);
-			System.out.println(separator('^'));
+			LOGGER.info(content);
 			printUtil.printString(CustomPrintUtils.PRINTER, content);
 			printUtil.printBytes(CustomPrintUtils.PRINTER, CustomPrintUtils.CUT_P);
 		} catch (Exception e) {
@@ -95,8 +97,7 @@ public class TicketPrintService {
 	public void withdrawall(Long userId, List<WithdrawalDto> denominations) {
 		try {
 			String content = buildWithdrawall(denominations, userId);
-			System.out.println(content);
-			System.out.println(separator('^'));
+			LOGGER.info(content);
 			printUtil.printString(CustomPrintUtils.PRINTER, content);
 			printUtil.printBytes(CustomPrintUtils.PRINTER, CustomPrintUtils.CUT_P);
 		} catch (Exception e) {
@@ -107,8 +108,7 @@ public class TicketPrintService {
 	public void general(Long userId, String start, String end, AccountInputTotal accountInputTotal, List<Payment> payments, List<AccountOutput> purchases, List<AccountOutput> expenses) {
 		try {
 			String content = buildGeneral(userId, start, end, accountInputTotal, payments, purchases, expenses);
-			System.out.println(content);
-			System.out.println(separator('^'));
+			LOGGER.info(content);
 			printUtil.printString(CustomPrintUtils.PRINTER, content);
 			printUtil.printBytes(CustomPrintUtils.PRINTER, CustomPrintUtils.CUT_P);
 		} catch (Exception e) {
@@ -172,7 +172,7 @@ public class TicketPrintService {
 			String comission = buildLine(payment.getComision() != null ? "$" + payment.getComision() : "", AlignedEmun.RIGHT, columnAmouSize);
 			content.append(strPayment).append(ammount).append(comission).append(GeneralConstants.LINE_BREAK);
 		});
-		
+		content.append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK).append(GeneralConstants.LINE_BREAK);
 		return content.toString();
 	}
 

@@ -43,6 +43,7 @@ insert into roles_privilegios(id_role, id_privilegio) values(4, 6);
 
 insert into usuarios (username, password, nombre_completo, id_role) values ('root', 'myR0o7PaSsW0rd', 'Root user', 1);
 update usuarios set username = 'root' where username = 'admin';
+update usuarios set password = '12345678' where username = 'Chris';
 
 select * from compras c where c.id_producto = 8;
 /*

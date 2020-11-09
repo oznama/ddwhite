@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -27,6 +29,8 @@ import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class UserService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(UserService.class);
 
 	private final String MODULE = User.class.getSimpleName();
 
@@ -86,6 +90,7 @@ public class UserService {
 	}
 
 	public UserGrantDto login(UserDto userDto) throws Exception {
+		LOGGER.debug("Logig service for user: {} with pswd: ****{}", userDto.getUsername(), userDto.getPassword().substring(6));
 		User userFinded = repository.findByUsername(userDto.getUsername());
 		if (userFinded != null) {
 			if (userDto.getPassword().equals(userFinded.getPassword()))

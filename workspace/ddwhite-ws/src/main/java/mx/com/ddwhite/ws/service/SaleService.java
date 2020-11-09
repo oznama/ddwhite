@@ -6,6 +6,8 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -32,6 +34,8 @@ import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class SaleService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(SaleService.class);
 	
 	private final String MODULE = Sale.class.getSimpleName();
 	
@@ -72,7 +76,11 @@ public class SaleService {
 			ticketPrintService.ticket(saleDto);
 			return saleDto;
 		} catch (DataAccessException e) {
+			LOGGER.error("DataAccessException to save sale", e);
 			throw e.getRootCause();
+		} catch (Exception e) {
+			LOGGER.error("Exception to save sale", e);
+			throw e;
 		}
 	}
 	
@@ -148,6 +156,7 @@ public class SaleService {
 	
 	public List<SaleDto> findByUserAndRange(Long userId, String startDate, String endDate) {
 		List<Sale> sales = saleRepository.findByUserAndRange(userId, startDate, endDate);
+		LOGGER.debug("Recuperando las ventas del usuario {} en el periodo de [{} - {}]\nVentas realizadas: %d\n", userId, startDate, endDate, sales.size());
 		return buildSalesDto(sales);
 	}
 	

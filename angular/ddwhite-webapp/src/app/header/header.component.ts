@@ -43,7 +43,7 @@ export class HeaderComponent implements OnInit {
       } else {
         const dialogRef = this.dialog.open(CashoutTicketComponent, { data: false, disableClose: !this.privileges.isAdmin() });
         dialogRef.afterClosed().subscribe(result => {
-          if( result && result.data ) this.closeSession(result.data);
+          if(result) this.closeSession(result.data);
           else this.apiService.logout();
         });
       }
@@ -53,9 +53,9 @@ export class HeaderComponent implements OnInit {
   private closeSession(finalAmmount: number){
     this.sessionService.getCurrentSession(+window.localStorage.getItem("userId")).subscribe(data => {
       if (data && data.id) {
-        this.sessionService.close(data.id, finalAmmount).subscribe(data => {
-          this.apiService.logout();
-        }, error => this.alertService.error('No se ha podido cerrar sesion, error: ' + error.error, alertOptions));
+        this.sessionService.close(data.id, finalAmmount).subscribe(
+          data => this.apiService.logout(), 
+          error => this.alertService.error('No se ha podido cerrar sesion, error: ' + error.error, alertOptions));
       } else {
         if( this.privileges.isAdmin() ) this.apiService.logout();
       }

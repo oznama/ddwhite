@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
@@ -27,6 +29,8 @@ import mx.com.ddwhite.ws.service.TicketPrintService;
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RequestMapping("/report")
 public class ReportController {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(ReportController.class);
 	
 	@Autowired
 	private ReportService service;
@@ -70,9 +74,11 @@ public class ReportController {
 			@RequestParam(value = "endDate", required = false) Date endDate,
 			@RequestParam(value = "cashInBox", required = false) BigDecimal cashInBox) {
 		try {
+			LOGGER.info("Printing cashout with params [userId: {}, cash in box: {}, startDate: {}, endDate: {}]", userId, cashInBox, startDate, endDate);
 			service.printCashout(userId, startDate, endDate, cashInBox);
 			return ResponseEntity.ok().build();
 		}catch (Exception e) {
+			LOGGER.error(e.getMessage());
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}

@@ -61,8 +61,7 @@ public class WithdrawalService {
 	}
 	
 	public List<Withdrawal> findCurrentSession(String sessionInDate) {
-		return findByRange(sessionInDate, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME)
-		);
+		return findByRange(sessionInDate, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 	}
 	
 	public BigDecimal getAmountBySessionAndRange(Long sessionId, String startDate, String endDate) {

@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -34,6 +36,8 @@ import mx.com.ddwhite.ws.service.utils.ReportUtils;
 
 @Service
 public class ReportService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(ReportService.class);
 	
 	@Autowired
 	private AccountOutputService outService;
@@ -169,6 +173,7 @@ public class ReportService {
 	}
 	
 	public Cashout getCashout(Long userId, String startDate, String endDate) {
+		LOGGER.debug("Haciendo cashout en fechas [{} - {}]\n", startDate, endDate);
 		return cashoutService.getCashout(userId, startDate, endDate);
 	}
 	
@@ -199,7 +204,8 @@ public class ReportService {
 			sessionDto = sessionService.findCurrentSession(userId);
 			if( sessionDto.getOutDate() == null )
 				sessionDto.setOutDate(GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
-			cashout = getCashout(sessionDto.getInDate(), sessionDto.getOutDate());
+//			cashout = getCashout(sessionDto.getInDate(), sessionDto.getOutDate());
+			cashout = getCashout(userId, sessionDto.getInDate(), sessionDto.getOutDate());
 		}
 		cashout.setInitialAmount(sessionDto.getInitialAmount() != null ? sessionDto.getInitialAmount() : BigDecimal.ZERO);
 		cashout.setCurrentAmount(cashInBox);
@@ -235,7 +241,9 @@ public class ReportService {
 	}
 	
 	public List<Withdrawal> findWithdrawalCurrentSession(Long userId) {
-		return withdrawalService.findCurrentSession(sessionService.findCurrentSession(userId).getInDate());
+//		return withdrawalService.findCurrentSession(sessionService.findCurrentSession(userId).getInDate());
+		SessionDto currentSession = sessionService.findCurrentSession(userId);
+		return withdrawalService.findBySessionAndRange(currentSession.getId(), currentSession.getInDate(), GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 	}
 	
 	public void printGeneral(Long userId, Date startDate, Date endDate) {

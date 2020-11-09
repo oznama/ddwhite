@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class SessionService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(SessionService.class);
 	
 	private final String MODULE = Session.class.getSimpleName();
 	
@@ -87,7 +91,7 @@ public class SessionService {
 	}
 	
 	public void updateAmounts(SessionDto sessionDto) {
-		System.out.printf("Updating session amounts, id: %d, initial: %s, final: %s\n", sessionDto.getId(), sessionDto.getInitialAmount(), sessionDto.getFinalAmount());
+		LOGGER.debug("Updating session amounts, id: %d, initial: %s, final: %s\n", sessionDto.getId(), sessionDto.getInitialAmount(), sessionDto.getFinalAmount());
 		repository.updateAmounts(sessionDto.getId(), sessionDto.getInitialAmount(), sessionDto.getFinalAmount());
 	}
 
