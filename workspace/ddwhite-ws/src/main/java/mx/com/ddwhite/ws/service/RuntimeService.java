@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import mx.com.ddwhite.ws.constants.GeneralConstants;
 
 @Service
 public class RuntimeService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(RuntimeService.class);
 
 	@Autowired
 	private CatalogService catalogService;
@@ -37,12 +41,13 @@ public class RuntimeService {
 		try {
 			return mysqldumpBackUp(dbUsername, dbPassword);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error to do mysql dump", e);
 			return "";
 		}
 	}
 
 	private String mysqldumpBackUp(String user, String pswd) throws IOException, InterruptedException {
+		LOGGER.debug("Mysql dump backup...");
 		try {
 			String command = catalogService.findByName(GeneralConstants.CATALOG_MYSQL_PATH).getDescription().trim();
 			command = String.format(command + MYSQLDUMP, user, pswd);
@@ -50,13 +55,13 @@ public class RuntimeService {
 			InputStream is = p.getInputStream();
 			return new BufferedReader(new InputStreamReader(is)).lines().collect(Collectors.joining("\n"));
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error to mysql dump", e);
 			return null;
 		}
 	}
 
-	private boolean mysqldumpRestore(InputStream in, String user, String pswd)
-			throws IOException, InterruptedException {
+	private boolean mysqldumpRestore(InputStream in, String user, String pswd) throws IOException, InterruptedException {
+		LOGGER.debug("Mysql dump restoring...");
 		try {
 			String command = catalogService.findByName(GeneralConstants.CATALOG_MYSQL_PATH).getDescription().trim();
 			command = String.format(command + MYSQL_RESTORE, user, pswd);
@@ -72,7 +77,7 @@ public class RuntimeService {
 			os.close();
 			return true;
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error to restore dump", e);
 			return false;
 		}
 	}

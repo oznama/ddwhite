@@ -1,5 +1,7 @@
 package mx.com.ddwhite.ws.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,6 +20,8 @@ import mx.com.ddwhite.ws.service.RuntimeService;
 @RequestMapping("/database")
 public class DumpDBController {
 	
+	private final Logger LOGGER = LoggerFactory.getLogger(DumpDBController.class);
+	
 	@Autowired
 	private RuntimeService runtimeService;
 	
@@ -30,7 +34,7 @@ public class DumpDBController {
 			} else
 				return ResponseEntity.badRequest().body("File null");
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error restoring database", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}

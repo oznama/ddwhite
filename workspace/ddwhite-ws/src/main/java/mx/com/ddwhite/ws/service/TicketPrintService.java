@@ -69,13 +69,14 @@ public class TicketPrintService {
 	}
 
 	public void ticket(SaleDto saleDto) {
+		LOGGER.debug("Building sale ticket...");
 		try {
 			String content = buildTicket(saleDto);
 			LOGGER.info(content);
 			printUtil.printString(CustomPrintUtils.PRINTER, content);
 			printUtil.printBytes(CustomPrintUtils.PRINTER, CustomPrintUtils.CUT_P);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error building sale ticket", e);
 		}
 	}
 
@@ -84,35 +85,38 @@ public class TicketPrintService {
 	}
 	
 	public void cashout(Cashout cashout, Long userId, String start, String end, Long sessionId) {
+		LOGGER.debug("Building cashout ticket with userId {} en dates [{} - {}]...", userId, start, end);
 		try {
 			String content = buildCashout(cashout, userId, start, end, sessionId);
 			LOGGER.info(content);
 			printUtil.printString(CustomPrintUtils.PRINTER, content);
 			printUtil.printBytes(CustomPrintUtils.PRINTER, CustomPrintUtils.CUT_P);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error building cashout ticket", e);
 		}
 	}
 	
 	public void withdrawall(Long userId, List<WithdrawalDto> denominations) {
+		LOGGER.debug("Building withdrawal ticket with userId...", userId);
 		try {
 			String content = buildWithdrawall(denominations, userId);
 			LOGGER.info(content);
 			printUtil.printString(CustomPrintUtils.PRINTER, content);
 			printUtil.printBytes(CustomPrintUtils.PRINTER, CustomPrintUtils.CUT_P);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error building withdrawal ticket", e);
 		}
 	}
 	
 	public void general(Long userId, String start, String end, AccountInputTotal accountInputTotal, List<Payment> payments, List<AccountOutput> purchases, List<AccountOutput> expenses) {
+		LOGGER.debug("Building general report ticket with userId {} en dates [{} - {}]...", userId, start, end);
 		try {
 			String content = buildGeneral(userId, start, end, accountInputTotal, payments, purchases, expenses);
 			LOGGER.info(content);
 			printUtil.printString(CustomPrintUtils.PRINTER, content);
 			printUtil.printBytes(CustomPrintUtils.PRINTER, CustomPrintUtils.CUT_P);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error building general report ticket", e);
 		}
 	}
 	

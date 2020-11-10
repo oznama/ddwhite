@@ -70,6 +70,7 @@ public class ReportService {
 	private WithdrawalService withdrawalService;
 	
 	public ReportGeneral getReportGeneral(String startDate, String endDate){
+		LOGGER.debug("General Report in range [{} - {}]", startDate, endDate);
 		ReportGeneral general = new ReportGeneral();
 		List<AccountInput> in = getInputs(startDate, endDate);
 		List<AccountOutput> out = getOutputs(startDate, endDate);
@@ -85,6 +86,7 @@ public class ReportService {
 	}
 	
 	public String getReportGeneralInCSV(Date startDate, Date endDate) {
+		LOGGER.debug("General Report to CSV in range [{} - {}]", startDate, endDate);
 		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
 		endDate = GenericUtils.plusDay(endDate, 1);
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
@@ -163,17 +165,14 @@ public class ReportService {
 	}
 	
 	/**
-	 * This method is used by print on server using TicketPrintService class
+	 * this method is used by print on server using TicketPrintService class
+	 * @param userId
 	 * @param startDate
 	 * @param endDate
 	 * @return
 	 */
-	public Cashout getCashout(String startDate, String endDate) {
-		return cashoutService.getCashout(startDate, endDate);
-	}
-	
 	public Cashout getCashout(Long userId, String startDate, String endDate) {
-		LOGGER.debug("Haciendo cashout en fechas [{} - {}]\n", startDate, endDate);
+		LOGGER.debug("Get Cashout with id {} and dates [{} - {}]\n", userId, startDate, endDate);
 		return cashoutService.getCashout(userId, startDate, endDate);
 	}
 	
@@ -184,10 +183,11 @@ public class ReportService {
 	 * @return
 	 */
 	public Cashout getCashout(Date startDate, Date endDate) {
+		LOGGER.debug("Get Cashout with dates [{} - {}]\n", startDate, endDate);
 		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
 		endDate = GenericUtils.plusDay(endDate, 1);
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME_SHORT);
-		return getCashout(strStartDate, strEndDate);
+		return cashoutService.getCashout(strStartDate, strEndDate);
 	}
 	
 	public void printCashout(Long userId, Date startDate, Date endDate, BigDecimal cashInBox) {
@@ -204,7 +204,6 @@ public class ReportService {
 			sessionDto = sessionService.findCurrentSession(userId);
 			if( sessionDto.getOutDate() == null )
 				sessionDto.setOutDate(GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
-//			cashout = getCashout(sessionDto.getInDate(), sessionDto.getOutDate());
 			cashout = getCashout(userId, sessionDto.getInDate(), sessionDto.getOutDate());
 		}
 		cashout.setInitialAmount(sessionDto.getInitialAmount() != null ? sessionDto.getInitialAmount() : BigDecimal.ZERO);

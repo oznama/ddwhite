@@ -2,6 +2,8 @@ package mx.com.ddwhite.ws.service;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -14,6 +16,8 @@ import mx.com.ddwhite.ws.model.Catalog;
 
 @Service
 public class CompanyDataService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(CompanyDataService.class);
 	
 	@Autowired
 	private CatalogService catalogService;
@@ -50,7 +54,7 @@ public class CompanyDataService {
 			try {
 				catalogService.create(catalogItem);
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("Error creating catalog item", e);
 			}
 		}
 	}
@@ -60,7 +64,7 @@ public class CompanyDataService {
 		try {
 			catalogService.updateDescription(id, description);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error updating catalog item", e);
 		}
 	}
 

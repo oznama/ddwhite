@@ -3,6 +3,8 @@ package mx.com.ddwhite.ws.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ import mx.com.ddwhite.ws.repository.CatalogRepository;
 
 @Service
 public class CatalogService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(CatalogService.class);
 
 	private final String MODULE = Catalog.class.getSimpleName();
 
@@ -28,26 +32,28 @@ public class CatalogService {
 			try {
 				catalogsReadDto.add(buildCatalog(catalog));
 			} catch (Exception e) {
-				e.printStackTrace();
+				LOGGER.error("Error finding all", e);
 			}
 		});
 		return catalogsReadDto;
 	}
 
 	public CatalogReadDto findById(Long id) {
+		LOGGER.debug("Finding by id {}", id);
 		try {
 			return buildCatalog(repository.findById(id).orElseThrow(() -> new ResourceNotFoundException(MODULE, "id", id)));
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error finding by id", e);
 		}
 		return null;
 	}
 
 	public CatalogReadDto findByName(String name) {
+		LOGGER.debug("Finding by name {}", name);
 		try {
 			return buildCatalog(repository.findByName(name.toUpperCase()));
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error finding by name", e);
 		}
 		return null;
 	}

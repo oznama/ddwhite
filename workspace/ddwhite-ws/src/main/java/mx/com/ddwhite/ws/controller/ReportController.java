@@ -78,7 +78,7 @@ public class ReportController {
 			service.printCashout(userId, startDate, endDate, cashInBox);
 			return ResponseEntity.ok().build();
 		}catch (Exception e) {
-			LOGGER.error(e.getMessage());
+			LOGGER.error("Error printing cashout ticket", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
@@ -91,7 +91,7 @@ public class ReportController {
 		} catch(ResourceNotFoundException rnf) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(rnf.getMessage());
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error reprinting sale ticket", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
@@ -111,6 +111,7 @@ public class ReportController {
 			ticketPrintService.withdrawall(userId, denominations);
 			return ResponseEntity.ok().build();
 		}catch (Exception e) {
+			LOGGER.error("Error printing withdrawal ticket", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
@@ -128,7 +129,7 @@ public class ReportController {
 			service.printGeneral(userId, startDate, endDate);
 			return ResponseEntity.ok().build();
 		}catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error printing general report ticket", e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}

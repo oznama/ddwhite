@@ -6,6 +6,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
@@ -28,6 +30,8 @@ import mx.com.ddwhite.ws.service.utils.GenericUtils;
 
 @Service
 public class PurchaseService {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(PurchaseService.class);
 
 	private final String MODULE = Purchase.class.getSimpleName();
 
@@ -135,7 +139,7 @@ public class PurchaseService {
 		try {
 			return repository.findCosts(productId, unity, date).get(0);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error getting purchase by product and date, params [productId: {}, unity: {}, date: {}], error: {}", productId, unity, date, e.getMessage());
 			return BigDecimal.ZERO;
 		}
 	}

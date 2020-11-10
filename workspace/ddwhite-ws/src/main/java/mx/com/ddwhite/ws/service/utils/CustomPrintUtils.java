@@ -21,12 +21,16 @@ import javax.print.attribute.PrintRequestAttributeSet;
 import javax.print.attribute.standard.MediaSizeName;
 import javax.print.attribute.standard.OrientationRequested;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CustomPrintUtils implements Printable {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(CustomPrintUtils.class);
 	
 	// cut that paper!
 	public static final byte[] CUT_P = new byte[] { 0x1d, 'V', 1 };
@@ -89,7 +93,7 @@ public class CustomPrintUtils implements Printable {
 			Doc doc = new SimpleDoc(bytes, flavor, null);
 			job.print(doc, null);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error printing string", e);
 		}
 
 	}
@@ -109,7 +113,7 @@ public class CustomPrintUtils implements Printable {
 			Doc doc = new SimpleDoc(bytes, flavor, null);
 			job.print(doc, null);
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error printing bytes", e);
 		}
 	}
 	
@@ -132,7 +136,7 @@ public class CustomPrintUtils implements Printable {
 			job.print(doc, null);
 			fis.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOGGER.error("Error printing image", e);
 		}
 	}
 
