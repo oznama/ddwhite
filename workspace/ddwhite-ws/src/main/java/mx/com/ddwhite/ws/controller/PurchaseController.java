@@ -3,10 +3,14 @@ package mx.com.ddwhite.ws.controller;
 import java.util.Date;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,6 +31,8 @@ import mx.com.ddwhite.ws.service.PurchaseService;
 @CrossOrigin(allowedHeaders = "*", origins = "*")
 @RequestMapping("/purchase")
 public class PurchaseController implements GenericController<PurchaseDto> {
+	
+	private final Logger LOGGER = LoggerFactory.getLogger(PurchaseController.class);
 
 	@Autowired
 	private PurchaseService service;
@@ -46,7 +52,11 @@ public class PurchaseController implements GenericController<PurchaseDto> {
 		try {
 			return ResponseEntity.ok(service.create(purchaseDto));
 		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		} catch (Throwable e) {
+			LOGGER.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
@@ -56,14 +66,26 @@ public class PurchaseController implements GenericController<PurchaseDto> {
 			service.update(purchaseDto);
 			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		} catch (Throwable e) {
+			LOGGER.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
 	@Override
 	public ResponseEntity<?> delete(Long id) {
-		service.delete(id);
-		return ResponseEntity.ok().build();
+		try {
+			service.delete(id);
+			return ResponseEntity.ok().build();
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La venta con folio " + id + " no existe");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 	
 	@PostMapping("/saveBulk")
@@ -72,7 +94,11 @@ public class PurchaseController implements GenericController<PurchaseDto> {
 			service.createBuilk(purchasesDto);
 			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		} catch (Throwable e) {
+			LOGGER.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 	
@@ -92,7 +118,11 @@ public class PurchaseController implements GenericController<PurchaseDto> {
 			service.saveReasign(purchaseReasingDto);
 			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
+			LOGGER.error(e.getMessage());
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		} catch (Throwable e) {
+			LOGGER.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 	

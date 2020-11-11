@@ -1,3 +1,5 @@
+import { Product } from './product.model';
+
 export class Purchase {
 	id: number;
 	productId: number;
@@ -10,6 +12,7 @@ export class Purchase {
 	unityDesc: string;
 	numPiece: number;
 	userId: number;
+	product: Product;
 
 	constructor(init?:Partial<Purchase>){
 		Object.assign(this, init);

@@ -41,7 +41,7 @@ export class HeaderComponent implements OnInit {
         //this.alertService.warn('Aun cuentas con $'+ response +' peso(s) de efectivo en caja', alertOptions)
         this.alertService.warn('Cuentas con efectivo excedente en caja', alertOptions)
       } else {
-        const dialogRef = this.dialog.open(CashoutTicketComponent, { data: false, disableClose: !this.privileges.isAdmin() });
+        const dialogRef = this.dialog.open(CashoutTicketComponent, { data: false, disableClose: !this.privileges.closeDialogs() });
         dialogRef.afterClosed().subscribe(result => {
           if(result) this.closeSession(result.data);
           else this.apiService.logout();
@@ -70,8 +70,8 @@ export class HeaderComponent implements OnInit {
     this.dialog.open(ReportFilterDialogComponent);
   }
 
-  reprintTicket(){
-    this.dialog.open(ReprintTicketDialogComponent);
+  actionSale(mode: string){
+    this.dialog.open(ReprintTicketDialogComponent, { data: { mode: mode} });
   }
 
   makeCashout() {

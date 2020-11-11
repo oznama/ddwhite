@@ -4,11 +4,19 @@
     <mat-card>
 
       <mat-card-header>
-        <mat-card-title>Reempresion de Ticket</mat-card-title>
+        <mat-card-title>{{cardTitle}}</mat-card-title>
       </mat-card-header>
 
       <mat-card-content>
-        <form [formGroup]="searchForm" (ngSubmit)="reprint()">
+
+        <div class="wrapper">
+          <span class="text-red" *ngIf="data.mode==='cancel'">
+            Esta es una operaci&oacute;n irreversible e irrecuperable<br>
+            consideralo antes de realizar la siguiente acci&oacute;n<br>
+          </span>
+        </div>
+
+        <form [formGroup]="searchForm" (ngSubmit)="onSubmit()">
 
           <mat-form-field class="full-width-input">
             <input matInput type="number" min="1" formControlName="saleId" placeholder="Folio de la compra" autocomplete="off">
@@ -16,7 +24,7 @@
           </mat-form-field>
 
           <div class="wrapper">
-            <button mat-fab color="primary" [disabled]="searchForm.invalid"><mat-icon>receipt</mat-icon></button>
+            <button mat-fab color="{{color}}" [disabled]="searchForm.invalid"><mat-icon>{{matIcon}}</mat-icon></button>
           </div>
         </form>
       </mat-card-content>

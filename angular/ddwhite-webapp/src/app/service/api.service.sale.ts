@@ -30,6 +30,10 @@ export class ApiSaleService {
     return this.http.put<any>(this.context + '/update', sale, observeResponse);
   }
 
+  delete(id: number) {
+    return this.http.delete<any>(this.context + '/delete/' + id);
+  }
+
   getExcedent(userId: number) {
     return this.http.get<number>(this.context + '/getExcedent?userId='+ userId);
   }

@@ -90,7 +90,7 @@ public class UserService {
 	}
 
 	public UserGrantDto login(UserDto userDto) throws Exception {
-		LOGGER.debug("Logig service for user: {} with pswd: ****{}", userDto.getUsername(), userDto.getPassword().substring(6));
+		LOGGER.debug("Logig service for user: {} with pswd: ****{}", userDto.getUsername(), userDto.getPassword().length()>6 ? userDto.getPassword().substring(6) : "");
 		User userFinded = repository.findByUsername(userDto.getUsername());
 		if (userFinded != null) {
 			if (userDto.getPassword().equals(userFinded.getPassword()))

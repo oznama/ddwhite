@@ -19,7 +19,7 @@
 		</RollingFile>
 	</Appenders>
 	<Loggers>
-		<Logger name="mx.com.ddwhite.ws" level="debug" additivity="false">
+		<Logger name="mx.com.ddwhite.ws" level="info" additivity="false">
 			<AppenderRef ref="RollingFile" />
 		</Logger>
 		<Logger name="org.springframework.boot" level="error" additivity="false">

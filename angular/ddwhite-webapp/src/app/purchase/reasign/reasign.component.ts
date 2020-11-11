@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {FormBuilder, FormGroup} from "@angular/forms";
 import {Purchase, PurchaseReasign} from '../../model/purchase.model';
 import { AlertService, alertOptions } from '../../_alert';
 import { ApiPurchaseService } from '../../service/module.service';
@@ -11,7 +12,9 @@ import {PurchaseDialogCostComponent} from '../purchase-dialog-cost/purchase-dial
 })
 export class PurchaseReasignComponent implements OnInit {
 
+  searchForm: FormGroup;
   purchases: Purchase[];
+  purchasesFiltred$: Purchase[];
   purchasesByProduct: Purchase[];
 
   purchaseOrigin: number;
@@ -19,10 +22,14 @@ export class PurchaseReasignComponent implements OnInit {
   
   constructor(
   	private purchaseService: ApiPurchaseService,
-  	public alertService:AlertService) { 
+  	public alertService:AlertService,
+    private formBuilder: FormBuilder) { 
   }
 
   ngOnInit(): void {
+    this.searchForm = this.formBuilder.group({
+      productName: []
+    });
   	this.loadPurchases();
   }
 
@@ -36,10 +43,23 @@ export class PurchaseReasignComponent implements OnInit {
 
   private loadPurchases(): void{
   	this.purchaseService.findForReasign().subscribe( response => {
-    	this.purchases = response
+    	this.purchases = response;
+      this.purchasesFiltred$ = response;
     }, error =>{
     	console.error(error);
     });
+  }
+
+  doFilter(): void{
+    var productName = this.searchForm.controls.productName.value;
+    if( productName ){
+      this.purchasesFiltred$ = this.purchases.filter(purchase => purchase.product.nameLarge.toLowerCase().includes(productName))
+    }
+  }
+
+  clearFilter(): void{
+    this.searchForm.reset();
+    this.purchasesFiltred$ = this.purchases;
   }
 
   cancelar() {

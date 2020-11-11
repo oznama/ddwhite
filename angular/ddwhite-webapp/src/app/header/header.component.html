@@ -2,16 +2,22 @@
 
   <mat-icon routerLink="/home">home</mat-icon>
 
-  <button mat-button [matMenuTriggerFor]="menuReport">
-    <mat-icon>filter_1</mat-icon> Reportes
+    <button mat-button [matMenuTriggerFor]="menuOperGen" *ngIf="privileges.showCashout | async">
+    <mat-icon>filter_1</mat-icon> General
   </button>
-  <mat-menu #menuReport="matMenu" class="mat-menu-panel.my-class">
-    <button mat-menu-item class="toolbar-button" (click)="reprintTicket()" *ngIf="privileges.showCashout | async">
+  <mat-menu #menuOperGen="matMenu" class="mat-menu-panel.my-class">
+    <button mat-menu-item class="toolbar-button" (click)="actionSale('reprint')">
       <mat-icon>receipt</mat-icon><span>Reimprimir ticket</span>
     </button>
-    <button mat-menu-item class="toolbar-button" (click)="checkWithdrall()" *ngIf="privileges.showCashout | async">
+    <button mat-menu-item class="toolbar-button" (click)="checkWithdrall()">
       <mat-icon>money</mat-icon><span>Retirar efectivo</span>
     </button>
+  </mat-menu>
+
+  <button mat-button [matMenuTriggerFor]="menuReport" *ngIf="privileges.isReporter | async">
+    <mat-icon>filter_2</mat-icon> Reportes
+  </button>
+  <mat-menu #menuReport="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item class="toolbar-button" (click)="makeCashout()" *ngIf="privileges.isRoleAdmin | async">
       <mat-icon>receipt_long</mat-icon><span>Corte de caja</span>
     </button>
@@ -23,8 +29,8 @@
     </button>
   </mat-menu>
   
-  <button mat-button [matMenuTriggerFor]="menuInven" *ngIf="privileges.isRoleAdmin | async">
-    <mat-icon>filter_2</mat-icon> Inventario
+  <button mat-button [matMenuTriggerFor]="menuInven" *ngIf="privileges.isPurchaser | async">
+    <mat-icon>filter_3</mat-icon> Inventario
   </button>
   <mat-menu #menuInven="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item routerLink="/purchases" *ngIf="privileges.isPurchaser | async">
@@ -33,10 +39,13 @@
     <button mat-menu-item routerLink="/purchases-reasign" *ngIf="privileges.isPurchaser | async">
       <mat-icon>autorenew</mat-icon><span>Reasignar compra</span>
     </button>
+    <button mat-menu-item (click)="actionSale('cancel')" *ngIf="privileges.isRoleAdmin | async">
+      <mat-icon>receipt</mat-icon><span>Cancelar venta</span>
+    </button>
   </mat-menu>
 
   <button mat-button [matMenuTriggerFor]="menuEntities" *ngIf="privileges.isRoleAdmin | async">
-    <mat-icon>filter_3</mat-icon> Registro
+    <mat-icon>filter_4</mat-icon> Registro
   </button>
   <mat-menu #menuEntities="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item class="toolbar-button" routerLink="/provider-list">
@@ -60,7 +69,7 @@
   </mat-menu>
 
   <button mat-button [matMenuTriggerFor]="menuAdmin" *ngIf="privileges.isRoleAdmin | async">
-    <mat-icon>filter_4</mat-icon> Administraci&oacute;n
+    <mat-icon>filter_5</mat-icon> Administraci&oacute;n
   </button>
   <mat-menu #menuAdmin="matMenu" class="mat-menu-panel.my-class">
     <button mat-menu-item class="toolbar-button" routerLink="/my-company-data">

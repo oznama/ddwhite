@@ -6,6 +6,8 @@ import java.util.Date;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -44,9 +46,12 @@ public class SaleController implements GenericController<SaleDto> {
 	public ResponseEntity<?> create(SaleDto entity) {
 		try {
 			return ResponseEntity.ok(service.save(entity).getId());
-		} catch (Throwable e) {
+		} catch (DataAccessException e) {
 			LOGGER.error(e.getMessage());
-			return ResponseEntity.badRequest().body(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		} catch (Throwable e) {
+			LOGGER.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
@@ -55,14 +60,28 @@ public class SaleController implements GenericController<SaleDto> {
 		try {
 			service.updateInvoice(entity.getId(), entity.getInvoice(), entity.getClientId());
 			return ResponseEntity.ok().build();
+		}  catch (DataAccessException e) {
+			LOGGER.error(e.getMessage());
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
 			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
 		}
 	}
 
 	@Override
 	public ResponseEntity<?> delete(Long id) {
-		return null;
+		try {
+			// TODO Checar si sera necesario registrar las cancelaciones en otra tabla
+			service.delete(id);	// Esto sera el cancelar compra
+			return ResponseEntity.ok().build();
+		} catch (EmptyResultDataAccessException e) {
+			LOGGER.error(e.getMessage());
+			return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("La venta con folio " + id + " no existe");
+		} catch (Exception e) {
+			LOGGER.error(e.getMessage(), e);
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+		}
 	}
 
 //	@GetMapping("/find/bydates")

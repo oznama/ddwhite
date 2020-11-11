@@ -237,5 +237,11 @@ public class SaleService {
 			saleDto.getDetail().add(saleDetailDto);
 		});
 	}
+	
+	public void delete(Long id) throws Exception {
+		salePaymentRepository.deleteBySale(id);
+		saleDetailRepository.deleteBySale(id);
+		saleRepository.deleteById(id);
+	}
 
 }

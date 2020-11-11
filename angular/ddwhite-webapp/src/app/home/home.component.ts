@@ -29,7 +29,7 @@ export class HomeComponent implements OnInit {
     const userId = +window.localStorage.getItem("userId");
     this.apiService.getCurrentSession(userId).subscribe(data => {
       if(!data || !data.id){
-        this.dialog.open(SessionComponent, { disableClose: !this.privileges.isAdmin() });
+        this.dialog.open(SessionComponent, { disableClose: !this.privileges.closeDialogs() });
       } else {
         this.checkWithdrall();
       }

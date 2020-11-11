@@ -38,6 +38,10 @@ export class Privileges {
 		return this.loginService.Privileges.includes(privileges.REPORTS);
 	}
 
+	closeDialogs(): boolean {
+		return this.isAdmin() || this.isReporter$();
+	}
+
 	get isRoleAdmin() {
 		this.menuAdmin.next( this.isAdmin() );
 		return this.menuAdmin.asObservable();

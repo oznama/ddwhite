@@ -4,8 +4,8 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {Provider} from "../../model/provider.model";
 import { ApiProviderService, pageSize, Privileges } from "../../service/module.service";
 import { AlertService, alertOptions } from '../../_alert';
-import { Observable, of, combineLatest } from 'rxjs/index';
-import { map, withLatestFrom, startWith, tap } from 'rxjs/operators';
+import { Observable, of } from 'rxjs/index';
+import { map } from 'rxjs/operators';
 
 @Component({
   selector: 'app-provider-list',

@@ -66,3 +66,7 @@ export class SalePayment{
 	voucherFolio: string;
 	comision: number;
 }
+
+export interface ModeSaleTicketDialog {
+  mode: 'reprint' | 'cancel';
+}
