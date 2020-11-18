@@ -37,8 +37,8 @@ export class ApiSessionService {
 		return this.http.get<Withdrawal[]>(this.context + '/withdrawals?id=' + id);
 	}
 
-	updateAmounts(session: Session): Observable<any> {
-		return this.http.put<any>(this.context + '/updateAmounts', session);
+	update(session: Session): Observable<any> {
+		return this.http.put<any>(this.context + '/update', session);
 	}
 
 }

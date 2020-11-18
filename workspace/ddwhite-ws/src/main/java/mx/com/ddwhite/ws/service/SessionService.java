@@ -1,6 +1,8 @@
 package mx.com.ddwhite.ws.service;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -10,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import mx.com.ddwhite.ws.constants.GeneralConstants;
 import mx.com.ddwhite.ws.dto.SessionDto;
@@ -32,11 +35,13 @@ public class SessionService {
 	private UserService userService;
 	
 	public List<SessionDto> findByRange(Date startDate, Date endDate) {
+		LOGGER.debug("find by range [{} - {}]", startDate, endDate);
 		final List<SessionDto> sessionsDto = new ArrayList<>();
 		String strStartDate = GenericUtils.dateToString(startDate, GeneralConstants.FORMAT_DATE_TIME);
 		endDate = GenericUtils.plusDay(endDate, 1);
 		String strEndDate = GenericUtils.dateToString(endDate, GeneralConstants.FORMAT_DATE_TIME);
 		List<Session> sessions = repository.findByRange(strStartDate, strEndDate);
+		sessions.addAll(repository.findOpenSessions(GenericUtils.dateToString(Date.from(LocalDate.now().minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant()), GeneralConstants.FORMAT_DATE_TIME)));
 		sessions.forEach( session -> sessionsDto.add(getSessionDto(session)));
 		return sessionsDto;
 	}
@@ -52,6 +57,7 @@ public class SessionService {
 	}
 	
 	public SessionDto findCurrentSession(Long userId) {
+		LOGGER.debug("find current session by userId: {} with current date", userId);
 		SessionDto sessionDto = new SessionDto();
 		Session session = repository.findCurrentSession(userId, GenericUtils.currentDateToString(GeneralConstants.FORMAT_DATE_TIME));
 		if(session != null) {
@@ -90,9 +96,19 @@ public class SessionService {
 		return sessionDto;
 	}
 	
-	public void updateAmounts(SessionDto sessionDto) {
-		LOGGER.debug("Updating session amounts, id: %d, initial: %s, final: %s\n", sessionDto.getId(), sessionDto.getInitialAmount(), sessionDto.getFinalAmount());
-		repository.updateAmounts(sessionDto.getId(), sessionDto.getInitialAmount(), sessionDto.getFinalAmount());
+	public void update(SessionDto sessionDto) {
+		LOGGER.debug("Updating session data, {}", sessionDto);
+		if(StringUtils.isEmpty(sessionDto.getOutDate())) {
+			LOGGER.debug("Custom update");
+			repository.update(sessionDto.getId(), sessionDto.getInitialAmount(), sessionDto.getFinalAmount());
+		} else {
+			LOGGER.debug("Refresh entity object");
+			Session sessionFinded = repository.getOne(sessionDto.getId());
+			sessionFinded.setOutDate(sessionDto.getOutDate());
+			sessionFinded.setInitialAmount(sessionDto.getInitialAmount());
+			sessionFinded.setFinalAmount(sessionDto.getFinalAmount());
+			repository.saveAndFlush(sessionFinded);
+		}
 	}
 
 }

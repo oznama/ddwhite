@@ -20,6 +20,9 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 	@Query("SELECT s FROM Session s WHERE s.inDate >= :startDate AND s.outDate <= :endDate")
 	List<Session> findByRange(@Param("startDate") String startDate, @Param("endDate") String endDate);
 	
+	@Query("SELECT s FROM Session s WHERE s.outDate IS NULL AND s.inDate <= :limitDate")
+	List<Session> findOpenSessions(@Param("limitDate") String limitDate);
+	
 	@Query("SELECT s FROM Session s WHERE s.userId = :userId AND :date BETWEEN s.inDate AND s.outDate")
 	Session findSessionByUserInDate(@Param("userId") Long userId, @Param("date") String date);
 	
@@ -37,6 +40,6 @@ public interface SessionRepository extends JpaRepository<Session, Long> {
 	@Modifying
 	@Transactional
 	@Query("UPDATE Session s SET s.initialAmount = :initialAmount, s.finalAmount = :finalAmount  WHERE s.id = :id")
-	void updateAmounts(@Param("id") Long id, @Param("initialAmount") BigDecimal initialAmount, @Param("finalAmount") BigDecimal finalAmount);
+	void update(@Param("id") Long id, @Param("initialAmount") BigDecimal initialAmount, @Param("finalAmount") BigDecimal finalAmount);
 	
 }

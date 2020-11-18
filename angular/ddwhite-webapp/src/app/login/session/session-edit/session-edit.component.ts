@@ -29,21 +29,42 @@ export class SessionEditComponent implements OnInit {
       userId: [],
       userFullname: [],
       inDate: [],
-      outDate: [],
+      outDate: [, [Validators.required,Validators.pattern("[0-9]{4}-[0-9]{2}-[0-9]{2} [0-9]{2}:[0-9]{2}:[0-9]{2}")]],
       initialAmount: [, [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]],
       finalAmount: [, [Validators.required,Validators.pattern("[0-9]{0,6}(\.[0-9]{1,2})?")]]
     });
+    let editSessionId = +window.localStorage.getItem("editSessionId");
+    this.apiService.getById(editSessionId).subscribe(data => {
+      this.editForm.setValue(data);
+      if(data.outDate) {
+        this.editForm.controls.outDate.disable();
+      } else {
+        this.setCurrentOutDate();
+      }
+    });
+    this.apiService.getWithdrawals(editSessionId).subscribe(data => this.withdrawals = data);
     this.editForm.controls.userFullname.disable();
     this.editForm.controls.inDate.disable();
-    this.editForm.controls.outDate.disable();
-    let editSessionId = +window.localStorage.getItem("editSessionId");
-    this.apiService.getById(editSessionId).subscribe(data => this.editForm.setValue(data));
-    this.apiService.getWithdrawals(editSessionId).subscribe(data => this.withdrawals = data);
+  }
+
+  private setCurrentOutDate(){
+    var date = new Date();
+    const month = (date.getMonth()+1);
+    const strMonth = (month < 10 ? '0' : '') + month;
+    const hour = (date.getHours());
+    const strHour = (hour < 10 ? '0' : '') + hour;
+    const min = (date.getMinutes());
+    const strMin = (min < 10 ? '0' : '') + min;
+    const sec = (date.getSeconds());
+    const strSec = (sec < 10 ? '0' : '') + sec;
+    const strDate = date.getFullYear() + '-' + strMonth + '-' + date.getDate() + ' ' + strHour + ':' + strMin + ':' + strSec;
+    this.editForm.controls.outDate.setValue(strDate);
   }
 
   onSubmit(){
-  	this.apiService.updateAmounts(this.editForm.value).subscribe( data => {
-        this.alertService.success('Montos actualizados', alertOptions);
+  	this.apiService.update(this.editForm.value)
+      .subscribe( data => {
+        this.alertService.success('Datos de session actualizados', alertOptions);
         this.regresar();
       }, error => this.alertService.error('El registro no ha sido actualizado: ' + error.error, alertOptions));
   }

@@ -15,7 +15,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,8 +56,13 @@ public class SessionController implements GenericController<SessionDto> {
 	}
 
 	@Override
-	public ResponseEntity<?> update(SessionDto entity) {
-		return null;
+	public ResponseEntity<?> update(SessionDto sessionDto) {
+		try {
+			service.update(sessionDto);
+			return ResponseEntity.ok().build();
+		} catch (DataAccessException e) {
+			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
+		}
 	}
 
 	@Override
@@ -98,16 +102,6 @@ public class SessionController implements GenericController<SessionDto> {
 	public ResponseEntity<?> updateCloseSession(@RequestParam(value = "id", required = true) Long id) {
 		try {
 			return ResponseEntity.ok().body(withdawallService.findBySession(id));
-		} catch (DataAccessException e) {
-			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
-		}
-	}
-	
-	@PutMapping("/updateAmounts")
-	public ResponseEntity<?> updateAmounts(@RequestBody SessionDto sessionDto) {
-		try {
-			service.updateAmounts(sessionDto);
-			return ResponseEntity.ok().build();
 		} catch (DataAccessException e) {
 			return ResponseEntity.badRequest().body(e.getRootCause().getMessage());
 		}

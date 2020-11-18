@@ -74,4 +74,25 @@ public class SessionDto implements Serializable {
 		this.finalAmount = finalAmount;
 	}
 
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append("SessionDto [id=");
+		builder.append(id);
+		builder.append(", userId=");
+		builder.append(userId);
+		builder.append(", userFullname=");
+		builder.append(userFullname);
+		builder.append(", inDate=");
+		builder.append(inDate);
+		builder.append(", outDate=");
+		builder.append(outDate);
+		builder.append(", initialAmount=");
+		builder.append(initialAmount);
+		builder.append(", finalAmount=");
+		builder.append(finalAmount);
+		builder.append("]");
+		return builder.toString();
+	}
+
 }
