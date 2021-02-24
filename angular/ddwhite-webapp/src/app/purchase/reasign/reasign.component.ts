@@ -95,10 +95,10 @@ export class PurchaseReasignComponent implements OnInit {
   		const body = this.setPurchaseReasign(purchaseDestiny, quantity);
 	    this.purchaseService.reasign(body)
 	      .subscribe( data => {
-	        this.alertService.success('Compra registrada', alertOptions);
+	        this.alertService.success('Compra reasignada correctamente', alertOptions);
 	        this.cancelar();
 	      }, error => {
-	        this.alertService.error('La compra no ha sido guardada: ' + error.error, alertOptions);
+	        this.alertService.error('La compra no ha sido reasignada: ' + error.error, alertOptions);
 	      }
 	    );
   	} else
